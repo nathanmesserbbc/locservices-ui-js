@@ -18,8 +18,5 @@
   ],
   "dependencies": {
     "locservices-core-js": "https://github.com/BBC-Location-Services/locservices-core-js"
-  },
-  "devDependencies": {
-    "sinonjs": "~1.10.2"
   }
 }
