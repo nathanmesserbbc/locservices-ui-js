@@ -4,6 +4,7 @@
   "paths": {
     "less": "src/less/",
     "js": "src/js/",
-    "css": "dist/css/"
+    "css": "dist/css/",
+    "test": "test/"
   }
 }

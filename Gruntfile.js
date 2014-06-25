@@ -9,6 +9,8 @@ module.exports = function(grunt) {
     jshint: require("./build/jshint")(grunt),
     recess: require("./build/recess")(grunt),
     less: require("./build/less")(grunt),
+    open: require("./build/open")(grunt),
+    connect: require("./build/connect")(grunt),
     watch: require("./build/watch")(grunt)
   });
 
