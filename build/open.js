@@ -4,11 +4,11 @@
 module.exports = function(grunt) {
   return {
     chrome: {
-      path: "http://localhost:9001",
+      path: "http://<%= config.server.host %>:<%= config.server.port %>",
       app: "Google Chrome"
     },
     firefox: {
-      path: "http://localhost:9001",
+      path: "http://<%= config.server.host %>:<%= config.server.port %>",
       app: "Firefox"
     }
   };

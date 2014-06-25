@@ -3,7 +3,7 @@
 module.exports = function(grunt) {
   return {
     options: {
-      port: 9001,
+      port: "<%= config.server.port %>",
       base: "<%= config.paths.test %>"
     },
     server: {

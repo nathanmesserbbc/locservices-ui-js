@@ -6,5 +6,9 @@
     "js": "src/js/",
     "css": "dist/css/",
     "test": "test/"
+  },
+  "server": {
+    "host": "localhost",
+    "port": "9001"
   }
 }
