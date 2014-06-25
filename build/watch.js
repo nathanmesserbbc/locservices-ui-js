@@ -11,8 +11,11 @@ module.exports = function(grunt) {
       tasks: ["jshint:build"]
     },
     js: {
-      files: "<%= config.paths.js %>/**/*.js",
-      tasks: ["jshint:app"]
+      files: [
+        "<%= config.paths.js %>/**/*.js",
+        "<%= config.paths.test %>/**/*.js"
+      ],
+      tasks: ["jshint:app", "test"]
     },
     less: {
       files: "<%= config.paths.less %>/**/*.less",

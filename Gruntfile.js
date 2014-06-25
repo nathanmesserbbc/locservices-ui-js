@@ -7,15 +7,26 @@ module.exports = function(grunt) {
     config: grunt.file.readJSON("./build/config.json"),
 
     jshint: require("./build/jshint")(grunt),
-    recess: require("./build/recess")(grunt),
+    karma: require("./build/karma")(grunt),
+
     less: require("./build/less")(grunt),
-    open: require("./build/open")(grunt),
+    recess: require("./build/recess")(grunt),
+
     connect: require("./build/connect")(grunt),
-    watch: require("./build/watch")(grunt)
+    open: require("./build/open")(grunt),
+
+    watch: require("./build/watch")(grunt),
+
+    concurrent: require("./build/concurrent")(grunt)
+
   });
 
-  grunt.registerTask("build", ["jshint", "recess", "less"]);
-  grunt.registerTask("default", ["build"]);
+  grunt.registerTask("css", ["less", "recess"]);
+  grunt.registerTask("test", ["karma"]);
+  grunt.registerTask("build", ["concurrent", "test"]);
+  grunt.registerTask("run", ["build", "connect", "open:chrome"]);
+
+  grunt.registerTask("default", ["run"]);
 
   require("load-grunt-tasks")(grunt);
 };

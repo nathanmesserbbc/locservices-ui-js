@@ -8,12 +8,8 @@ module.exports = function(grunt) {
     },
     server: {
       options: {
-        keepalive: true
-      }
-    },
-    test: {
-      options: {
-        keepalive: false
+        keepalive: true,
+        open: true
       }
     }
   };
