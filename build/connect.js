@@ -4,12 +4,13 @@ module.exports = function(grunt) {
   return {
     options: {
       port: "<%= config.server.port %>",
-      base: "<%= config.paths.test %>"
+      base: "<%= config.paths.app %>"
     },
     server: {
       options: {
         keepalive: true,
-        open: true
+        open: true,
+        livereload: true
       }
     }
   };

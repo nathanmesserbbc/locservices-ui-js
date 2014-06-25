@@ -12,7 +12,12 @@ module.exports = function(grunt) {
       src: "<%= config.buildfiles %>"
     },
     app: {
-      src: "<%= config.paths.js %>"
+      files: {
+        src: [
+          "<%= config.paths.js %>**/*.js",
+          "<%= config.paths.test %>**/*.js"
+        ]
+      }
     }
   };
 };

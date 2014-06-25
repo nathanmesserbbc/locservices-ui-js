@@ -7,8 +7,15 @@ module.exports = function(grunt) {
       yuicompress: false
     },
     build: {
-      src: "<%= config.paths.less %>component/search.less",
-      dest: "<%= config.paths.css %>component/search.css"
+      files: [
+        {
+          expand: true,
+          cwd: "<%= config.paths.less %>",
+          src: ["**/*.less"],
+          dest: "<%= config.paths.css %>",
+          ext: ".css"
+        }
+      ]
     }
   };
 };

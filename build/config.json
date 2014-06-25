@@ -3,6 +3,7 @@
   "gruntfile": "Gruntfile.js",
   "karmaconf": "build/karma.conf.js",
   "paths": {
+    "app": "src/",
     "less": "src/less/",
     "js": "src/js/",
     "css": "dist/css/",
