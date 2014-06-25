@@ -1,0 +1,19 @@
+{
+  "name": "locservices-ui-js",
+  "version": "0.0.1",
+  "description": "A set of UI components for navigating location",
+  "author": "BBC Location Services Team",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BBC-Location-Services/locservices-ui-js.git"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.13",
+    "load-grunt-tasks": "~0.6.0"
+  }
+}
