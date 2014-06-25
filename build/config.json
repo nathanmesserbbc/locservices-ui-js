@@ -1,0 +1,9 @@
+{
+  "buildfiles": "build/**/*.js",
+  "gruntfile": "Gruntfile.js",
+  "paths": {
+    "less": "src/less/",
+    "js": "src/js/",
+    "css": "dist/css/"
+  }
+}

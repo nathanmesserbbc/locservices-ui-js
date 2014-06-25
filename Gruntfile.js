@@ -4,29 +4,16 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
+    config: grunt.file.readJSON("./build/config.json"),
 
-    // Task configuration.
-    jshint: {
-      options: {
-        jshintrc: true
-      },
-      gruntfile: {
-        src: "Gruntfile.js"
-      }
-    },
-
-    watch: {
-      gruntfile: {
-        files: "<%= jshint.gruntfile.src %>",
-        tasks: ["jshint:gruntfile"]
-      }
-    }
+    jshint: require("./build/jshint")(grunt),
+    recess: require("./build/recess")(grunt),
+    less: require("./build/less")(grunt),
+    watch: require("./build/watch")(grunt)
   });
 
-  require("load-grunt-tasks")(grunt);
-
-  // Default task.
-  grunt.registerTask("build", ["jshint"]);
+  grunt.registerTask("build", ["jshint", "recess", "less"]);
   grunt.registerTask("default", ["build"]);
 
+  require("load-grunt-tasks")(grunt);
 };
