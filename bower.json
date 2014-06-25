@@ -1,0 +1,25 @@
+{
+  "name": "locservices-ui-js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/BBC-Location-Services/locservices-ui-js",
+  "authors": [
+    "BBC Location Services Team"
+  ],
+  "moduleType": [
+    "amd",
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "locservices-core-js": "https://github.com/BBC-Location-Services/locservices-core-js"
+  },
+  "devDependencies": {
+    "sinonjs": "~1.10.2"
+  }
+}
