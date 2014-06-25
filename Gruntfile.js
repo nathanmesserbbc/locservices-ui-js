@@ -2,6 +2,9 @@
 module.exports = function(grunt) {
   "use strict";
 
+  require("time-grunt")(grunt);
+  require("load-grunt-tasks")(grunt);
+
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
     config: grunt.file.readJSON("./build/config.json"),
@@ -14,8 +17,6 @@ module.exports = function(grunt) {
     watch: require("./build/watch")(grunt),
     concurrent: require("./build/concurrent")(grunt)
   });
-
-  require("load-grunt-tasks")(grunt);
 
   grunt.registerTask("css", ["less", "recess"]);
   grunt.registerTask("test", ["karma"]);
