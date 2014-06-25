@@ -6,6 +6,7 @@
     "app": "src/",
     "less": "src/less/",
     "js": "src/js/",
+    "minjs": "dist/js/",
     "css": "dist/css/",
     "test": "test/"
   },
