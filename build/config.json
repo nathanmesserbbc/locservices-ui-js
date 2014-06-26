@@ -1,0 +1,17 @@
+{
+  "buildfiles": "build/**/*.js",
+  "gruntfile": "Gruntfile.js",
+  "karmaconf": "build/karma.conf.js",
+  "paths": {
+    "app": "src/",
+    "less": "src/less/",
+    "js": "src/js/",
+    "minjs": "dist/js/",
+    "css": "dist/css/",
+    "test": "test/"
+  },
+  "server": {
+    "host": "localhost",
+    "port": "9001"
+  }
+}
