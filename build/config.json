@@ -8,7 +8,7 @@
     "less": "src/less/",
     "js": "src/js/",
     "minjs": "dist/js/",
-    "css": "dist/css/",
+    "css": "src/css/",
     "test": "test/"
   },
   "server": {
