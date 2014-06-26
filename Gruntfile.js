@@ -21,7 +21,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask("css", ["less", "recess"]);
-  grunt.registerTask("test", ["karma"]);
+  grunt.registerTask("test", ["karma:run"]);
+  grunt.registerTask("test:ci", ["karma:ci"]);
   grunt.registerTask("build", ["clean", "concurrent", "uglify", "test"]);
   grunt.registerTask("run", ["build", "connect", "open:chrome"]);
 

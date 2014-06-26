@@ -2,8 +2,12 @@
 
 module.exports = function(grunt) {
   return {
-    run: {
+    options: {
       configFile: "<%= config.karmaconf %>"
+    },
+    run: {},
+    ci: {
+      browsers: ["Firefox", "PhantomJS"]
     },
     debug: {
       logLevel: "DEBUG"

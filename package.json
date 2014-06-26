@@ -4,8 +4,8 @@
   "description": "A set of UI components for navigating location",
   "author": "BBC Location Services Team",
   "scripts": {
-    "build": "grunt build",
-    "test": "grunt test"
+    "start": "grunt run",
+    "test": "grunt test:ci"
   },
   "private": true,
   "repository": {
@@ -31,6 +31,7 @@
     "karma-sinon": "^1.0.3",
     "karma-story-reporter": "^0.2.2",
     "load-grunt-tasks": "~0.6.0",
-    "time-grunt": "^0.3.2"
+    "time-grunt": "^0.3.2",
+    "karma-firefox-launcher": "~0.1.3"
   }
 }
