@@ -11,7 +11,13 @@ module.exports = function(grunt) {
     var url    = config.barlesque.url;
 
     request.get(url, function(err, data) {
+      if (err) {
+        grunt.fail.fatal("Failed to download Barlesque content");
+      }
       parse(data.body, function(err, result) {
+        if (err) {
+          grunt.fail.fatal("Failed parse Barlesque content");
+        }
         var head = result.barlesque.head;
         var bodyFirst = result.barlesque.bodyfirst[0];
         var bodyLast = result.barlesque.bodylast[0];
