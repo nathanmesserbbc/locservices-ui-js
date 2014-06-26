@@ -3,8 +3,7 @@
 module.exports = function(grunt) {
   return {
     options: {
-      compress: false,
-      yuicompress: false
+      compress: true
     },
     build: {
       files: [

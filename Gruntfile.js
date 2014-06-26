@@ -16,12 +16,13 @@ module.exports = function(grunt) {
     open: require("./build/open")(grunt),
     watch: require("./build/watch")(grunt),
     concurrent: require("./build/concurrent")(grunt),
-    uglify: require("./build/uglify")(grunt)
+    uglify: require("./build/uglify")(grunt),
+    clean: require("./build/clean")(grunt)
   });
 
   grunt.registerTask("css", ["less", "recess"]);
   grunt.registerTask("test", ["karma"]);
-  grunt.registerTask("build", ["concurrent", "uglify", "test"]);
+  grunt.registerTask("build", ["clean", "concurrent", "uglify", "test"]);
   grunt.registerTask("run", ["build", "connect", "open:chrome"]);
 
   grunt.registerTask("default", ["run"]);
