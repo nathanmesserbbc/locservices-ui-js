@@ -2,6 +2,9 @@
 
 module.exports = function(grunt) {
   return {
+    options: {
+      livereload: true
+    },
     gruntfile: {
       files: "<%= config.gruntfile %>",
       tasks: ["jshint:gruntfile"]
