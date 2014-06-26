@@ -17,6 +17,6 @@
     "tests"
   ],
   "dependencies": {
-    "locator-core-js": "git@github.com:BBC-Location-Services/locservices-core-js.git#master"
+    "locator-core-js": "https://github.com/BBC-Location-Services/locservices-core-js.git"
   }
 }
