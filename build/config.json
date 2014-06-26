@@ -1,6 +1,7 @@
 {
   "buildfiles": "build/**/*.js",
   "gruntfile": "Gruntfile.js",
+  "templatefile": "build/template/index.html",
   "karmaconf": "build/karma.conf.js",
   "paths": {
     "app": "src/",
@@ -13,5 +14,11 @@
   "server": {
     "host": "localhost",
     "port": "9001"
+  },
+  "barlesque": {
+    "url": "http://www.live.bbc.co.uk/frameworks/barlesque/webservice.xml?blq_version=4&blq_idcta_ptrt=http%3A%2F%2Fwww.bbc.co.uk%2F",
+    "head": "<barlesque:head>",
+    "bodyfirst": "<barlesque:bodystart>",
+    "bodylast": "<barlesque:bodylast>"
   }
 }

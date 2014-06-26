@@ -20,11 +20,12 @@ module.exports = function(grunt) {
     clean: require("./build/clean")(grunt)
   });
 
+  grunt.registerTask("barlesque", require("./build/barlesque")(grunt));
   grunt.registerTask("css", ["less", "recess"]);
   grunt.registerTask("test", ["karma:run"]);
   grunt.registerTask("test:ci", ["karma:ci"]);
   grunt.registerTask("build", ["clean", "concurrent", "uglify", "test"]);
-  grunt.registerTask("run", ["build", "connect", "open:chrome"]);
+  grunt.registerTask("run", ["build", "barlesque", "connect", "open:chrome"]);
 
   grunt.registerTask("default", ["run"]);
 };
