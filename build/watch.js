@@ -13,6 +13,10 @@ module.exports = function(grunt) {
       files: '<%= config.buildfiles %>',
       tasks: ['jshint:build']
     },
+    html: {
+      files: '<%= config.paths.template %>**/*',
+      tasks: ['clean', 'template']
+    },
     js: {
       files: [
         '<%= config.paths.js %>/**/*.js',
