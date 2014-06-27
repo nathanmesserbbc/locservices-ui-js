@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
   return {
@@ -6,23 +6,23 @@ module.exports = function(grunt) {
       livereload: true
     },
     gruntfile: {
-      files: "<%= config.gruntfile %>",
-      tasks: ["jshint:gruntfile"]
+      files: '<%= config.gruntfile %>',
+      tasks: ['jshint:gruntfile']
     },
     build: {
-      files: "<%= config.buildfiles %>",
-      tasks: ["jshint:build"]
+      files: '<%= config.buildfiles %>',
+      tasks: ['jshint:build']
     },
     js: {
       files: [
-        "<%= config.paths.js %>/**/*.js",
-        "<%= config.paths.test %>/**/*.js"
+        '<%= config.paths.js %>/**/*.js',
+        '<%= config.paths.test %>/**/*.js'
       ],
-      tasks: ["jshint:app", "test"]
+      tasks: ['jshint:app', 'test']
     },
     less: {
-      files: "<%= config.paths.less %>/**/*.less",
-      tasks: ["less", "recess"]
+      files: '<%= config.paths.less %>/**/*.less',
+      tasks: ['less', 'recess']
     }
   };
 };

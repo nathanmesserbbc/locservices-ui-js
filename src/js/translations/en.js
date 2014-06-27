@@ -1,7 +1,7 @@
 /*global locservices */
 
 (function(global, factory) {
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     return define(factory);
   } else {
     global.locservices = global.locservices || {};
@@ -11,10 +11,10 @@
   }
 }(this, function() {
 
-  "use strict";
+  'use strict';
 
   var dictionary = {
-    foo: "bar"
+    foo: 'bar'
   };
 
   function TranslationsEn() {}

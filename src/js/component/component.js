@@ -1,7 +1,7 @@
 /*global locservices */
 
 (function(global, factory) {
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     return define(factory);
   } else {
     global.locservices = global.locservices || {};
@@ -11,7 +11,7 @@
   }
 }(this, function() {
 
-  "use strict";
+  'use strict';
 
   function Component() {}
 
@@ -20,18 +20,18 @@
     options = options || {};
 
     if (undefined === options.translations) {
-      throw new Error("Component requires a translations option.");
+      throw new Error('Component requires a translations option.');
     } else {
       this.translations = options.translations;
     }
 
-    this.componentId = options.componentId || "component";
+    this.componentId = options.componentId || 'component';
 
-    this.eventNamespaceBase = "locservices:ui";
+    this.eventNamespaceBase = 'locservices:ui';
     if (options.eventNamespace) {
       this.eventNamespaceBase = options.eventNamespace;
     }
-    this.eventNamespace = this.eventNamespaceBase + ":component:" + this.componentId;
+    this.eventNamespace = this.eventNamespaceBase + ':component:' + this.componentId;
 
   };
 

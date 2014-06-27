@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
   return {
@@ -10,10 +10,10 @@ module.exports = function(grunt) {
       files: [
         {
           expand: true,
-          cwd: "<%= config.paths.less %>",
-          src: ["**/*.less"],
-          dest: "<%= config.paths.css %>",
-          ext: ".css"
+          cwd: '<%= config.paths.less %>',
+          src: ['**/*.less'],
+          dest: '<%= config.paths.css %>',
+          ext: '.css'
         }
       ]
     }

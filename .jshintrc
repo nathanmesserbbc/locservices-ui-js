@@ -18,7 +18,7 @@
   "laxbreak": false,
   "evil": true,
   "indent": 2,
-  "quotmark": "double",
+  "quotmark": "single",
   "node": true,
   "browser": true,
   "es3": true,
@@ -38,4 +38,3 @@
     "throws": true
   }
 }
-

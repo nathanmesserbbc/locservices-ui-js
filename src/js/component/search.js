@@ -1,7 +1,6 @@
 /*global locservices */
-
 (function(global, factory) {
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     return define(factory);
   } else {
     global.locservices = locservices || {};
@@ -11,11 +10,11 @@
   }
 }(this, function() {
 
-  "use strict";
+  'use strict';
 
   function Search(options) {
     options = options || {};
-    options.componentId = "search";
+    options.componentId = 'search';
     this.setComponentOptions(options);
   }
 

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
   return {
@@ -9,11 +9,11 @@ module.exports = function(grunt) {
       files: [
         {
           expand: true,
-          cwd: "<%= config.paths.js %>",
-          src: ["**/*.js"],
-          dest: "<%= config.paths.minjs %>",
-          ext: ".min.js",
-          extDot: "first"
+          cwd: '<%= config.paths.js %>',
+          src: ['**/*.js', '!app.js'],
+          dest: '<%= config.paths.minjs %>',
+          ext: '.min.js',
+          extDot: 'first'
         }
       ]
     }

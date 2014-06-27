@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
   return {
-    start: ["jscs", "jshint", "css"]
+    start: ['jscs', 'jshint', 'css']
   };
 };
