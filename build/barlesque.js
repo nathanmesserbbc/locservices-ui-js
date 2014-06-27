@@ -22,12 +22,9 @@ module.exports = function(grunt) {
         var bodyFirst = result.barlesque.bodyfirst[0];
         var bodyLast = result.barlesque.bodylast[0];
 
-        var template = grunt.file.read(config.templatefile)
-                        .replace(config.barlesque.head, head)
-                        .replace(config.barlesque.bodyfirst, bodyFirst)
-                        .replace(config.barlesque.bodylast, bodyLast);
-
-        grunt.file.write(config.paths.app + "/index.html",template);
+        grunt.file.write(config.template.head, head);
+        grunt.file.write(config.template.bodyfirst, bodyFirst);
+        grunt.file.write(config.template.bodylast, bodyLast);
         done();
       });
     });

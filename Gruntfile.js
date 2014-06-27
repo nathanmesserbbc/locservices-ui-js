@@ -21,11 +21,12 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask("barlesque", require("./build/barlesque")(grunt));
+  grunt.registerTask("template", require("./build/template")(grunt));
   grunt.registerTask("css", ["less", "recess"]);
   grunt.registerTask("test", ["karma:run"]);
   grunt.registerTask("test:ci", ["karma:ci"]);
   grunt.registerTask("build", ["clean", "concurrent", "uglify", "test"]);
-  grunt.registerTask("run", ["build", "barlesque", "connect", "open:chrome"]);
+  grunt.registerTask("run", ["build", "template", "connect", "open:chrome"]);
 
   grunt.registerTask("default", ["run"]);
 };

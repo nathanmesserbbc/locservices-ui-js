@@ -9,7 +9,8 @@
     "js": "src/js/",
     "minjs": "dist/js/",
     "css": "src/css/",
-    "test": "test/"
+    "test": "test/",
+    "template": "build/template"
   },
   "server": {
     "host": "localhost",
@@ -20,5 +21,11 @@
     "head": "<barlesque:head>",
     "bodyfirst": "<barlesque:bodystart>",
     "bodylast": "<barlesque:bodylast>"
+  },
+  "template": {
+    "html": "build/template/index.html",
+    "head": "build/template/head.tpl",
+    "bodyfirst": "build/template/bodyfirst.tpl",
+    "bodylast": "build/template/bodylast.tpl"
   }
 }
