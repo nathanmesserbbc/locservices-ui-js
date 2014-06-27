@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
   return {
@@ -6,16 +6,16 @@ module.exports = function(grunt) {
       jshintrc: true
     },
     gruntfile: {
-      src: "<%= config.gruntfile %>"
+      src: '<%= config.gruntfile %>'
     },
     build: {
-      src: "<%= config.buildfiles %>"
+      src: '<%= config.buildfiles %>'
     },
     app: {
       files: {
         src: [
-          "<%= config.paths.js %>**/*.js",
-          "<%= config.paths.test %>**/*.js"
+          '<%= config.paths.js %>**/*.js',
+          '<%= config.paths.test %>**/*.js'
         ]
       }
     }

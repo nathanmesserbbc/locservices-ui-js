@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
   return {
@@ -6,7 +6,7 @@ module.exports = function(grunt) {
       compile: false
     },
     build: {
-      src: "<%= config.paths.css %>**/*.css"
+      src: '<%= config.paths.css %>**/*.css'
     }
   };
 };

@@ -1,8 +1,8 @@
 
-"use strict";
+'use strict';
 
-var request = require("request");
-var parse   = require("xml2js").parseString;
+var request = require('request');
+var parse   = require('xml2js').parseString;
 
 module.exports = function(grunt) {
   return function() {
@@ -16,6 +16,6 @@ module.exports = function(grunt) {
                     .replace(config.barlesque.bodyfirst, bodyFirst)
                     .replace(config.barlesque.bodylast, bodyLast);
 
-    grunt.file.write(config.paths.app + "/index.html", template);
+    grunt.file.write(config.paths.app + '/index.html', template);
   };
 };

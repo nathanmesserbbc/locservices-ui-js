@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
   return {
     options: {
-      configFile: "<%= config.karmaconf %>"
+      configFile: '<%= config.karmaconf %>'
     },
     run: {},
     ci: {
-      browsers: ["Firefox", "PhantomJS"]
+      browsers: ['Firefox', 'PhantomJS']
     },
     debug: {
-      logLevel: "DEBUG"
+      logLevel: 'DEBUG'
     }
   };
 };

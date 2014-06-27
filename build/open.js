@@ -1,15 +1,15 @@
 
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
   return {
     chrome: {
-      path: "http://<%= config.server.host %>:<%= config.server.port %>",
-      app: "Google Chrome"
+      path: 'http://<%= config.server.host %>:<%= config.server.port %>',
+      app: 'Google Chrome'
     },
     firefox: {
-      path: "http://<%= config.server.host %>:<%= config.server.port %>",
-      app: "Firefox"
+      path: 'http://<%= config.server.host %>:<%= config.server.port %>',
+      app: 'Firefox'
     }
   };
 };

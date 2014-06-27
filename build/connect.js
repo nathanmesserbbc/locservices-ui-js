@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
   return {
     options: {
-      port: "<%= config.server.port %>",
-      base: "<%= config.paths.app %>",
-      hostname: "<%= config.server.host %>"
+      port: '<%= config.server.port %>',
+      base: '<%= config.paths.app %>',
+      hostname: '<%= config.server.host %>'
     },
     server: {
       options: {
