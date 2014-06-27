@@ -14,6 +14,11 @@
 
   var $ = window.jQuery;
 
+  /**
+   * User Locations constructor
+   *
+   * @param {Object} options
+   */
   function UserLocations(options) {
     options = options || {};
     options.componentId = 'user_locations';
@@ -38,11 +43,19 @@
   UserLocations.prototype = new locservices.ui.component.Component();
   UserLocations.prototype.constructor = UserLocations;
 
+  /**
+   * Remove a location from the list
+   *
+   * @param {String} locationId
+   */
   UserLocations.prototype.removeLocationById = function(locationId) {
     this.recentLocations.remove(locationId);
     this.render();
   };
 
+  /**
+   * Render a list of locations
+   */
   UserLocations.prototype.render = function() {
     var html = "";
     var locations;
@@ -68,6 +81,12 @@
     this.element.html(html);
   };
 
+  /**
+   * Get a list of up to 5 user locations. Can include both a
+   * preferred location and recents.
+   *
+   * @return {Array} The array of 0 to 5 locations
+   */
   UserLocations.prototype.getLocations = function() {
     var locations = [];
     var noOfLocationsRemaining = 5;
