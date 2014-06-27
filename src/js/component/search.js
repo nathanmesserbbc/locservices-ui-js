@@ -2,14 +2,23 @@
   if (typeof define === "function" && define.amd) {
     return define(factory);
   } else {
-    global.locator = locator || {};
-    locator.ui = locator.ui || {};
-    locator.ui.search = factory();
+    global.locator = locservices || {};
+    locservices.ui = locservices.ui || {};
+    locservices.ui.component = locservices.ui.component || {};
+    locservices.ui.component.search = factory();
   }
 }(this, function() {
 
   "use strict";
 
-  return function() {};
+  Search.prototype = new locservices.ui.component.component;
+  Search.prototype.constructor = Search;
+
+  function Search(options){ 
+    options.componentId = "search";
+    this.setComponentOptions(options);
+  } 
+
+  return Search;
 
 }));
