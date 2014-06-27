@@ -32,10 +32,24 @@
   "requireCapitalizedConstructors": true,
 
   "validateJSDoc": {
-    "checkParamNames": false,
-    "checkRedundantParams": false,
-    "requireParamTypes": false
+    "checkParamNames": true,
+    "checkRedundantParams": true,
+    "requireParamTypes": true
   },
 
-  "excludeFiles": ["node_modules/**"]
+  "excludeFiles": ["node_modules/**"],
+
+  "additionalRules": [
+    "node_modules/jscs-jsdoc/lib/rules/*.js"
+  ],
+
+  "jsDoc": {
+    "checkParamNames": true,
+    "checkRedundantParams": true,
+    "requireParamTypes": true,
+    "checkReturnTypes": true,
+    "checkRedundantReturns": true,
+    "requireReturnTypes": true,
+    "checkTypes": true
+  }
 }
