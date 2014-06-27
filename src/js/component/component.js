@@ -1,3 +1,5 @@
+/*global locservices */
+
 (function(global, factory) {
   if (typeof define === "function" && define.amd) {
     return define(factory);
@@ -11,7 +13,6 @@
 
   "use strict";
 
-
   function Component() {}
 
   Component.prototype.setComponentOptions = function(options) {
@@ -19,7 +20,7 @@
     options = options || {};
 
     if (undefined === options.translations) {
-      throw new Error('Component requires a translations option.');
+      throw new Error("Component requires a translations option.");
     } else {
       this.translations = options.translations;
     }

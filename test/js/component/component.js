@@ -1,4 +1,4 @@
-/*global describe, it:false*/
+/*global describe, beforeEach, locservices, it:false*/
 
 describe("The component module", function () {
   "use strict";
@@ -15,7 +15,7 @@ describe("The component module", function () {
     beforeEach(function() {
       translations = new locservices.ui.translations.en();
       component.setComponentOptions({
-        translations: translations 
+        translations: translations
       });
     });
 

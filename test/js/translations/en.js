@@ -1,4 +1,4 @@
-/*global describe, it:false*/
+/*global describe, beforeEach, locservices, it:false*/
 
 describe("The EN translations module", function () {
   "use strict";

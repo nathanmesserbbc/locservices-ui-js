@@ -1,3 +1,5 @@
+/*global locservices */
+
 (function(global, factory) {
   if (typeof define === "function" && define.amd) {
     return define(factory);
@@ -12,7 +14,7 @@
   "use strict";
 
   var dictionary = {
-    'foo' : 'bar'
+    "foo" : "bar"
   };
 
   function TranslationsEn() {}

@@ -1,4 +1,4 @@
-/*global describe, it:false*/
+/*global describe, beforeEach, locservices, it:false*/
 
 describe("The search", function () {
   "use strict";
@@ -9,7 +9,7 @@ describe("The search", function () {
   beforeEach(function() {
     translations = new locservices.ui.translations.en();
     search = new locservices.ui.component.search({
-      translations: translations 
+      translations: translations
     });
   });
 
