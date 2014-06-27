@@ -9,7 +9,6 @@ module.exports = function(grunt) {
     },
     server: {
       options: {
-        keepalive: true,
         open: true,
         livereload: true
       }
