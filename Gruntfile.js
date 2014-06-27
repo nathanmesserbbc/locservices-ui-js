@@ -21,8 +21,8 @@ module.exports = function(grunt) {
     jscs: require('./build/jscs')(grunt)
   });
 
-  grunt.registerTask('barlesque', require('./build/barlesque')(grunt));
-  grunt.registerTask('template', require('./build/template')(grunt));
+  grunt.registerTask('barlesque', 'Downloads Barlesque templates from API', require('./build/barlesque')(grunt));
+  grunt.registerTask('template', 'Generate index.html from templates', require('./build/template')(grunt));
   grunt.registerTask('css', ['less', 'recess']);
   grunt.registerTask('test', ['karma:run']);
   grunt.registerTask('test:ci', ['karma:ci']);
