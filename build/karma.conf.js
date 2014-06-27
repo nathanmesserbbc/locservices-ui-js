@@ -22,7 +22,8 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-      'src/js/app.js'
+      'src/js/app.js',
+      'src/examples/**/*.js'
     ],
 
     // preprocess matching files before serving them to the browser
