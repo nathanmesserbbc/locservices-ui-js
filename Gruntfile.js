@@ -17,7 +17,8 @@ module.exports = function(grunt) {
     watch: require("./build/watch")(grunt),
     concurrent: require("./build/concurrent")(grunt),
     uglify: require("./build/uglify")(grunt),
-    clean: require("./build/clean")(grunt)
+    clean: require("./build/clean")(grunt),
+    jscs: require("./build/jscs")(grunt)
   });
 
   grunt.registerTask("barlesque", require("./build/barlesque")(grunt));
