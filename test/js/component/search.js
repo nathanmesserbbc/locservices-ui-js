@@ -6,8 +6,8 @@ describe('The search', function() {
   var translations;
 
   beforeEach(function() {
-    translations = new locservices.ui.translations.en();
-    search = new locservices.ui.component.search({
+    translations = new locservices.ui.translations.En();
+    search = new locservices.ui.component.Search({
       translations: translations
     });
   });

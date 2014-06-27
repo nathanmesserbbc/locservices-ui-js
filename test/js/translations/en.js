@@ -5,7 +5,7 @@ describe('The EN translations module', function() {
   var translations;
 
   beforeEach(function() {
-    translations = new locservices.ui.translations.en();
+    translations = new locservices.ui.translations.En();
   });
 
   describe('get()', function() {

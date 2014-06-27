@@ -7,7 +7,7 @@
     global.locservices = global.locservices || {};
     locservices.ui = locservices.ui || {};
     locservices.ui.translations = locservices.ui.translations || {};
-    locservices.ui.translations.en = factory();
+    locservices.ui.translations.En = factory();
   }
 }(this, function() {
 

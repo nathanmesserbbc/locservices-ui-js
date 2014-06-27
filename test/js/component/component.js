@@ -7,13 +7,13 @@ describe('The component module', function() {
   var translations;
 
   beforeEach(function() {
-    component = new locservices.ui.component.component();
+    component = new locservices.ui.component.Component();
   });
 
   describe('setComponentOptions()', function() {
 
     beforeEach(function() {
-      translations = new locservices.ui.translations.en();
+      translations = new locservices.ui.translations.En();
       component.setComponentOptions({
         translations: translations
       });

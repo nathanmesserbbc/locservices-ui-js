@@ -6,7 +6,7 @@
     global.locservices = locservices || {};
     locservices.ui = locservices.ui || {};
     locservices.ui.component = locservices.ui.component || {};
-    locservices.ui.component.search = factory();
+    locservices.ui.component.Search = factory();
   }
 }(this, function() {
 
@@ -18,7 +18,7 @@
     this.setComponentOptions(options);
   }
 
-  Search.prototype = new locservices.ui.component.component();
+  Search.prototype = new locservices.ui.component.Component();
   Search.prototype.constructor = Search;
 
   return Search;
