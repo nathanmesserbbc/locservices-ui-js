@@ -31,7 +31,7 @@
     if (options.eventNamespace) {
       this.eventNamespaceBase = options.eventNamespace;
     }
-    this.eventNamespace = this.eventNamespaceBase +":component:" +this.componentId;
+    this.eventNamespace = this.eventNamespaceBase + ":component:" + this.componentId;
 
   };
 

@@ -14,7 +14,7 @@
   "use strict";
 
   var dictionary = {
-    "foo" : "bar"
+    foo: "bar"
   };
 
   function TranslationsEn() {}
