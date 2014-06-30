@@ -10,10 +10,10 @@ module.exports = function(grunt) {
     var head      = grunt.file.read(config.template.head);
     var bodyFirst = grunt.file.read(config.template.bodyfirst);
     var bodyLast  = grunt.file.read(config.template.bodylast);
-    var templates = grunt.file.expand([ config.paths.template + '**/*.html']);
-    
+    var templates = grunt.file.expand([ config.paths.template + '/**/*.html']);
+
     templates.forEach(function(file) {
-      var filename = file.split('/')[2];
+      var filename = file.replace(config.paths.template, '');
       var template = grunt.file.read(file)
                           .replace(config.barlesque.head, head)
                           .replace(config.barlesque.bodyfirst, bodyFirst)
