@@ -20,6 +20,7 @@
    * @param {Object} options
    */
   function UserLocations(options) {
+    var _this = this;
     options = options || {};
     options.componentId = 'user_locations';
     this.setComponentOptions(options);
@@ -29,15 +30,21 @@
 
     // @todo inject container as an option
     this.element = $("<div id=\"user_locations\"></div>");
-    /*
+
     this.element.on('click', function(e){
+      var target;
       var locationId;
       e.preventDefault();
       target = $(e.target);
-      locationId = target.attr('href').split('=')[1];
-      this.removeLocationById
+      if (target.hasClass("ls-ui-comp-user_locations-remove")) {
+        locationId = target.parent().attr('href').split('=')[1];
+        _this.removeLocationById(locationId);
+      }
+
+      // @todo handle clicking on the prefer link
+
     });
-    */
+ 
   }
 
   UserLocations.prototype = new locservices.ui.component.Component();
@@ -48,8 +55,39 @@
    *
    * @param {String} locationId
    */
+  UserLocations.prototype.setPreferredLocationById = function(locationId) {
+    var location;
+    var locations;
+    var locationIndex;
+    var noOfLocations;
+    locations = this.getLocations();
+    noOfLocations = locations.length;
+    for (locationIndex = 0; locationIndex < noOfLocations; locationIndex++) {
+      if (locationId === locations[locationIndex].id) {
+        location = locations[locationIndex];
+      }
+    }
+
+    // @todo push the previous preferred location to the top
+    // of recents ???
+
+    if (location) {
+      this.preferredLocation.set(location);
+      this.render();
+    }
+  };
+
+  /**
+   * Remove a location from the list
+   *
+   * @param {String} locationId
+   */
   UserLocations.prototype.removeLocationById = function(locationId) {
     this.recentLocations.remove(locationId);
+
+    // @todo what happens if the removed location is also the
+    // preferred location ???
+
     this.render();
   };
 
@@ -63,7 +101,10 @@
     var noOfLocations;
     var locationIndex;
     var label;
-    
+
+    // @todo render the prefer link
+    // @todo render the active prefer link
+
     locations = this.getLocations();
     noOfLocations = locations.length;
     if (0 < noOfLocations) {
@@ -74,7 +115,10 @@
         if (location.container) {
           label += ", " +location.container;
         }
-        html += "<li><a href=\"?locationId=" +location.id +"\">" +label +"</a></li>";
+        html += "<li><a href=\"?locationId=" +location.id +"\">"
+          + label 
+          + "<span class=\"ls-ui-comp-user_locations-remove\">remove</span>"
+          + "</a></li>";
       }
       html += "</ul>";
     }

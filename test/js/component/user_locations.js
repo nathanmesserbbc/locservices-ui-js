@@ -1,5 +1,5 @@
 /*global describe, beforeEach, locservices, it:false*/
-describe("The User Locations", function() {
+describe("The User Locations module", function() {
   "use strict";
 
   var userLocations;
@@ -31,6 +31,44 @@ describe("The User Locations", function() {
     // @todo
     // sets this.preferredLocation
     // sets this.recentLocations
+
+    it("calls this.removeLocationById with expected ID when clicking on remove", function() {
+      var stub;
+      var expectedId;
+      expectedId = "123";
+      stub = sinon.stub(userLocations, "removeLocationById");
+      userLocations.element.html(
+        "<a href=\"?locationId=" +expectedId +"\">Location"
+        + "<span class=\"ls-ui-comp-user_locations-remove\">remove</span>"
+        + "</a>"
+      );
+      userLocations.element.find("span").trigger("click");
+      expect(stub.calledOnce).toBe(true);
+      expect(stub.calledWith(expectedId)).toBe(true);
+    });
+
+  });
+
+  describe("setPreferredLocationById()", function() {
+
+    it("calls this.preferredLocation.set() with the expected location object", function() {
+      var stub;
+      stub = sinon.stub(userLocations.preferredLocation, "set");
+      sinon.stub(userLocations, "getLocations").returns(testLocations);
+      sinon.stub(userLocations, "render");
+      userLocations.setPreferredLocationById(testLocations[0].id);
+      expect(stub.calledOnce).toEqual(true);
+      expect(stub.calledWith(testLocations[0])).toEqual(true);
+    });
+
+    it("calls this.render()", function() {
+      var stub;
+      sinon.stub(userLocations.preferredLocation, "set");
+      sinon.stub(userLocations, "getLocations").returns(testLocations);
+      stub = sinon.stub(userLocations, "render");
+      userLocations.setPreferredLocationById(testLocations[0].id);
+      expect(stub.calledOnce).toEqual(true);
+    });
 
   });
 
@@ -70,7 +108,10 @@ describe("The User Locations", function() {
         id: "CF5", 
         name: "CF5"
       };
-      var expectedHtml = "<ul><li><a href=\"?locationId=" +expectedLocation.id +"\">" +expectedLocation.name +"</a></li></ul>";
+      var expectedHtml = "<ul><li><a href=\"?locationId=" +expectedLocation.id +"\">" 
+        + expectedLocation.name 
+        + "<span class=\"ls-ui-comp-user_locations-remove\">remove</span>"
+        + "</a></li></ul>";
       sinon.stub(userLocations, "getLocations").returns([expectedLocation]);
       userLocations.render();
       expect(userLocations.element.html()).toEqual(expectedHtml);
@@ -82,7 +123,10 @@ describe("The User Locations", function() {
         name: "Llandaff",
         container: "Cardiff"
       };
-      var expectedHtml = "<ul><li><a href=\"?locationId=" +expectedLocation.id +"\">" +expectedLocation.name +", " +expectedLocation.container +"</a></li></ul>";
+      var expectedHtml = "<ul><li><a href=\"?locationId=" +expectedLocation.id +"\">" 
+        + expectedLocation.name +", " +expectedLocation.container 
+        + "<span class=\"ls-ui-comp-user_locations-remove\">remove</span>"
+        + "</a></li></ul>";
       sinon.stub(userLocations, "getLocations").returns([expectedLocation]);
       userLocations.render();
       expect(userLocations.element.html()).toEqual(expectedHtml);
