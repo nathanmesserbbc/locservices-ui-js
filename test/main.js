@@ -25,6 +25,7 @@ require.config({
   callback: window.__karma__.start,
 
   paths: {
+    'jquery' : 'src/vendor/jquery/dist/jquery',
     'locservices/ui' : 'src/js',
     'locservices/core': 'src/vendor/locservices-core-js/src'
   }

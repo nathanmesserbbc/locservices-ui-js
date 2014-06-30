@@ -1,15 +1,6 @@
-/*global locservices */
+/*global define */
 
-(function(global, factory) {
-  if (typeof define === 'function' && define.amd) {
-    return define(factory);
-  } else {
-    global.locservices = global.locservices || {};
-    locservices.ui = locservices.ui || {};
-    locservices.ui.component = locservices.ui.component || {};
-    locservices.ui.component.Component = factory();
-  }
-}(this, function() {
+define(function() {
 
   'use strict';
 
@@ -42,5 +33,4 @@
   };
 
   return Component;
-
-}));
+});

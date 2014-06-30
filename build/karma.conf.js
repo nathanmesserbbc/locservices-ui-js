@@ -15,7 +15,8 @@ module.exports = function(config) {
     files: [
       'test/main.js',
       {pattern: 'src/js/**/*.js', included: false},
-      {pattern: 'src/vendor/**/*.js', included: false},
+      {pattern: 'src/vendor/jquery/dist/**/*.js', included: false},
+      {pattern: 'src/vendor/locservices-core-js/src/**/*.js', included: false},
       {pattern: 'test/js/**/*.js', included: false}
     ],
 
