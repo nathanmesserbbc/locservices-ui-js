@@ -20,7 +20,7 @@
    * @param {Object} options
    */
   function UserLocations(options) {
-    var _this = this;
+    var self = this;
     options = options || {};
     options.componentId = 'user_locations';
     this.setComponentOptions(options);
@@ -29,16 +29,16 @@
     this.recentLocations = new locservices.core.RecentLocations();
 
     // @todo inject container as an option
-    this.element = $("<div id=\"user_locations\"></div>");
+    this.element = $('<div id="user_locations"></div>');
 
-    this.element.on('click', function(e){
+    this.element.on('click', function(e) {
       var target;
       var locationId;
       e.preventDefault();
       target = $(e.target);
-      if (target.hasClass("ls-ui-comp-user_locations-remove")) {
+      if (target.hasClass('ls-ui-comp-user_locations-remove')) {
         locationId = target.parent().attr('href').split('=')[1];
-        _this.removeLocationById(locationId);
+        self.removeLocationById(locationId);
       }
 
       // @todo handle clicking on the prefer link
@@ -95,7 +95,7 @@
    * Render a list of locations
    */
   UserLocations.prototype.render = function() {
-    var html = "";
+    var html = '';
     var locations;
     var location;
     var noOfLocations;
@@ -108,19 +108,19 @@
     locations = this.getLocations();
     noOfLocations = locations.length;
     if (0 < noOfLocations) {
-      html = "<ul>";
+      html = '<ul>';
       for (locationIndex = 0; locationIndex < noOfLocations; locationIndex++) {
         location = locations[locationIndex];
         label = location.name;
         if (location.container) {
-          label += ", " +location.container;
+          label += ', ' + location.container;
         }
-        html += "<li><a href=\"?locationId=" +location.id +"\">"
-          + label 
-          + "<span class=\"ls-ui-comp-user_locations-remove\">remove</span>"
-          + "</a></li>";
+        html += '<li><a href="?locationId=' + location.id + '">' +
+          label +
+          '<span class="ls-ui-comp-user_locations-remove">remove</span>' +
+          '</a></li>';
       }
-      html += "</ul>";
+      html += '</ul>';
     }
     this.element.html(html);
   };
@@ -152,7 +152,7 @@
       if (0 < noOfRecentLocations) {
         for (recentLocationIndex = 0; recentLocationIndex < noOfRecentLocations; recentLocationIndex++) {
           recentLocation = recentLocations[recentLocationIndex];
-          if (0 < noOfLocationsRemaining && 
+          if (0 < noOfLocationsRemaining &&
             (
               !preferredLocation ||
               (preferredLocation && preferredLocation.id !== recentLocation.id)
