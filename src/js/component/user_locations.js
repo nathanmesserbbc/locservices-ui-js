@@ -1,18 +1,19 @@
-/*global locservices */
-(function(global, factory) {
-  if (typeof define === 'function' && define.amd) {
-    return define(factory);
-  } else {
-    global.locservices = locservices || {};
-    locservices.ui = locservices.ui || {};
-    locservices.ui.component = locservices.ui.component || {};
-    locservices.ui.component.UserLocations = factory();
-  }
-}(this, function() {
+/*global define */
+
+define([
+  'jquery',
+  'locservices/ui/component/component',
+  'locservices/core/recent_locations',
+  'locservices/core/preferred_location'
+],
+function(
+  $,
+  Component,
+  RecentLocations,
+  PreferredLocation
+) {
 
   'use strict';
-
-  var $ = window.jQuery;
 
   /**
    * User Locations constructor
@@ -25,8 +26,8 @@
     options.componentId = 'user_locations';
     this.setComponentOptions(options);
 
-    this.preferredLocation = new locservices.core.PreferredLocation();
-    this.recentLocations = new locservices.core.RecentLocations();
+    this.preferredLocation = new PreferredLocation();
+    this.recentLocations = new RecentLocations();
 
     // @todo inject container as an option
     this.element = $('<div id="user_locations"></div>');
@@ -47,7 +48,7 @@
  
   }
 
-  UserLocations.prototype = new locservices.ui.component.Component();
+  UserLocations.prototype = new Component();
   UserLocations.prototype.constructor = UserLocations;
 
   /**
@@ -173,4 +174,4 @@
 
   return UserLocations;
 
-}));
+});
