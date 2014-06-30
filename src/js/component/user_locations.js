@@ -30,14 +30,16 @@ function(
     this.recentLocations = new RecentLocations();
 
     // @todo inject container as an option
-    this.element = $('<div id="user_locations"></div>');
+    // @todo test this
+    this.container.append('<div class="ls-ui-user_locations"></div>');
+    this.element = this.container.find('.ls-ui-user_locations');
 
     this.element.on('click', function(e) {
       var target;
       var locationId;
       e.preventDefault();
       target = $(e.target);
-      if (target.hasClass('ls-ui-comp-user_locations-remove')) {
+      if (target.hasClass('ls-ui-user_locations-remove')) {
         locationId = target.parent().attr('href').split('=')[1];
         self.removeLocationById(locationId);
       }
@@ -45,6 +47,9 @@ function(
       // @todo handle clicking on the prefer link
 
     });
+
+    // @todo test this call
+    this.render();
  
   }
 
@@ -118,7 +123,7 @@ function(
         }
         html += '<li><a href="?locationId=' + location.id + '">' +
           label +
-          '<span class="ls-ui-comp-user_locations-remove">remove</span>' +
+          '<span class="ls-ui-user_locations-remove">remove</span>' +
           '</a></li>';
       }
       html += '</ul>';
