@@ -8,7 +8,10 @@ describe('The search', function() {
   beforeEach(function() {
     translations = new locservices.ui.translations.En();
     search = new locservices.ui.component.Search({
-      translations: translations
+      $: {},
+      translations: translations,
+      container: null,
+      api: {}
     });
   });
 

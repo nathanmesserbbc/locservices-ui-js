@@ -19,10 +19,22 @@
 
     options = options || {};
 
+    if (undefined === options.$) {
+      throw new Error('Component requires $ parameter.');
+    } else {
+      this.$ = options.$;
+    }
+
     if (undefined === options.translations) {
       throw new Error('Component requires a translations option.');
     } else {
       this.translations = options.translations;
+    }
+
+    if (undefined === options.container) {
+      throw new Error('Component requires container parameter.');
+    } else {
+      this.container = options.container;
     }
 
     this.componentId = options.componentId || 'component';
