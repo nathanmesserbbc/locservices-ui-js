@@ -19,14 +19,8 @@
 
     options = options || {};
 
-    if (undefined === options.$) {
-      throw new Error('Component requires $ parameter.');
-    } else {
-      this.$ = options.$;
-    }
-
     if (undefined === options.translations) {
-      throw new Error('Component requires a translations option.');
+      throw new Error('Component requires a translations parameter.');
     } else {
       this.translations = options.translations;
     }

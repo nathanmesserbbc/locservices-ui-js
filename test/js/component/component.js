@@ -15,7 +15,6 @@ describe('The component module', function() {
     beforeEach(function() {
       translations = new locservices.ui.translations.En();
       component.setComponentOptions({
-        $: {},
         translations: translations,
         container: null
       });
@@ -30,7 +29,6 @@ describe('The component module', function() {
     it('should set eventNamespaceBase from options.eventNamespace', function() {
       var eventNamespace = 'foo:bar';
       component.setComponentOptions({
-        $: {},
         translations: translations,
         eventNamespace: eventNamespace,
         container: null
@@ -46,7 +44,6 @@ describe('The component module', function() {
       var eventNamespace = 'foo:bar';
       var expectedValue = eventNamespace + ':component:component';
       component.setComponentOptions({
-        $: {},
         translations: translations,
         eventNamespace: eventNamespace,
         container: null
@@ -63,7 +60,6 @@ describe('The component module', function() {
     it('should set this.componentId from options.componentId', function() {
       var expectedValue = 'foo';
       component.setComponentOptions({
-        $: {},
         translations: translations,
         componentId: expectedValue,
         container: null
@@ -71,28 +67,15 @@ describe('The component module', function() {
       expect(component.componentId).toBe(expectedValue);
     });
 
-    // jQuery
-
-    it('should throw an exception if options do not contain an $', function() {
-      var failure = function() {
-        component.setComponentOptions({
-          $: {},
-          container: null
-        });
-      };
-      expect(failure).toThrow(new Error('Component requires a translations option.'));
-    });
-
     // translations
 
-    it('should throw an exception if no $ module option', function() {
+    it('should throw an exception if no trnslation module option', function() {
       var failure = function() {
         component.setComponentOptions({
-          translations: translations,
           container: null
         });
       };
-      expect(failure).toThrow(new Error('Component requires $ parameter.'));
+      expect(failure).toThrow(new Error('Component requires a translations parameter.'));
     });
 
     it('should set this.tranlations from options.translations', function() {
@@ -104,7 +87,6 @@ describe('The component module', function() {
     it('should throw an exception if options do not container an element', function() {
       var failure = function() {
         component.setComponentOptions({
-          $: {},
           translations: translations
         });
       };
