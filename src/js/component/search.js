@@ -1,14 +1,6 @@
-/*global locservices */
-(function(global, factory) {
-  if (typeof define === 'function' && define.amd) {
-    return define(factory);
-  } else {
-    global.locservices = locservices || {};
-    locservices.ui = locservices.ui || {};
-    locservices.ui.component = locservices.ui.component || {};
-    locservices.ui.component.Search = factory();
-  }
-}(this, function() {
+/*global define */
+
+define(['jquery', 'locservices/ui/component/component'], function($, Component) {
 
   'use strict';
 
@@ -23,7 +15,7 @@
     }
     this.setComponentOptions(options);
   }
-  Search.prototype = new locservices.ui.component.Component();
+  Search.prototype = new Component();
   Search.prototype.constructor = Search;
 
   Search.prototype.render = function() {
@@ -35,5 +27,4 @@
   };
 
   return Search;
-
-}));
+});
