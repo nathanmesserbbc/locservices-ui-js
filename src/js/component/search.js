@@ -17,7 +17,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.setComponentOptions(options);
     self.input = self.container.find(options.selector || '#ls-search-input');
 
-    self.container.on('submit', function(e){
+    self.container.on('submit', function(e) {
       e.preventDefault();
       self.search(self.input.val());
     });
@@ -39,7 +39,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       },
       error: function() {
         $.emit(this.eventNamespace + ':end');
-        $.emit(this.eventNamespace + ':error', ['Error searching for "' +searchTerm +'"']);
+        $.emit(this.eventNamespace + ':error', ['Error searching for "' + searchTerm + '"']);
       }
     });
   };

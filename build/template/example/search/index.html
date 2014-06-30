@@ -1,15 +1,68 @@
 <!doctype>
 <html>
   <head>
-    <title>Search Example | BBC</title>
+    <title>LocServices UI: Search</title>
     <barlesque:head>
-    <link rel="stylesheet" href="css/component/search.css" />
-    <script src="js/app.js"></script>
+    <link rel="stylesheet" href="/css/example/app.css" />
+    <link rel="stylesheet" href="/css/component/search.css" />
+    <script type="text/javascript" src="/example/search/search.js"></script>
   </head>
   <body>
     <barlesque:bodystart>
-      <div class="b-g-p">
-        <h1>LocServices UI</h1>
+      <div class="header">
+        <div class="b-g-p clearfix">
+          <h1>LocServices UI: Search</h1>
+        </div>
+      </div>
+      <div class="b-g-p clearfix">
+        <h2>Example</h2>
+        <div class="component">
+          <form class="locator-container locator-search-container-inner">
+            <div class="locator-column locator-input-container">
+              <input type="text" name="search" class="locator-search-input" id="locator-search-input" placeholder="Enter a town, city or UK postcode" autocomplete="off">
+            </div>
+            <div class="locator-column locator-submit-button">
+              <input type="submit" name="q" value="Search" title="Search for location" />
+            </div>
+          </form>
+        </div>
+        <div class="output">
+
+        </div>
+        <h2>Setup</h2>
+        <pre class="html">
+          &lt;form class="locator-container locator-search-container-inner"&gt;
+            &lt;div class="locator-column locator-input-container"&gt;
+              &lt;input type="text" name="search" class="locator-search-input" id="locator-search-input" placeholder="Enter a town, city or UK postcode" autocomplete="off"&gt;
+            &lt;/div&gt;
+            &lt;div class="locator-column locator-submit-button"&gt;
+              &lt;input type="submit" name="q" value="Search" title="Search for location" /&gt;
+            &lt;/div&gt;
+          &lt;/form&gt;
+        </pre>
+
+        <pre class="js">
+          require(['jquery', 'locservices/core/api', 'locservices/ui/translation'], function($, Api, Translation) {
+            require([
+                'jquery',
+                'locservices/core/api',
+                'locservices/ui/translations/en',
+                'locservices/ui/component/search'
+              ], function($, Api, Translation, Search) {
+
+              'use strict';
+
+              var api = new Api();
+              var translations = new Translation();
+              var search = new Search({
+                api: api,
+                translations: translations,
+                container: $('form.locator-container')
+              });
+            });
+          });
+        </pre>
+
       </div>
     <barlesque:bodylast>
   </body>
