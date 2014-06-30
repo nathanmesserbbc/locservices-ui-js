@@ -12,6 +12,20 @@ module.exports = function(grunt) {
         open: true,
         livereload: true
       }
+    },
+    test: {
+      options: {
+        base: '<%= config.paths.test %>',
+        open: true,
+        livereload: true,
+        middleware: function(connect) {
+          var paths = grunt.config.get('config.paths');
+          return [
+            connect['static'](paths.test),
+            connect['static'](paths.app)
+          ];
+        }
+      }
     }
   };
 };

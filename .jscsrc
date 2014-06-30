@@ -9,8 +9,6 @@
 
   "requireSpacesInsideObjectBrackets": "allButNested",
 
-  "disallowQuotedKeysInObjects": "allButReserved",
-
   "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
 
   "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],

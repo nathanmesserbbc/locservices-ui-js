@@ -17,7 +17,7 @@ module.exports = function(config) {
       {pattern: 'src/js/**/*.js', included: false},
       {pattern: 'src/vendor/jquery/dist/**/*.js', included: false},
       {pattern: 'src/vendor/locservices-core-js/src/**/*.js', included: false},
-      {pattern: 'test/js/**/*.js', included: false}
+      {pattern: 'test/specs/**/*.js', included: false}
     ],
 
     // list of files to exclude

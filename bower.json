@@ -20,6 +20,9 @@
     "locservices-core-js": "https://github.com/BBC-Location-Services/locservices-core-js.git"
   },
   "devDependencies": {
-    "jquery": "1.11.1"
+    "jquery": "1.11.1",
+    "requirejs": "~2.1.14",
+    "jasmine": "~2.0.0",
+    "sinon": "~1.10.2"
   }
 }

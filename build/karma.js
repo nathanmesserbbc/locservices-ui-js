@@ -11,6 +11,9 @@ module.exports = function(grunt) {
     },
     debug: {
       logLevel: 'DEBUG'
+      // logLevel: 'DEBUG',
+      // singleRun: true,
+      // browsers: ['Chrome']
     }
   };
 };
