@@ -14,7 +14,7 @@ module.exports = function(grunt) {
       tasks: ['jshint:build']
     },
     html: {
-      files: '<%= config.paths.template %>**/*',
+      files: '<%= config.paths.template %>/**/*',
       tasks: ['template']
     },
     js: {
