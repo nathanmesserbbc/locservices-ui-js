@@ -5,7 +5,9 @@ define(function() {
   'use strict';
 
   var dictionary = {
-    foo: 'bar'
+    foo: 'bar',
+    'search.placeholder': 'Search for a location',
+    'search.submit': 'Search'
   };
 
   function TranslationsEn() {}

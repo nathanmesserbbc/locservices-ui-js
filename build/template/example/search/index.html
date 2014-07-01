@@ -17,52 +17,12 @@
       <div class="b-g-p clearfix">
         <h2>Example</h2>
         <div class="component">
-          <form class="locator-container locator-search-container-inner">
-            <div class="locator-column locator-input-container">
-              <input type="text" name="search" class="locator-search-input" id="locator-search-input" placeholder="Enter a town, city or UK postcode" autocomplete="off">
-            </div>
-            <div class="locator-column locator-submit-button">
-              <input type="submit" name="q" value="Search" title="Search for location" />
-            </div>
-          </form>
+          <div class="search-component" data-namespace="primary-search"></div>
         </div>
-        <div class="output">
+        <h2>Sample output <i>(<strong>note:</strong> this is not part of the component)</i></h2>
+        <ul class="output">
 
-        </div>
-        <h2>Setup</h2>
-        <pre class="html">
-          &lt;form class="locator-container locator-search-container-inner"&gt;
-            &lt;div class="locator-column locator-input-container"&gt;
-              &lt;input type="text" name="search" class="locator-search-input" id="locator-search-input" placeholder="Enter a town, city or UK postcode" autocomplete="off"&gt;
-            &lt;/div&gt;
-            &lt;div class="locator-column locator-submit-button"&gt;
-              &lt;input type="submit" name="q" value="Search" title="Search for location" /&gt;
-            &lt;/div&gt;
-          &lt;/form&gt;
-        </pre>
-
-        <pre class="js">
-          require(['jquery', 'locservices/core/api', 'locservices/ui/translation'], function($, Api, Translation) {
-            require([
-                'jquery',
-                'locservices/core/api',
-                'locservices/ui/translations/en',
-                'locservices/ui/component/search'
-              ], function($, Api, Translation, Search) {
-
-              'use strict';
-
-              var api = new Api();
-              var translations = new Translation();
-              var search = new Search({
-                api: api,
-                translations: translations,
-                container: $('form.locator-container')
-              });
-            });
-          });
-        </pre>
-
+        </ul>
       </div>
     <barlesque:bodylast>
   </body>

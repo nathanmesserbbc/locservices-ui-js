@@ -4,19 +4,22 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   'use strict';
 
-  var form = $('<form />').attr('method', 'post'). attr('action', '#');
+  var form = $('<form />')
+                .attr('method', 'post')
+                .attr('action', '#')
+                .addClass('ls-ui-form');
 
   var input = function(translations) {
     return $('<input />')
             .attr('type', 'text')
-            .attr('class', 'ls-search-input')
+            .attr('class', 'ls-ui-input')
             .attr('placeholder', translations.get('search.placeholder'));
   };
 
   var submit = function(translations) {
     return $('<input />')
               .attr('type', 'submit')
-              .attr('class', 'ls-search-submut')
+              .attr('class', 'ls-ui-submit')
               .attr('value', translations.get('search.submit'));
   };
 
@@ -47,19 +50,20 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     if (undefined === searchTerm || 0 === searchTerm.length) {
       return;
     }
-    $.emit(this.eventNamespace + ':start', [searchTerm]);
+    var self = this;
+    $.emit(self.eventNamespace + ':start', [searchTerm]);
 
-    this.api.search(searchTerm, {
+    self.api.search(searchTerm, {
       params: {},
       success: function(data) {
-        $.emit(this.eventNamespace + ':end');
+        $.emit(self.eventNamespace + ':end');
         data.metadata.startOffset = 0;
         data.metadata.searchTerm = searchTerm;
-        $.emit(this.eventNamespace + ':results', [data.results, data.metadata]);
+        $.emit(self.eventNamespace + ':results', [data.results, data.metadata]);
       },
       error: function() {
-        $.emit(this.eventNamespace + ':end');
-        $.emit(this.eventNamespace + ':error', ['Error searching for "' + searchTerm + '"']);
+        $.emit(self.eventNamespace + ':end');
+        $.emit(self.eventNamespace + ':error', ['Error searching for "' + searchTerm + '"']);
       }
     });
   };
@@ -70,7 +74,14 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   var render = function(translations, container) {
     var inputEl  = input(translations);
     var submitEl = submit(translations);
-    container.html(form.append(inputEl).append(submitEl));
+
+    container.html(
+      form.append(
+        $('<div />').addClass('ls-ui-col').append(inputEl)
+      ).append(
+        $('<div />').addClass('ls-ui-col').append(submitEl)
+      )
+    ).addClass('ls-ui-comp-search');
   };
 
   return Search;
