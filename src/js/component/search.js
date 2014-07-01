@@ -4,17 +4,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   'use strict';
 
-  /**
-   * @var jQuery
-   */
   var form = $('<form />').attr('method', 'post'). attr('action', '#');
 
-  /**
-   * Returns submit button
-   *
-   * @param En translation
-   * @return jQuery
-   */
   var input = function(translations) {
     return $('<input />')
             .attr('type', 'text')
@@ -22,12 +13,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
             .attr('placeholder', translations.get('search.placeholder'));
   };
 
-  /**
-   * Returns submit button
-   *
-   * @param En translation
-   * @return jQuery
-   */
   var submit = function(translations) {
     return $('<input />')
               .attr('type', 'submit')
@@ -68,7 +53,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       params: {},
       success: function(data) {
         $.emit(this.eventNamespace + ':end');
-        data.metadata.startOffset = startOffset;
+        data.metadata.startOffset = 0;
         data.metadata.searchTerm = searchTerm;
         $.emit(this.eventNamespace + ':results', [data.results, data.metadata]);
       },

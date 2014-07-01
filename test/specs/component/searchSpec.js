@@ -1,4 +1,4 @@
-/*global describe, beforeEach, locservices, it:false*/
+/*global describe, beforeEach, afterEach, locservices, it:false*/
 
 define([
   'jquery',
@@ -20,7 +20,7 @@ define([
       container.trigger('submit');
     };
 
-    describe('constructor()', function() {
+    describe('constructor', function() {
 
       beforeEach(function() {
         translations = new En();
@@ -50,7 +50,7 @@ define([
       });
     });
 
-    describe('search()', function() {
+    describe('search', function() {
 
       var mock;
 
@@ -58,10 +58,9 @@ define([
         container = $('<div />');
         api  = new Api();
         mock = sinon.mock(api);
-        translations = new En();
 
         search = new Search({
-          translations: translations,
+          translations: new En(),
           container: container,
           api: api
         });
@@ -82,19 +81,24 @@ define([
 
     describe('events', function() {
 
-      var stub, apiStub;
+      var stub, searchStub;
+      var results = {
+        metadata: {},
+        results: {}
+      };
 
       beforeEach(function() {
         container = $('<div />');
-        api  = new Api();
-        apiStub = sinon.stub(api, 'search');
-        translations = new En();
-
+        searchStub = sinon.stub(Api.prototype, 'search');
         search = new Search({
-          translations: translations,
+          translations: new En(),
           container: container,
-          api: apiStub
+          api: new Api()
         });
+      });
+
+      afterEach(function() {
+        searchStub.restore();
       });
 
       it('should emit an event when a search starts', function() {
@@ -107,10 +111,8 @@ define([
 
       it('should emit an event when a search end', function() {
         var stub = sinon.stub($, 'emit');
-
-        console.log(apiStub);
-        //apiStub.yeildsTo('success', [1, 2, 3]);
         var eventName = 'locservices:ui:component:search:end';
+        searchStub.yieldsToOn('success', search, results);
         submitSearch('Cardiff');
         expect(stub.calledWith(eventName)).toBe(true);
         stub.restore();
@@ -119,6 +121,8 @@ define([
       it('should emit an event when a search has results', function() {
         var stub = sinon.stub($, 'emit');
         var eventName = 'locservices:ui:component:search:results';
+
+        searchStub.yieldsToOn('success', search, results);
         submitSearch('Cardiff');
         expect(stub.calledWith(eventName)).toBe(true);
         stub.restore();
@@ -127,6 +131,8 @@ define([
       it('should emit an event when a search returns an error', function() {
         var stub = sinon.stub($, 'emit');
         var eventName = 'locservices:ui:component:search:error';
+
+        searchStub.yieldsToOn('error', search, 'Error searching for "Cardiff"');
         submitSearch('Cardiff');
         expect(stub.calledWith(eventName)).toBe(true);
         stub.restore();
