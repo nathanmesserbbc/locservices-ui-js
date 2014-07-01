@@ -4,6 +4,37 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   'use strict';
 
+  /**
+   * @var jQuery
+   */
+  var form = $('<form />').attr('method', 'post'). attr('action', '#');
+
+  /**
+   * Returns submit button
+   *
+   * @param En translation
+   * @return jQuery
+   */
+  var input = function(translations) {
+    return $('<input />')
+            .attr('type', 'text')
+            .attr('class', 'ls-search-input')
+            .attr('placeholder', translations.get('search.placeholder'));
+  };
+
+  /**
+   * Returns submit button
+   *
+   * @param En translation
+   * @return jQuery
+   */
+  var submit = function(translations) {
+    return $('<input />')
+              .attr('type', 'submit')
+              .attr('class', 'ls-search-submut')
+              .attr('value', translations.get('search.submit'));
+  };
+
   function Search(options) {
     var self = this;
     options = options || {};
@@ -15,7 +46,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.api = options.api;
     }
     self.setComponentOptions(options);
-    self.input = self.container.find(options.selector || '#ls-search-input');
+    render(self.translations, self.container);
+    self.input = self.container.find('input[type=text]');
 
     self.container.on('submit', function(e) {
       e.preventDefault();
@@ -26,11 +58,14 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   Search.prototype.constructor = Search;
 
   Search.prototype.search = function(searchTerm, startOffset) {
-    var params = {};
 
+    if (undefined === searchTerm || 0 === searchTerm.length) {
+      return;
+    }
     $.emit(this.eventNamespace + ':start', [searchTerm]);
+
     this.api.search(searchTerm, {
-      params: params,
+      params: {},
       success: function(data) {
         $.emit(this.eventNamespace + ':end');
         data.metadata.startOffset = startOffset;
@@ -42,6 +77,15 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
         $.emit(this.eventNamespace + ':error', ['Error searching for "' + searchTerm + '"']);
       }
     });
+  };
+
+  /**
+   * Renders component into the container element
+   */
+  var render = function(translations, container) {
+    var inputEl  = input(translations);
+    var submitEl = submit(translations);
+    container.html(form.append(inputEl).append(submitEl));
   };
 
   return Search;
