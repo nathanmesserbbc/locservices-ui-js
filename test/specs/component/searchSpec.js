@@ -72,6 +72,13 @@ define([
         mock.verify();
       });
 
+      it('should only permit a single search at one time', function() {
+        mock.expects('search').once();
+        submitSearch('Cardiff');
+        submitSearch('Manchester');
+        mock.verify();
+      });
+
       it('should not search if the search term is empty', function() {
         mock.expects('search').never();
         submitSearch('');

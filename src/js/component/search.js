@@ -36,6 +36,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.setComponentOptions(options);
     render(self.translations, self.container);
     self.input = self.container.find('input[type=text]');
+    self.isSearching = false;
 
     self.container.on('submit', function(e) {
       e.preventDefault();
@@ -47,22 +48,28 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   Search.prototype.search = function(searchTerm, startOffset) {
 
-    if (undefined === searchTerm || 0 === searchTerm.length) {
+    var self = this;
+
+    if (undefined === searchTerm ||
+          0 === searchTerm.length ||
+          true === self.isSearching) {
       return;
     }
-    var self = this;
     $.emit(self.eventNamespace + ':start', [searchTerm]);
+    self.isSearching = true;
 
     self.api.search(searchTerm, {
       params: {},
       success: function(data) {
         $.emit(self.eventNamespace + ':end');
+        self.isSearching = false;
         data.metadata.startOffset = 0;
         data.metadata.searchTerm = searchTerm;
         $.emit(self.eventNamespace + ':results', [data.results, data.metadata]);
       },
       error: function() {
         $.emit(self.eventNamespace + ':end');
+        self.isSearching = false;
         $.emit(self.eventNamespace + ':error', ['Error searching for "' + searchTerm + '"']);
       }
     });
