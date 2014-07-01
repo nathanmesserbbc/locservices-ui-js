@@ -46,16 +46,16 @@ define([
 
       it('should set the content', function() {
         message.set('Sample message');
-        expect(container.text()).toBe('Sample message');
-        expect(container.hasClass('active')).toBe(true);
+        expect(message.element.text()).toBe('Sample message');
+        expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
       it('should remove the content', function() {
         message.set('Sample message');
-        expect(container.text()).toBe('Sample message');
+        expect(message.element.text()).toBe('Sample message');
         message.clear();
-        expect(container.text()).toBe('');
-        expect(container.hasClass('active')).toBe(false);
+        expect(message.element.text()).toBe('');
+        expect(message.element.hasClass('ls-ui-active')).toBe(false);
       });
 
     });
@@ -75,38 +75,38 @@ define([
       });
 
       it('should respond to errors', function() {
-        expect(container.text()).toBe('');
+        expect(message.element.text()).toBe('');
         $.emit('message-test:error', ['An emitted error']);
-        expect(container.text()).toBe('An emitted error');
-        expect(container.hasClass('active')).toBe(true);
+        expect(message.element.text()).toBe('An emitted error');
+        expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
       it('should set content on search start', function() {
         message.set('');
         $.emit('message-test:component:search:start', ['Cardiff']);
-        expect(container.text()).toBe('Searching for "Cardiff"');
-        expect(container.hasClass('active')).toBe(true);
+        expect(message.element.text()).toBe('Searching for "Cardiff"');
+        expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
       it('should remove content on search completes', function() {
         message.set('Detecting your location');
         $.emit('message-test:component:search:end');
-        expect(container.text()).toBe('');
-        expect(container.hasClass('active')).toBe(false);
+        expect(message.element.text()).toBe('');
+        expect(message.element.hasClass('ls-ui-active')).toBe(false);
       });
 
       it('should set detection on geolocation start', function() {
         message.set('');
         $.emit('message-test:component:geolocation:start');
-        expect(container.text()).toBe('Detecting your location.');
-        expect(container.hasClass('active')).toBe(true);
+        expect(message.element.text()).toBe('Detecting your location.');
+        expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
       it('should set term being search on search start', function() {
         message.set('');
         $.emit('message-test:component:search:end');
-        expect(container.text()).toBe('');
-        expect(container.hasClass('active')).toBe(false);
+        expect(message.element.text()).toBe('');
+        expect(message.element.hasClass('ls-ui-active')).toBe(false);
       });
 
     });

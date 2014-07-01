@@ -9,21 +9,23 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     options = options || {};
     options.componentId = 'message';
 
-    this.setComponentOptions(options);
+    self.setComponentOptions(options);
+    render(self.container);
+    self.element = self.container.find('p');
 
     $.on(self.eventNamespaceBase + ':error', function(message) {
       self.set(message);
     });
 
     $.on(self.eventNamespaceBase + ':component:search:start', function(value) {
-      self.set('Searching for "' +value +'"');
+      self.set('Searching for "' + value + '"');
     });
 
     $.on(self.eventNamespaceBase + ':component:search:end', function() {
       self.clear();
     });
 
-    $.on(self.eventNamespaceBase + ':component:geolocation:start', function(value) {
+    $.on(self.eventNamespaceBase + ':component:geolocation:start', function() {
       self.set(self.translations.get('message.geolocation.detect'));
     });
 
@@ -35,13 +37,18 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   Message.prototype.constructor = Message;
 
   Message.prototype.clear = function() {
-    this.container.removeClass('active');
-    this.container.text('');
+    this.element.removeClass('ls-ui-active');
+    this.element.text('');
   };
 
   Message.prototype.set = function(value) {
-    this.container.addClass('active');
-    this.container.text(value);
+    this.element.addClass('ls-ui-active');
+    this.element.text(value);
+  };
+
+  var render = function(container) {
+    container.addClass('ls-ui-message')
+             .append($('<p />'));
   };
 
   return Message;
