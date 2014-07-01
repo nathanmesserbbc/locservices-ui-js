@@ -15,7 +15,19 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.set(message);
     });
 
-    $.on(self.eventNamespace + ':end', function() {
+    $.on(self.eventNamespaceBase + ':component:search:start', function(value) {
+      self.set('Searching for "' +value +'"');
+    });
+
+    $.on(self.eventNamespaceBase + ':component:search:end', function() {
+      self.clear();
+    });
+
+    $.on(self.eventNamespaceBase + ':component:geolocation:start', function(value) {
+      self.set(self.translations.get('message.geolocation.detect'));
+    });
+
+    $.on(self.eventNamespaceBase + ':component:geolocation:end', function() {
       self.clear();
     });
   }

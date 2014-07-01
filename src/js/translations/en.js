@@ -5,7 +5,8 @@ define(function() {
   'use strict';
 
   var dictionary = {
-    foo: 'bar'
+    foo: 'bar',
+    'message.geolocation.detect': 'Detecting your location.'
   };
 
   function TranslationsEn() {}

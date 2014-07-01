@@ -81,9 +81,30 @@ define([
         expect(container.hasClass('active')).toBe(true);
       });
 
-      it('should remove contents after end events', function() {
+      it('should set content on search start', function() {
+        message.set('');
+        $.emit('message-test:component:search:start', ['Cardiff']);
+        expect(container.text()).toBe('Searching for "Cardiff"');
+        expect(container.hasClass('active')).toBe(true);
+      });
+
+      it('should remove content on search completes', function() {
         message.set('Detecting your location');
-        $.emit('message-test:component:message:end', 'An emitted error');
+        $.emit('message-test:component:search:end');
+        expect(container.text()).toBe('');
+        expect(container.hasClass('active')).toBe(false);
+      });
+
+      it('should set detection on geolocation start', function() {
+        message.set('');
+        $.emit('message-test:component:geolocation:start');
+        expect(container.text()).toBe('Detecting your location.');
+        expect(container.hasClass('active')).toBe(true);
+      });
+
+      it('should set term being search on search start', function() {
+        message.set('');
+        $.emit('message-test:component:search:end');
         expect(container.text()).toBe('');
         expect(container.hasClass('active')).toBe(false);
       });
