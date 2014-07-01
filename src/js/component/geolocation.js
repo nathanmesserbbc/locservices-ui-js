@@ -30,14 +30,20 @@ define([
    */
   function Geolocation(options) {
 
+    this.isSupported = geolocation.isSupported;
+
+    if (this.isSupported === false) {
+      return;
+    }
+
     options = options || {};
-    options.component = 'geolocation';
+    options.componentId = 'geolocation';
 
     var self = this;
 
     this.setComponentOptions(options);
-    this.container.append(template.replace('{text}', 'Use my current location'));
-
+    var label = this.translations.get('geolocation.button.label');
+    this.container.append(template.replace('{text}', label));
     this._button = this.container.find('button');
     this._api = new Api();
     this._button.on('click', function(e) {

@@ -5,7 +5,7 @@ define(function() {
   'use strict';
 
   var dictionary = {
-    foo: 'bar'
+    'geolocation.button.label': 'Use my current location'
   };
 
   function TranslationsEn() {}
