@@ -46,7 +46,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   Search.prototype = new Component();
   Search.prototype.constructor = Search;
 
-  Search.prototype.search = function(searchTerm, startOffset) {
+  Search.prototype.search = function(searchTerm) {
 
     var self = this;
 
@@ -63,8 +63,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       success: function(data) {
         $.emit(self.eventNamespace + ':end');
         self.isSearching = false;
-        data.metadata.startOffset = 0;
-        data.metadata.searchTerm = searchTerm;
         $.emit(self.eventNamespace + ':results', [data.results, data.metadata]);
       },
       error: function() {
