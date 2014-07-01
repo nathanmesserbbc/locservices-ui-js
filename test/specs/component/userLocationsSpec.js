@@ -1,10 +1,12 @@
 /*global describe, beforeEach, it:false*/
 
 define([
+  'jquery',
   'locservices/ui/component/user_locations',
   'locservices/ui/translations/en'
 ],
 function(
+    $,
     UserLocations,
     En
   )
@@ -13,6 +15,7 @@ function(
   describe('The User Locations module', function() {
     'use strict';
 
+    var container;
     var userLocations;
     var translations;
 
@@ -27,10 +30,11 @@ function(
     ];
 
     beforeEach(function() {
+      container = $('<div/>');
       translations = new En();
       userLocations = new UserLocations({
         translations: translations,
-        container: null
+        container: container
       });
     });
 
