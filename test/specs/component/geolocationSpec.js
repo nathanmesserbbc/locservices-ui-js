@@ -8,6 +8,8 @@ define([
 
   var geolocation, container, translations;
 
+  geo.isSupported = true;
+
   beforeEach(function() {
     container = $('<div />');
     translations = new En();
@@ -15,8 +17,6 @@ define([
       container: container,
       translations: translations
     });
-
-    container.appendTo($('body'));
   });
 
   afterEach(function() {
@@ -50,16 +50,38 @@ define([
       stub.restore();
     });
 
-//    describe('onSuccess() success handled', function() {
-//      var stub = sinon.stub(geolocation._api, 'reverseGeocode');
-//      var position = {
-//        coords: {
-//          longitude: 0,
-//          latitude: 0
-//        }
-//      };
-//      geolocation.onSuccess(position);
-//      expect(stub.calledOnce).toBe(true);
-//    });
+    it('onSuccess() success handled', function() {
+      var stub = sinon.stub(geolocation._api, 'reverseGeocode');
+      var position = {
+        coords: {
+          longitude: 0,
+          latitude: 0
+        }
+      };
+      geolocation.onSuccess(position);
+      expect(stub.calledOnce).toBe(true);
+    });
+
+    describe('onSuccess()', function() {
+
+      it('emits the correct event name', function() {
+        var stub = sinon.stub($, 'emit');
+        var eventName = 'locservices:ui:component:geolocation:result';
+        geolocation.onSuccess({results: [{}]});
+        expect(stub.calledWith(eventName)).toBe(true);
+        stub.restore();
+      });
+    });
+
+    describe('onError()', function() {
+      it('emits the correct event name', function() {
+        var stub = sinon.stub($, 'emit');
+        var eventName = 'locservices:ui:component:geolocation:error';
+        geolocation.onError();
+        expect(stub.calledWith(eventName)).toBe(true);
+        stub.restore();
+      });
+    });
+
   });
 });

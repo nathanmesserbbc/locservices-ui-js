@@ -5,9 +5,9 @@ define([
   'locservices/core/api'
 ], function($, Component, geolocation, Api) {
 
-  var template = '<button type="button" class="locservices-ui-component locservices-ui-component-geolocation">'
-  + '<span class="locservices-ui-component-geolocation-label">{text}</span>'
-  + '<span class="locservices-ui-component-geolocation-icon"></span></button>';
+  var template = '<button type="button" class="locservices-ui-component locservices-ui-component-geolocation">';
+  template += '<span class="locservices-ui-component-geolocation-label">{text}</span>';
+  template += '<span class="locservices-ui-component-geolocation-icon"></span></button>';
 
   /**
    * Bind a context to a function.
@@ -42,15 +42,26 @@ define([
     var self = this;
 
     this.setComponentOptions(options);
+
     var label = this.translations.get('geolocation.button.label');
     this.container.append(template.replace('{text}', label));
+
     this._button = this.container.find('button');
     this._api = new Api();
+
     this._button.on('click', function(e) {
       e.preventDefault();
-
       geolocation.getCurrentPosition(
-        bind(self.onSuccess, self),
+        function(position) {
+          self._api.reverseGeocode(
+            position.coords.latitude,
+            position.coords.longitude,
+            {
+              success: bind(self.onSuccess, self),
+              error: bind(self.onError, self)
+            }
+          );
+        },
         bind(self.onError, self)
       );
     });
@@ -61,27 +72,17 @@ define([
   /**
    * Success handler.
    *
-   * @param {Object} position the position result
+   * @param {Object} data the response data from the API call
    */
-  Geolocation.prototype.onSuccess = function(position) {
-
-    this._api.reverseGeocode(
-      position.coords.latitude,
-      position.coords.longitude,
-      {
-        success: function(data) {
-//          $.emit(this.eventNamespace + 'result', [data.results[0]]);
-        },
-        error: this.onError
-      }
-    );
+  Geolocation.prototype.onSuccess = function(data) {
+    $.emit(this.eventNamespace + ':result', [data.results[0]]);
   };
 
   /**
    * Error handler
    */
   Geolocation.prototype.onError = function() {
-    $.emit(this.eventNamespace + 'error');
+    $.emit(this.eventNamespace + ':error');
   };
 
   return Geolocation;
