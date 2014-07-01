@@ -15,6 +15,38 @@ function(
 
   'use strict';
 
+  var templates = {
+    element: $('<div />').addClass('ls-ui-comp-user_locations'),
+    heading: function(translations, noOfLocations) {
+      return $('<p />').text(
+        translations.get('user_locations.heading') + ' (' + noOfLocations + ')'
+      );
+    },
+    list: $('<ul/>'),
+    location: function(translations, location) {
+      var locationId = location.id;
+      var linkName = $('<a/>')
+        .addClass('ls-ui-comp-user_locations-name')
+        .attr('href', '?locationId=' +locationId)
+        .html($('<strong/>').text(location.name));
+      if (location.container) {
+        linkName.append(', ' +location.container);
+      }
+      var linkPreferred = $('<a/>')
+        .addClass('ls-ui-comp-user_locations-recent')
+        .attr('href', '?locationId=' +locationId)
+        .text(translations.get('user_locations.recent'));
+      var linkRemove = $('<a/>')
+        .addClass('ls-ui-comp-user_locations-remove')
+        .attr('href', '?locationId=' +locationId)
+        .text(translations.get('user_locations.remove'));
+      return $('<li />')
+        .append(linkPreferred)
+        .append(linkName)
+        .append(linkRemove);
+    }
+  };
+
   /**
    * User Locations constructor
    *
@@ -29,12 +61,7 @@ function(
     this.preferredLocation = new PreferredLocation();
     this.recentLocations = new RecentLocations();
 
-    // @todo inject container as an option
-    // @todo test this
-    this.container.append('<div class="ls-ui-user_locations"></div>');
-    this.element = this.container.find('.ls-ui-user_locations');
-
-    this.element.on('click', function(e) {
+    templates.element.on('click', function(e) {
       var target;
       var locationId;
       e.preventDefault();
@@ -101,34 +128,23 @@ function(
    * Render a list of locations
    */
   UserLocations.prototype.render = function() {
-    var html = '';
     var locations;
-    var location;
     var noOfLocations;
     var locationIndex;
-    var label;
-
-    // @todo render the prefer link
-    // @todo render the active prefer link
 
     locations = this.getLocations();
     noOfLocations = locations.length;
+
+    templates.element.append(templates.heading(this.translations, noOfLocations));
+
     if (0 < noOfLocations) {
-      html = '<ul>';
       for (locationIndex = 0; locationIndex < noOfLocations; locationIndex++) {
-        location = locations[locationIndex];
-        label = location.name;
-        if (location.container) {
-          label += ', ' + location.container;
-        }
-        html += '<li><a href="?locationId=' + location.id + '">' +
-          label +
-          '<span class="ls-ui-user_locations-remove">remove</span>' +
-          '</a></li>';
+        templates.list.append(templates.location(this.translations, locations[locationIndex]));
       }
-      html += '</ul>';
+      templates.element.append(templates.list);
     }
-    this.element.html(html);
+
+    this.container.append(templates.element);
   };
 
   /**

@@ -5,7 +5,10 @@ define(function() {
   'use strict';
 
   var dictionary = {
-    foo: 'bar'
+    foo: 'bar',
+    'user_locations.heading': 'Your locations',
+    'user_locations.recent': 'Prefer',
+    'user_locations.remove': 'Remove'
   };
 
   function TranslationsEn() {}
