@@ -137,7 +137,7 @@ define([
 
       it('should emit an event when a search returns an error', function() {
         var stub = sinon.stub($, 'emit');
-        var eventName = 'locservices:ui:component:search:error';
+        var eventName = 'locservices:ui:error';
 
         searchStub.yieldsToOn('error', search, 'Error searching for "Cardiff"');
         submitSearch('Cardiff');

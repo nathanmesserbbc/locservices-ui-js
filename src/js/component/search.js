@@ -9,6 +9,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
                 .attr('action', '#')
                 .addClass('ls-ui-form');
 
+  var wrapEl = $('<div />').addClass('ls-ui-container');
+
   var input = function(translations) {
     return $('<input />')
             .attr('type', 'text')
@@ -20,7 +22,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     return $('<input />')
               .attr('type', 'submit')
               .attr('class', 'ls-ui-submit')
-              .attr('value', translations.get('search.submit'));
+              .attr('value', translations.get('search.submit'))
+              .attr('title', translations.get('search.submit.title'));
   };
 
   function Search(options) {
@@ -34,10 +37,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.api = options.api;
     }
     self.setComponentOptions(options);
-    render(self.translations, self.container);
-    self.input = self.container.find('input[type=text]');
     self.isSearching = false;
+    render(self.translations, self.container);
 
+    self.input = self.container.find('input[type=text]');
     self.container.on('submit', function(e) {
       e.preventDefault();
       self.search(self.input.val());
@@ -59,18 +62,15 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.isSearching = true;
 
     self.api.search(searchTerm, {
-      params: {},
       success: function(data) {
         $.emit(self.eventNamespace + ':end');
         self.isSearching = false;
-        data.metadata.startOffset = 0;
-        data.metadata.searchTerm = searchTerm;
         $.emit(self.eventNamespace + ':results', [data.results, data.metadata]);
       },
       error: function() {
         $.emit(self.eventNamespace + ':end');
         self.isSearching = false;
-        $.emit(self.eventNamespace + ':error', ['Error searching for "' + searchTerm + '"']);
+        $.emit(self.eventNamespaceBase + ':error', ['Error searching for "' + searchTerm + '"']);
       }
     });
   };
@@ -82,13 +82,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     var inputEl  = input(translations);
     var submitEl = submit(translations);
 
-    container.html(
-      form.append(
-        $('<div />').addClass('ls-ui-col').append(inputEl)
-      ).append(
-        $('<div />').addClass('ls-ui-col').append(submitEl)
-      )
-    ).addClass('ls-ui-comp-search');
+    container.addClass('ls-ui-comp-search')
+             .html(form.append(wrapEl.append(inputEl)).append(submitEl));
   };
 
   return Search;

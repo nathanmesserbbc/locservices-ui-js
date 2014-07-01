@@ -6,8 +6,9 @@ define(function() {
 
   var dictionary = {
     foo: 'bar',
-    'search.placeholder': 'Search for a location',
-    'search.submit': 'Search'
+    'search.placeholder': 'Enter a town, city or UK postcode',
+    'search.submit': 'Search',
+    'search.submit.title': 'Search for a location'
   };
 
   function TranslationsEn() {}
