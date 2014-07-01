@@ -16,29 +16,33 @@ function(
   'use strict';
 
   var templates = {
-    element: $('<div />').addClass('ls-ui-comp-user_locations'),
+
+    element: $('<div />').addClass('ls-ui-comp-userLocations'),
+
     heading: function(translations, noOfLocations) {
       return $('<p />').text(
         translations.get('user_locations.heading') + ' (' + noOfLocations + ')'
       );
     },
+
     list: $('<ul/>'),
+
     location: function(translations, location) {
       var locationId = location.id;
       var linkName = $('<a/>')
-        .addClass('ls-ui-comp-user_locations-name')
-        .attr('href', '?locationId=' +locationId)
+        .addClass('ls-ui-comp-userLocations-name')
+        .attr('href', '?locationId=' + locationId)
         .html($('<strong/>').text(location.name));
       if (location.container) {
-        linkName.append(', ' +location.container);
+        linkName.append(', ' + location.container);
       }
       var linkPreferred = $('<a/>')
-        .addClass('ls-ui-comp-user_locations-recent')
-        .attr('href', '?locationId=' +locationId)
+        .addClass('ls-ui-comp-userLocations-recent')
+        .attr('href', '?locationId=' + locationId)
         .text(translations.get('user_locations.recent'));
       var linkRemove = $('<a/>')
-        .addClass('ls-ui-comp-user_locations-remove')
-        .attr('href', '?locationId=' +locationId)
+        .addClass('ls-ui-comp-userLocations-remove')
+        .attr('href', '?locationId=' + locationId)
         .text(translations.get('user_locations.remove'));
       return $('<li />')
         .append(linkPreferred)
@@ -66,7 +70,7 @@ function(
       var locationId;
       e.preventDefault();
       target = $(e.target);
-      if (target.hasClass('ls-ui-user_locations-remove')) {
+      if (target.hasClass('ls-ui-userLocations-remove')) {
         locationId = target.parent().attr('href').split('=')[1];
         self.removeLocationById(locationId);
       }
