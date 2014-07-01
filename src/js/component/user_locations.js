@@ -29,6 +29,8 @@ function(
 
     location: function(translations, location) {
       var locationId = location.id;
+      var nameClass = location.isPreferred ? 'ls-ui-comp-userLocations-preferred'
+        : 'ls-ui-comp-userLocations-recent';
       var linkName = $('<a/>')
         .addClass('ls-ui-comp-userLocations-name')
         .attr('href', '?locationId=' + locationId)
@@ -37,7 +39,7 @@ function(
         linkName.append(', ' + location.container);
       }
       var linkPreferred = $('<a/>')
-        .addClass('ls-ui-comp-userLocations-recent')
+        .addClass(nameClass)
         .attr('href', '?locationId=' + locationId)
         .text(translations.get('user_locations.recent'));
       var linkRemove = $('<a/>')
@@ -69,17 +71,21 @@ function(
       var target;
       var locationId;
       e.preventDefault();
+      e.stopPropagation();
       target = $(e.target);
-      if (target.hasClass('ls-ui-userLocations-remove')) {
-        locationId = target.parent().attr('href').split('=')[1];
+      if (target.hasClass('ls-ui-comp-userLocations-recent')) {
+        locationId = target.attr('href').split('=')[1];
+        self.setPreferredLocationById(locationId);
+      } else if (target.hasClass('ls-ui-comp-userLocations-remove')) {
+        // @todo test this
+        locationId = target.attr('href').split('=')[1];
         self.removeLocationById(locationId);
       }
 
-      // @todo handle clicking on the prefer link
-
     });
 
-    // @todo test this call
+    // @todo test both lines
+    this.container.append(templates.element);
     this.render();
  
   }
@@ -136,6 +142,9 @@ function(
     var noOfLocations;
     var locationIndex;
 
+    templates.element.empty();
+    templates.list.empty();
+
     locations = this.getLocations();
     noOfLocations = locations.length;
 
@@ -147,8 +156,6 @@ function(
       }
       templates.element.append(templates.list);
     }
-
-    this.container.append(templates.element);
   };
 
   /**
@@ -169,6 +176,10 @@ function(
     if (this.preferredLocation.isSet()) {
       noOfLocationsRemaining--;
       preferredLocation = this.preferredLocation.get();
+
+      // @todo tests this line
+      preferredLocation.isPreferred = true;
+
       locations.push(preferredLocation);
     }
 
