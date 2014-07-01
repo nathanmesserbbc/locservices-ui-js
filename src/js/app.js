@@ -1,7 +1,7 @@
 /*global console,debugger:false*/
 console.log('demo start...');
 
-require(['jquery-1'], function(jQuery) {
+require(['jquery', 'vendor/events/pubsub'], function(jQuery) {
   require.config({ baseUrl: '/' });
 
   require([
