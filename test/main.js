@@ -1,6 +1,6 @@
 /* global requirejs */
 
-var allTestFiles = [];
+var allTestFiles = ['pubsub'];
 var TEST_REGEXP = /(spec|test)\.js$/i;
 
 var pathToModule = function(path) {
@@ -25,6 +25,7 @@ require.config({
   callback: window.__karma__.start,
 
   paths: {
+    'pubsub' : 'src/vendor/events/pubsub',
     'jquery' : 'src/vendor/jquery/dist/jquery',
     'locservices/ui' : 'src/js',
     'locservices/core': 'src/vendor/locservices-core-js/src'

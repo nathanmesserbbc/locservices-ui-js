@@ -15,7 +15,8 @@ module.exports = function(grunt) {
       files: {
         src: [
           '<%= config.paths.js %>**/*.js',
-          '<%= config.paths.test %>**/*.js'
+          '<%= config.paths.test %>**/*.js',
+          '!<%= config.paths.test %>/vendor/**/*.js'
         ]
       }
     }

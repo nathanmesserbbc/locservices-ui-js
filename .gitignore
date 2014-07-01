@@ -12,4 +12,5 @@ node_modules
 bower_components
 vendor
 !src/vendor/events/pubsub.js
+!test/vendor
 src/css
