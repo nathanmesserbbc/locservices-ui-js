@@ -6,14 +6,16 @@ define([
   'locservices/ui/component/search',
   'locservices/ui/component/message',
   'locservices/ui/component/geolocation',
-  'locservices/ui/component/search_results'
+  'locservices/ui/component/search_results',
+  'locservices/ui/component/user_locations'
 ], function(
   $,
   Api,
   Search,
   Message,
   Geolocation,
-  SearchResults
+  SearchResults,
+  UserLocations
 ) {
   'use strict';
 
@@ -63,6 +65,11 @@ define([
       translations: options.translations,
       eventNamespace: namespace,
       container: this.container.find('.ls-ui-search-results')
+    });
+
+    new UserLocations({
+      translations: options.translations,
+      container: this.container.find('.ls-ui-user-locations')
     });
   }
 
