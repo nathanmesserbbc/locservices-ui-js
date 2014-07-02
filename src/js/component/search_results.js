@@ -28,7 +28,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       }
       self.render(metadata, results);
     });
-
     self.setup();
   }
   SearchResults.prototype = new Component();

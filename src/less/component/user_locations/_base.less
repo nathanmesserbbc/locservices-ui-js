@@ -1,0 +1,54 @@
+.ls-ui-comp-userLocations {
+  p {
+      padding: 8px;
+      margin: 0;
+      font-size: @font14;
+      color: @font-color;
+      border-bottom: 1px solid @ls-ui-input-background;
+  }
+
+  ul {
+      padding: 0;
+      margin: 0 0 16px 0;
+  }
+
+  li {
+      padding: 5px;
+      margin: 0;
+      list-style-type: none;
+      border-bottom: 1px solid @ls-ui-input-background;
+  }
+}
+
+.ls-ui-comp-userLocations-name {
+    display: inline-block;
+    padding: 7px 10px;
+    font-size: @font14;
+    color: @font-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+}
+.ls-ui-comp-userLocations-recent,
+.ls-ui-comp-userLocations-preferred {
+    float: left;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    text-indent: -10000px;
+    background: url("@{asset-path}/user_locations/star_empty_sm.png") no-repeat;
+}
+.ls-ui-comp-userLocations-preferred {
+    background: url("@{asset-path}/user_locations/star_filled_sm.png") no-repeat;
+}
+.ls-ui-comp-userLocations-remove {
+    float: right;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin-top: 2px;
+    text-indent: -10000px;
+    background: url("@{asset-path}/user_locations/close_cross_sm.png") no-repeat;
+}
