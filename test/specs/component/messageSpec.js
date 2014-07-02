@@ -1,4 +1,4 @@
-/*global describe, beforeEach, afterEach, locservices, it:false*/
+/*global describe, beforeEach, it:false*/
 
 define([
   'jquery',
