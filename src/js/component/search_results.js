@@ -40,11 +40,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   SearchResults.prototype.setup = function() {
 
     var internalContainer = $('<div />').addClass('li-ui-comp-search-results-container');
-    this.title = $('<h2 />');
     this.list = $('<ul />');
     this.moreResults = $('<a />').attr('href', '').addClass('ls-ui-comp-search-results-more').text('Show more results');
 
-    internalContainer.append(this.title).append(this.list).append(this.moreResults);
+    internalContainer.append(this.list).append(this.moreResults);
     this.container.append(internalContainer);
 
     var self = this;
@@ -102,8 +101,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     } else {
       this.moreResults.removeClass('active');
     }
-
-    this.title.text('Search results for: ' + this.searchTerm);
   };
 
   /**
@@ -111,7 +108,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   SearchResults.prototype.clear = function() {
     this.moreResults.removeClass('active');
-    this.title.text('');
     this.list.empty();
   };
 
