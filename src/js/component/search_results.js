@@ -3,7 +3,13 @@
 define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'], function($, Component, API) {
 
   'use strict';
-
+  
+  /**
+   * SearchResults.
+   *
+   * @param {Object} options
+   * @constructor
+   */
   function SearchResults(options) {
     var self = this;
     options = options || {};
@@ -25,6 +31,10 @@ define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'],
   SearchResults.prototype = new Component();
   SearchResults.prototype.constructor = SearchResults;
 
+
+  /**
+   * Setup the DOM
+   */
   SearchResults.prototype.setup = function() {
     var html = '<div class="li-ui-comp-search-results-container"><h2>Search results</h2>' +
                 '<ul></ul>' +
@@ -58,6 +68,12 @@ define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'],
 
   };
 
+  /**
+   * Render some search results.
+   *
+   * @param {Object} metadata
+   * @param {Array} results
+   */
   SearchResults.prototype.render = function(metadata, results) {
     var i, result, label, html = '';
 
@@ -88,6 +104,9 @@ define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'],
     this.title.text('Search results for: ' + this.searchTerm);
   };
 
+  /**
+   * Clear / empty the DOM components
+   */
   SearchResults.prototype.clear = function() {
     this.moreResults.removeClass('active');
     this.title.text('');
