@@ -38,14 +38,14 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    * Setup the DOM
    */
   SearchResults.prototype.setup = function() {
-    var html = '<div class="li-ui-comp-search-results-container"><h2>Search results</h2>' +
-                '<ul></ul>' +
-                '<a href="" class="ls-ui-comp-search-results-more">Show more results.</a></div>';
-    this.container.append(html);
 
-    this.moreResults = this.container.find('.ls-ui-comp-search-results-more');
-    this.title       = this.container.find('h2');
-    this.list        = this.container.find('ul');
+    var internalContainer = $('<div />').addClass('li-ui-comp-search-results-container');
+    this.title = $('<h2 />');
+    this.list = $('<ul />');
+    this.moreResults = $('<a />').attr('href', '').addClass('ls-ui-comp-search-results-more').text('Show more results');
+
+    internalContainer.append(this.title).append(this.list).append(this.moreResults);
+    this.container.append(internalContainer);
 
     var self = this;
     this.list.on('click', function(evt) {
