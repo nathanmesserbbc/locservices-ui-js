@@ -146,6 +146,8 @@ define([
         results.list.find('a').trigger('click');
 
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search-results:location');
+
+        $.emit.restore();
       });
     });
 
