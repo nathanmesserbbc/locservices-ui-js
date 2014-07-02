@@ -1,9 +1,8 @@
 define([
   'jquery',
   'locservices/ui/component/component',
-  'locservices/core/geolocation',
-  'locservices/core/api'
-], function($, Component, geolocation, Api) {
+  'locservices/core/geolocation'
+], function($, Component, geolocation) {
 
   var template = '<button type="button" class="locservices-ui-component locservices-ui-component-geolocation">';
   template += '<span class="locservices-ui-component-geolocation-label">{text}</span>';

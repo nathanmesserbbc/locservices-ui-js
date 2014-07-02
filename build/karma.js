@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function() {
   return {
     options: {
       configFile: '<%= config.karmaconf %>'

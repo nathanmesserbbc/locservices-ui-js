@@ -1,4 +1,4 @@
-/*global describe, beforeEach, locservices, it:false*/
+/*global describe, beforeEach, it:false*/
 
 define([
   'locservices/ui/component/component',

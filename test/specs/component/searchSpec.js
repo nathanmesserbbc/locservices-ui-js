@@ -1,4 +1,4 @@
-/*global describe, beforeEach, afterEach, locservices, it:false*/
+/*global describe, beforeEach, afterEach, it:false*/
 
 define([
   'jquery',
@@ -88,7 +88,7 @@ define([
 
     describe('events', function() {
 
-      var stub, searchStub;
+      var searchStub;
       var results = {
         metadata: {},
         results: {}

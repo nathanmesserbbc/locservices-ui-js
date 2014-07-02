@@ -86,7 +86,7 @@ function(
     // @todo test both lines
     this.container.append(templates.element);
     this.render();
- 
+
     $.on(this.eventNamespaceBase + ':component:search_results:location', function(location) {
       self.addRecentLocation(location);
     });
