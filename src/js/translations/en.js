@@ -10,6 +10,10 @@ define(function() {
     'search.submit': 'Search',
     'search.submit.title': 'Search for a location',
     'geolocation.button.label': 'Use my current location',
+    'geolocation.error.http': 'We are unable to use your location.',
+    'geolocation.error.browser': 'We are unable to use your location.',
+    'geolocation.error.browser.permission': 'Please enable Location Services in your device settings or browser.',
+    'geolocation.error.outsideContext': 'Your location is not currently supported by this application.',
     'message.geolocation.detect': 'Detecting your location.'
   };
 

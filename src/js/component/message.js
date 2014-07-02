@@ -13,8 +13,12 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     render(self.container);
     self.element = self.container.find('p');
 
-    self.on('error', function(message) {
-      self.set(message);
+    self.on('error', function(error) {
+      if (typeof error === 'object') {
+        self.set(self.translations.get(error.code));
+        return;
+      }
+      self.set(error);
     });
 
     $.on(self.eventNamespaceBase + ':component:search:start', function(value) {
