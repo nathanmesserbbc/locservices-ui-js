@@ -3,9 +3,9 @@
 define([
   'jquery',
   'locservices/core/api',
-  'locservices/component/geolocation',
-  'locservices/component/message',
-  'locservices/component/search'
+  'locservices/ui/component/geolocation',
+  'locservices/ui/component/message',
+  'locservices/ui/component/search'
 ], function(
   $,
   Api,
