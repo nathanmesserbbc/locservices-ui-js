@@ -41,7 +41,7 @@ require([
 
   $.on('primary-search:component:search:results', function(results, metadata) {
     output.append(
-      $('<li />').text('Results for ' + metadata.searchTerm)
+      $('<li />').text('Results for ' + metadata.search)
     );
 
     for(var i = 0; i < results.length; i++) {
