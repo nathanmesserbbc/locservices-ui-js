@@ -1,9 +1,9 @@
 /*global define */
 
-define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'], function($, Component, API) {
+define(['jquery', 'locservices/ui/component/component'], function($, Component) {
 
   'use strict';
-  
+
   /**
    * SearchResults.
    *
@@ -15,22 +15,24 @@ define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'],
     options = options || {};
     options.componentId = 'search-results';
 
+    if (undefined === options.api) {
+      throw new Error('SearchResults requires api parameter');
+    } else {
+      self.api = options.api;
+    }
     self.setComponentOptions(options);
     $.on('locservices:ui:component:search:results', function(metadata, results) {
       if (metadata.totalResults === 1) {
-        $.emit('locservices:ui:component:search-results:location', [results[0].id]);
+        self.emit('location', [results[0].id]);
         return;
       }
       self.render(metadata, results);
     });
 
-    this.api = new API();
-
     self.setup();
   }
   SearchResults.prototype = new Component();
   SearchResults.prototype.constructor = SearchResults;
-
 
   /**
    * Setup the DOM
@@ -50,7 +52,7 @@ define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'],
       var locationId;
       evt.preventDefault();
       locationId = $(evt.target).data('id');
-      $.emit('locservices:ui:component:search-results:location', [locationId]);
+      self.emit('location', [locationId]);
       self.clear();
       return false;
     });

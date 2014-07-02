@@ -1,14 +1,15 @@
-/*global describe, beforeEach, afterEach, locservices, it:false*/
+/*global describe, beforeEach, afterEach, it:false*/
 
 define([
   'locservices/ui/component/search_results',
   'locservices/ui/translations/en',
+  'locservices/core/api',
   'jquery',
   'fixtures/multiple-results',
   'fixtures/more-multiple-results',
   'fixtures/single-result'
 ],
-  function(SearchResults, En, $, responseMultiple, responseMultipleMore, responseWithSingleResult) {
+  function(SearchResults, En, API, $, responseMultiple, responseMultipleMore, responseWithSingleResult) {
 
   describe('The search-results', function() {
     'use strict';
@@ -20,7 +21,8 @@ define([
 
       searchResults = new SearchResults({
         translations: new En(),
-        container: $('#search-results')
+        container: $('#search-results'),
+        api: new API()
       });
     });
 
@@ -46,7 +48,8 @@ define([
         var setup = sinon.spy(SearchResults.prototype, 'setup');
         new SearchResults({
           translations: new En(),
-          container: $('#search-results')
+          container: $('#search-results'),
+          api: new API()
         });
 
         expect(setup.calledOnce).toBe(true);
@@ -73,9 +76,10 @@ define([
 
       it('should listen to events from search component and call render()', function() {
         var render = sinon.spy(SearchResults.prototype, 'render');
-        var results = new SearchResults({
+        new SearchResults({
           translations: new En(),
-          container: $('#search-results')
+          container: $('#search-results'),
+          api: new API()
         });
 
         $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);
@@ -95,9 +99,10 @@ define([
 
       it('should not call render() if single result returned', function() {
         var render = sinon.spy(SearchResults.prototype, 'render');
-        var results = new SearchResults({
+        new SearchResults({
           translations: new En(),
-          container: $('#search-results')
+          container: $('#search-results'),
+          api: new API()
         });
 
         $.emit('locservices:ui:component:search:results', [responseWithSingleResult.metadata, responseWithSingleResult.results]);
@@ -116,7 +121,8 @@ define([
 
         new SearchResults({
           translations: new En(),
-          container: $('#search-results')
+          container: $('#search-results'),
+          api: new API()
         });
 
         $.emit('locservices:ui:component:search:results', [responseWithSingleResult.metadata, responseWithSingleResult.results]);
@@ -131,7 +137,8 @@ define([
 
         var results = new SearchResults({
           translations: new En(),
-          container: $('#search-results')
+          container: $('#search-results'),
+          api: new API()
         });
 
         $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);

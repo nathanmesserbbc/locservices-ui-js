@@ -25,7 +25,8 @@ require([
   var translations = new Translation();
   var searchResults = new SearchResults({
     translations: translations,
-    container: $('#search-results')
+    container: $('#search-results'),
+    api: api
   });
   api.search('cardiff', {
     success: function(res) {
