@@ -1,6 +1,7 @@
 @white: #fff;
 @background: #4a91bd;
 @background-highlight: lighten(@background, 10%);
+@output: #efefef;
 
 .clearfix:after {
   display: block;
@@ -20,6 +21,9 @@
   h1, h2, h3, h4 {
     font-family: 'Gill Sans', 'Helvetica', 'Arial', sans-serif;
     font-weight: 100;
+  }
+  h2 {
+    font-size: 2em;
   }
 }
 .header {
@@ -46,6 +50,22 @@
   &:hover, &:focus {
     background: @background-highlight;
   }
+}
+
+.output {
+  padding: 12px;
+  margin: 0 0 24px;
+  font-size: 1.6em;
+  list-style: none;
+  background: #efefef;
+  
+  li {
+    padding: 6px;
+  }
+}
+
+i {
+  font-size: 0.675em;
 }
 
 @media (min-width: 600px) {
