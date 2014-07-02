@@ -65,7 +65,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       success: function(data) {
         self.emit('end');
         self.isSearching = false;
-        self.emit('results', [data.results, data.metadata]);
+        self.emit('results', [data.metadata, data.results]);
       },
       error: function() {
         self.emit('end');

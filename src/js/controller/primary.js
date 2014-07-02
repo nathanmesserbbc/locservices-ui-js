@@ -3,15 +3,17 @@
 define([
   'jquery',
   'locservices/core/api',
-  'locservices/ui/component/geolocation',
+  'locservices/ui/component/search',
   'locservices/ui/component/message',
-  'locservices/ui/component/search'
+  'locservices/ui/component/geolocation',
+  'locservices/ui/component/search_results'
 ], function(
   $,
   Api,
   Search,
   Message,
-  Geolocation
+  Geolocation,
+  SearchResults
 ) {
   'use strict';
 
@@ -34,22 +36,33 @@ define([
     var namespace = options.namespace || 'locservices:ui:primary';
 
     this.api = new Api(options.api);
+    this.container = options.container;
 
     new Search({
       api: this.api,
       translations: options.translations,
-      eventNamespace: namespace
-    });
-
-    new Message({
-      translations: options.translations,
-      eventNamespace: namespace
+      eventNamespace: namespace,
+      container: this.container.find('.ls-ui-search')
     });
 
     new Geolocation({
       api: this.api,
       translations: options.translations,
-      eventNamespace: namespace
+      eventNamespace: namespace,
+      container: this.container.find('.ls-ui-geolocation')
+    });
+
+    new Message({
+      translations: options.translations,
+      eventNamespace: namespace,
+      container: this.container.find('.ls-ui-message')
+    });
+
+    new SearchResults({
+      api: this.api,
+      translations: options.translations,
+      eventNamespace: namespace,
+      container: this.container.find('.ls-ui-search-results')
     });
   }
 

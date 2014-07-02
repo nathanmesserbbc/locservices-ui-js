@@ -21,7 +21,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.api = options.api;
     }
     self.setComponentOptions(options);
-    $.on('locservices:ui:component:search:results', function(metadata, results) {
+    $.on(this.eventNamespaceBase + ':component:search:results', function(metadata, results) {
       if (metadata.totalResults === 1) {
         self.emit('location', [results[0].id]);
         return;

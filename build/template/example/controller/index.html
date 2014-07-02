@@ -4,7 +4,11 @@
     <title>Primary Controller | BBC </title>
     <barlesque:head>
     <link rel="stylesheet" href="../../css/controller/primary.css" />
-    <link rel="stylesheet" href="../../css/example/app.css">
+    <link rel="stylesheet" href="../../css/component/geolocation.css" />
+    <link rel="stylesheet" href="../../css/component/message.css" />
+    <link rel="stylesheet" href="../../css/component/search.css" />
+    <link rel="stylesheet" href="../../css/component/search_results.css" />
+    <link rel="stylesheet" href="../../css/component/user_locations.css" />
   </head>
   <body>
     <barlesque:bodystart>
@@ -13,7 +17,12 @@
           <h1 id="site-title">Travel</h1>
         </div>
         <div class="primary-search" data-namespace="primary">
-
+          <div class="ls-ui-wrap">
+            <div class="ls-ui-search"></div>
+          </div>
+          <div class="ls-ui-geolocation"></div>
+          <div class="ls-ui-message"></div>
+          <div class="ls-ui-search-results"></div>
         </div>
       </div>
     <barlesque:bodylast>
