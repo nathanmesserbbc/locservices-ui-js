@@ -39,6 +39,35 @@ define([
 
     });
 
+    describe('setup()', function() {
+
+      it('should call setup when SearchResults is created via the constructor', function() {
+        var setup = sinon.spy(SearchResults.prototype, 'setup');
+        new SearchResults({
+          translations: new En(),
+          container: $('#search-results')
+        });
+
+        expect(setup.calledOnce).toBe(true);
+
+        SearchResults.prototype.setup.restore();
+
+      });
+
+      it('should add a title to the search-results component', function() {
+        expect(searchResults.title).toBeDefined();
+      });
+
+      it('should add a moreResults to the search-results component', function() {
+        expect(searchResults.moreResults).toBeDefined();
+      });
+
+      it('should add a list to the search-results component', function() {
+        expect(searchResults.list).toBeDefined();
+      });
+
+    });
+
     describe('render()', function() {
 
       it('should listen to events from search component and call render()', function() {
@@ -63,7 +92,7 @@ define([
 
       });
 
-      it('should not call render() if single result returned', function () {
+      it('should not call render() if single result returned', function() {
         var render = sinon.spy(SearchResults.prototype, 'render');
         var results = new SearchResults({
           translations: new En(),
@@ -77,6 +106,51 @@ define([
         SearchResults.prototype.render.restore();
       });
 
+    });
+
+    describe('events', function() {
+
+      it('should trigger: locservices:ui:component:search-results:location for single location returned via search', function() {
+        var spy = sinon.spy($, 'emit');
+
+        new SearchResults({
+          translations: new En(),
+          container: $('#search-results')
+        });
+
+        $.emit('locservices:ui:component:search:results', [singleResult.metadata, singleResult.results]);
+
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search-results:location');
+
+        $.emit.restore();
+      });
+
+
+      it('should trigger: locservices:ui:component:search-results:location for single location returned via search', function() {
+        var spy = sinon.spy($, 'emit');
+
+        var results = new SearchResults({
+          translations: new En(),
+          container: $('#search-results')
+        });
+
+        $.emit('locservices:ui:component:search:results', [response.metadata, response.results]);
+
+        results.list.find('a').trigger('click');
+
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search-results:location');
+      });
+    });
+
+    describe('clear()', function() {
+      it('should clear out the SearchResults container', function() {
+
+        searchResults.clear();
+
+        expect(searchResults.title.text()).toEqual('');
+        expect(searchResults.list.children().length).toEqual(0);
+        expect(searchResults.moreResults.hasClass('active')).toBe(false);
+      });
     });
 
   });
