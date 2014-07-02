@@ -5,7 +5,8 @@ module.exports = function(grunt) {
     options: {
       compile: false,
       noIDs: false,
-      noUniversalSelectors: false
+      noUniversalSelectors: false,
+      strictPropertyOrder: false
     },
     build: {
       src: '<%= config.paths.css %>**/*.css'
