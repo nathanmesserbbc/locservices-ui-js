@@ -8,7 +8,8 @@ define(function() {
     'search.placeholder': 'Enter a town, city or UK postcode',
     'search.submit': 'Search',
     'search.submit.title': 'Search for a location',
-    'geolocation.button.label': 'Use my current location'
+    'geolocation.button.label': 'Use my current location',
+    'message.geolocation.detect': 'Detecting your location.'
   };
 
   function TranslationsEn() {}
