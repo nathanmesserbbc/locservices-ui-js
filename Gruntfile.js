@@ -23,7 +23,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('barlesque', 'Downloads Barlesque templates from API', require('./build/barlesque')(grunt));
   grunt.registerTask('template', 'Generate index.html from templates', require('./build/template')(grunt));
-  grunt.registerTask('css', ['less']);
+  grunt.registerTask('css', ['less', 'recess']);
   grunt.registerTask('test', ['connect:test', 'watch']);
   grunt.registerTask('test:cli', ['karma:run']);
   grunt.registerTask('test:ci', ['karma:ci']);
