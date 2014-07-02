@@ -5,9 +5,10 @@ define([
   'locservices/ui/translations/en',
   'jquery',
   'fixtures/multiple-results',
+  'fixtures/more-multiple-results',
   'fixtures/single-result'
 ],
-  function(SearchResults, En, $, response, singleResult) {
+  function(SearchResults, En, $, responseMultiple, responseMultipleMore, responseWithSingleResult) {
 
   describe('The search-results', function() {
     'use strict';
@@ -77,7 +78,7 @@ define([
           container: $('#search-results')
         });
 
-        $.emit('locservices:ui:component:search:results', [response.metadata, response.results]);
+        $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);
 
         expect(render.called).toBe(true);
 
@@ -86,9 +87,9 @@ define([
 
       it('should render results to unordered list', function() {
 
-        $.emit('locservices:ui:component:search:results', [response.metadata, response.results]);
+        $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);
 
-        expect($('#search-results ul li').length).toEqual(response.results.length);
+        expect($('#search-results ul li').length).toEqual(responseMultiple.results.length);
 
       });
 
@@ -99,7 +100,7 @@ define([
           container: $('#search-results')
         });
 
-        $.emit('locservices:ui:component:search:results', [singleResult.metadata, singleResult.results]);
+        $.emit('locservices:ui:component:search:results', [responseWithSingleResult.metadata, responseWithSingleResult.results]);
 
         expect(render.called).toBe(false);
 
@@ -118,7 +119,7 @@ define([
           container: $('#search-results')
         });
 
-        $.emit('locservices:ui:component:search:results', [singleResult.metadata, singleResult.results]);
+        $.emit('locservices:ui:component:search:results', [responseWithSingleResult.metadata, responseWithSingleResult.results]);
 
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search-results:location');
 
@@ -133,12 +134,34 @@ define([
           container: $('#search-results')
         });
 
-        $.emit('locservices:ui:component:search:results', [response.metadata, response.results]);
+        $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);
 
         results.list.find('a').trigger('click');
 
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search-results:location');
       });
+    });
+
+    describe('more results', function() {
+
+      it('should add new results to list', function() {
+        $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);
+        expect(searchResults.list.children().length).toEqual(10);
+
+        $.emit('locservices:ui:component:search:results', [responseMultipleMore.metadata, responseMultipleMore.results]);
+        expect(searchResults.list.children().length).toEqual(20);
+      });
+
+      it('should not display more results button if less than 10 results', function() {
+        $.emit('locservices:ui:component:search:results', [{ search: 'test', totalResults: 9 }, []]);
+        expect(searchResults.moreResults.hasClass('active')).toBe(false);
+      });
+
+      it('should not display more results button if offset + 10 is grater than totalResults', function() {
+        $.emit('locservices:ui:component:search:results', [{ search: 'test', start: 80, totalResults: 84 }, []]);
+        expect(searchResults.moreResults.hasClass('active')).toBe(false);
+      });
+
     });
 
     describe('clear()', function() {
