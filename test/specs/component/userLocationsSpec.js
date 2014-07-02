@@ -70,6 +70,36 @@ function(
         expect(stub.calledWith(expectedId)).toBe(true);
       });
 
+      it('calls this.addRecentLocation on search_results location event', function() {
+        var stub;
+        var expectedLocation;
+        expectedLocation = 'foo';
+        stub = sinon.stub(userLocations, 'addRecentLocation');
+        $.emit('locservices:ui:component:search_results:location', [expectedLocation]);
+        expect(stub.calledOnce).toBe(true);
+        expect(stub.calledWith(expectedLocation)).toBe(true);
+      });
+
+      it('calls this.addRecentLocation on geolocation location event', function() {
+        var stub;
+        var expectedLocation;
+        expectedLocation = 'foo';
+        stub = sinon.stub(userLocations, 'addRecentLocation');
+        $.emit('locservices:ui:component:geolocation:location', [expectedLocation]);
+        expect(stub.calledOnce).toBe(true);
+        expect(stub.calledWith(expectedLocation)).toBe(true);
+      });
+
+      it('calls this.addRecentLocation on auto_complete location event', function() {
+        var stub;
+        var expectedLocation;
+        expectedLocation = 'foo';
+        stub = sinon.stub(userLocations, 'addRecentLocation');
+        $.emit('locservices:ui:component:auto_complete:location', [expectedLocation]);
+        expect(stub.calledOnce).toBe(true);
+        expect(stub.calledWith(expectedLocation)).toBe(true);
+      });
+
     });
 
     describe('setPreferredLocationById()', function() {

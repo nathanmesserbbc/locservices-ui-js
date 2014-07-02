@@ -87,13 +87,24 @@ function(
     this.container.append(templates.element);
     this.render();
  
+    $.on(this.eventNamespaceBase + ':component:search_results:location', function(location) {
+      self.addRecentLocation(location);
+    });
+
+    $.on(this.eventNamespaceBase + ':component:geolocation:location', function(location) {
+      self.addRecentLocation(location);
+    });
+
+    $.on(this.eventNamespaceBase + ':component:auto_complete:location', function(location) {
+      self.addRecentLocation(location);
+    });
   }
 
   UserLocations.prototype = new Component();
   UserLocations.prototype.constructor = UserLocations;
 
   /**
-   * Remove a location from the list
+   * Set the preferred location by location id
    *
    * @param {String} locationId
    */
@@ -120,7 +131,26 @@ function(
   };
 
   /**
-   * Remove a location from the list
+   * Add a location to the list of recents
+   *
+   * @param {Object} location
+   */
+  UserLocations.prototype.addRecentLocation = function(location) {
+    
+    //@todo test this method
+
+    // should not have to do this try/catch
+    // core/recents should return false instead
+    try {
+      this.recentLocations.add(location);
+    } catch (e) {
+      return;
+    }
+    this.render();
+  };
+
+  /**
+   * Remove a location from the list of recents by location id
    *
    * @param {String} locationId
    */
