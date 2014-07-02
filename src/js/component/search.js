@@ -58,19 +58,19 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
           true === self.isSearching) {
       return;
     }
-    $.emit(self.eventNamespace + ':start', [searchTerm]);
+    self.emit('start', [searchTerm]);
     self.isSearching = true;
 
     self.api.search(searchTerm, {
       success: function(data) {
-        $.emit(self.eventNamespace + ':end');
+        self.emit('end');
         self.isSearching = false;
-        $.emit(self.eventNamespace + ':results', [data.results, data.metadata]);
+        self.emit('results', [data.results, data.metadata]);
       },
       error: function() {
-        $.emit(self.eventNamespace + ':end');
+        self.emit('end');
         self.isSearching = false;
-        $.emit(self.eventNamespaceBase + ':error', ['Error searching for "' + searchTerm + '"']);
+        self.emit('error', ['Error searching for "' + searchTerm + '"']);
       }
     });
   };
