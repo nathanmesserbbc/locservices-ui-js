@@ -39,7 +39,7 @@ define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'],
     this.list.on('click', function(evt) {
       var locationId;
       evt.preventDefault();
-      locationId = $(evt.target).attr('href').split('=')[1];
+      locationId = $(evt.target).data('id');
       $.emit('locservices:ui:component:search-results:location', [locationId]);
       self.clear();
       return false;
@@ -70,7 +70,7 @@ define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'],
       if (result.container) {
         label += ', ' + result.container;
       }
-      html += '<li><a href="?location_id=' + result.id + '">' + label + '</a></li>';
+      html += '<li><a href="" data-id="' + result.id + '">' + label + '</a></li>';
     }
 
     if (this.offset === 0) {
@@ -78,7 +78,7 @@ define(['jquery', 'locservices/ui/component/component', 'locservices/core/api'],
     } else {
       this.list.append(html);
     }
-    
+
     if (metadata.totalResults > 10 && (this.offset + 10) < metadata.totalResults) {
       this.moreResults.addClass('active');
     } else {

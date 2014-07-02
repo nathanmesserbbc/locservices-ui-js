@@ -125,7 +125,6 @@ define([
         $.emit.restore();
       });
 
-
       it('should trigger: locservices:ui:component:search-results:location for single location returned via search', function() {
         var spy = sinon.spy($, 'emit');
 
