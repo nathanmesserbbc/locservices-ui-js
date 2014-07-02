@@ -44,25 +44,32 @@ function(
         expect(userLocations.componentId).toBe('user_locations');
       });
 
-      // @todo
-      // sets this.preferredLocation
-      // sets this.recentLocations
-/*
       it('calls this.removeLocationById with expected ID when clicking on remove', function() {
         var stub;
         var expectedId;
         expectedId = '123';
         stub = sinon.stub(userLocations, 'removeLocationById');
-        userLocations.element.html(
-          '<a href="?locationId=' + expectedId + '">Location' +
-          '<span class="ls-ui-comp-user_locations-remove">remove</span>' +
-          '</a>'
+        container.find('div').html(
+          '<a class="ls-ui-comp-userLocations-remove" href="?locationId=' + expectedId + '">Location</a>'
         );
-        userLocations.element.find('span').trigger('click');
+        container.find('a').trigger('click');
         expect(stub.calledOnce).toBe(true);
         expect(stub.calledWith(expectedId)).toBe(true);
       });
-*/
+
+      it('calls this.setPreferredLocationById with expected ID when clicking on prefer', function() {
+        var stub;
+        var expectedId;
+        expectedId = '123';
+        stub = sinon.stub(userLocations, 'setPreferredLocationById');
+        container.find('div').html(
+          '<a class="ls-ui-comp-userLocations-recent" href="?locationId=' + expectedId + '">Location</a>'
+        );
+        container.find('a').trigger('click');
+        expect(stub.calledOnce).toBe(true);
+        expect(stub.calledWith(expectedId)).toBe(true);
+      });
+
     });
 
     describe('setPreferredLocationById()', function() {
@@ -110,27 +117,30 @@ function(
       });
 
     });
-/*
+
     describe('render()', function() {
 
       it('renders empty this.element if no locations', function() {
         sinon.stub(userLocations, 'getLocations').returns([]);
         userLocations.render();
-        expect(userLocations.element.html()).toEqual('');
+        expect(container.find('li').length).toEqual(0);
       });
 
-      it('renders a single location without container', function() {
+      it('renders a single location without container name', function() {
         var expectedLocation = {
           id: 'CF5',
           name: 'CF5'
         };
-        var expectedHtml = '<ul><li><a href="?locationId=' + expectedLocation.id + '">' +
-          expectedLocation.name +
-          '<span class="ls-ui-comp-user_locations-remove">remove</span>' +
-          '</a></li></ul>';
+        var expectedHtml = '<div class="ls-ui-comp-userLocations">' +
+          '<p>Your locations (1)</p>' +
+          '<ul><li>' +
+          '<a class="ls-ui-comp-userLocations-recent" href="?locationId=' + expectedLocation.id + '">Prefer</a>' +
+          '<a class="ls-ui-comp-userLocations-name" href="?locationId=' + expectedLocation.id + '"><strong>' + expectedLocation.name + '</strong></a>' +
+          '<a class="ls-ui-comp-userLocations-remove" href="?locationId=' + expectedLocation.id + '">Remove</a>' +
+          '</li></ul></div>';
         sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
         userLocations.render();
-        expect(userLocations.element.html()).toEqual(expectedHtml);
+        expect(container.html()).toEqual(expectedHtml);
       });
 
       it('renders a single location with container', function() {
@@ -139,13 +149,11 @@ function(
           name: 'Llandaff',
           container: 'Cardiff'
         };
-        var expectedHtml = '<ul><li><a href="?locationId=' + expectedLocation.id + '">' +
-          expectedLocation.name + ', ' + expectedLocation.container +
-          '<span class="ls-ui-comp-user_locations-remove">remove</span>' +
-          '</a></li></ul>';
+        var expectedHtml = '<strong>' + expectedLocation.name + '</strong>, ' +
+        expectedLocation.container;
         sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
         userLocations.render();
-        expect(userLocations.element.html()).toEqual(expectedHtml);
+        expect(container.find('.ls-ui-comp-userLocations-name').html()).toEqual(expectedHtml);
       });
 
       it('renders multiple locations', function() {
@@ -155,11 +163,33 @@ function(
         };
         sinon.stub(userLocations, 'getLocations').returns([expectedLocation, expectedLocation, expectedLocation]);
         userLocations.render();
-        expect(userLocations.element.find('li').length).toEqual(3);
+        expect(container.find('li').length).toEqual(3);
+      });
+
+      it('renders a preferred location with a preferred class', function() {
+        var expectedLocation = {
+          id: 'CF5',
+          name: 'CF5',
+          isPreferred: true
+        };
+        sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
+        userLocations.render();
+        expect(container.find('a.ls-ui-comp-userLocations-preferred').length).toEqual(1);
+      });
+
+      it('renders a recent location with a recent class', function() {
+        var expectedLocation = {
+          id: 'CF5',
+          name: 'CF5',
+          isPreferred: false
+        };
+        sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
+        userLocations.render();
+        expect(container.find('a.ls-ui-comp-userLocations-recent').length).toEqual(1);
       });
 
     });
-*/
+
     describe('getLocations()', function() {
 
       var stubPreferredLocationIsSet;
@@ -185,6 +215,14 @@ function(
         locations = userLocations.getLocations();
         expect(locations.length).toEqual(1);
         expect(locations[0]).toEqual(testLocations[0]);
+      });
+
+      it('sets isPreferred to true for preferred location', function() {
+        var locations;
+        stubPreferredLocationIsSet.returns(true);
+        stubPreferredLocationGet.returns(testLocations[0]);
+        locations = userLocations.getLocations();
+        expect(locations[0].isPreferred).toEqual(true);
       });
 
       it('returns at most 5 recent locations if no preferred location is set', function() {

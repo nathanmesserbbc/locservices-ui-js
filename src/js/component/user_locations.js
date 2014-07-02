@@ -77,7 +77,6 @@ function(
         locationId = target.attr('href').split('=')[1];
         self.setPreferredLocationById(locationId);
       } else if (target.hasClass('ls-ui-comp-userLocations-remove')) {
-        // @todo test this
         locationId = target.attr('href').split('=')[1];
         self.removeLocationById(locationId);
       }
@@ -176,10 +175,7 @@ function(
     if (this.preferredLocation.isSet()) {
       noOfLocationsRemaining--;
       preferredLocation = this.preferredLocation.get();
-
-      // @todo tests this line
       preferredLocation.isPreferred = true;
-
       locations.push(preferredLocation);
     }
 

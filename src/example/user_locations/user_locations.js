@@ -29,7 +29,10 @@ require([
     {id: 5681, name: 'Salford', container: 'Salford', placeType: 'settlement'},
     {id: 3453, name: 'Bristol', container: 'Bristol', placeType: 'settlement'},
     {id: 8778, name: 'Bridgend', container: 'Aberdeenshire', placeType: 'settlement'},
-    {id: 8778, name: 'Belfast City Airport', container: 'Belfast', placeType: 'settlement'}
+    {id: 8778, name: 'Belfast City Airport', container: 'Belfast', placeType: 'settlement'},
+    {id: 2654710, name: 'Brighton', container: 'Brighton and Hove', placeType: 'settlement'},
+    {id: 2652002, name: 'Crewe', container: 'Cheshire East', placeType: 'settlement'},
+    {id: 2645425, name: 'Hull', container: 'Kingston upon Hull', placeType: 'settlement'}
   ];
   $('.addLocation').on('click', function(e){
     e.preventDefault();
