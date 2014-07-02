@@ -3,14 +3,27 @@
   <head>
     <title>Geolocation Example | BBC </title>
     <barlesque:head>
-    <link rel="stylesheet" href="css/component/search.css" />
-    <script data-main="js/app.js" src="vendor/requirejs/require.js"></script>
+    <link rel="stylesheet" href="../../css/component/geolocation.css" />
+    <link rel="stylesheet" href="../../css/example/app.css">
   </head>
   <body>
     <barlesque:bodystart>
       <div class="b-g-p">
-        <h1>LocServices UI</h1>
+        <h1>LocServices UI - Geolocation</h1>
+          <h3 class="location-result"></h3>
+          <div class="locservices-geolocation-example-container"></div>
       </div>
     <barlesque:bodylast>
+    <script>
+        require.config({
+            baseUrl: '/',
+            paths: {
+                jquery: '/vendor/jquery/dist/jquery',
+                'locservices/ui': '/js',
+                'locservices/core': '/vendor/locservices-core-js/src'
+            }
+        });
+    </script>
+    <script src="main.js"></script>
   </body>
 </html>
