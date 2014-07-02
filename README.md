@@ -1,4 +1,4 @@
-# locservices-ui-js [![Build Status](https://travis-ci.org/BBC-Location-Services/locservices-ui-js.svg)](https://travis-ci.org/BBC-Location-Services/locservices-ui-js) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+# locservices-ui-js  [![Build Status](https://travis-ci.org/BBC-Location-Services/locservices-ui-js.svg)](https://travis-ci.org/BBC-Location-Services/locservices-ui-js) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 This project consists of several UI components for creating location based searches.  Each component is loosely coupled allowing you to mix and match them to generate your desired experience.
 
