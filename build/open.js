@@ -1,7 +1,7 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function() {
   return {
     chrome: {
       path: 'http://<%= config.server.host %>:<%= config.server.port %>',

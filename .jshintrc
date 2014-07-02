@@ -14,7 +14,7 @@
   "newcap": true,
   "trailing": true,
   "undef": true,
-  "unused": false,
+  "unused": true,
   "laxbreak": false,
   "evil": true,
   "indent": 2,

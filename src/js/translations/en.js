@@ -1,5 +1,3 @@
-/*global locservices */
-
 define(function() {
 
   'use strict';
