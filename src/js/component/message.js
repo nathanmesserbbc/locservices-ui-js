@@ -13,7 +13,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     render(self.container);
     self.element = self.container.find('p');
 
-    $.on(self.eventNamespaceBase + ':error', function(message) {
+    self.on('error', function(message) {
       self.set(message);
     });
 
