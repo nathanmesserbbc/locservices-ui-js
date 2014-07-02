@@ -23,6 +23,8 @@
   "browser": true,
   "es3": true,
   "globals": {
+    "it": true,
+    "describe": true,
     "define": true,
     "sinon": true,
     "test": true,

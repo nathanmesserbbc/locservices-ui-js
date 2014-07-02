@@ -5,10 +5,10 @@ define(function() {
   'use strict';
 
   var dictionary = {
-    foo: 'bar',
     'search.placeholder': 'Enter a town, city or UK postcode',
     'search.submit': 'Search',
-    'search.submit.title': 'Search for a location'
+    'search.submit.title': 'Search for a location',
+    'geolocation.button.label': 'Use my current location'
   };
 
   function TranslationsEn() {}

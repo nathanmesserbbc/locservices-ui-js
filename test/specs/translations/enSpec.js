@@ -18,7 +18,8 @@ define(['locservices/ui/translations/en'], function(En) {
       });
 
       it('should return a string for a valid key', function() {
-        expect(translations.get('foo')).toBe('bar');
+
+        expect(translations.get('geolocation.button.label')).toBe('Use my current location');
       });
 
     });
