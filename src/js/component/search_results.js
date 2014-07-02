@@ -42,7 +42,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     var internalContainer = $('<div />').addClass('li-ui-comp-search-results-container');
     this.title = $('<h2 />');
     this.list = $('<ul />');
-    this.moreResults = $('<a />').attr('href', '').addClass('.ls-ui-comp-search-results-more').text('Show more results');
+    this.moreResults = $('<a />').attr('href', '').addClass('ls-ui-comp-search-results-more').text('Show more results');
 
     internalContainer.append(this.title).append(this.list).append(this.moreResults);
     this.container.append(internalContainer);
