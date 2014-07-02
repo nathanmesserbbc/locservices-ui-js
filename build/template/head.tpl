@@ -41,13 +41,155 @@
 })();
  fig.manager.include(); </script>  
 <!--[if (gt IE 8) | (IEMobile)]><!-->
-<link rel="stylesheet" href="http://static.bbci.co.uk/frameworks/barlesque/2.62.2/orb/4/style/orb.css">
+<link rel="stylesheet" href="http://static.bbci.co.uk/frameworks/barlesque/2.63.2/orb/4/style/orb.css">
 <!--<![endif]-->
 
 <!--[if (lt IE 9) & (!IEMobile)]>
-<link rel="stylesheet" href="http://static.bbci.co.uk/frameworks/barlesque/2.62.2/orb/4/style/orb-ie.css">
+<link rel="stylesheet" href="http://static.bbci.co.uk/frameworks/barlesque/2.63.2/orb/4/style/orb-ie.css">
 <![endif]-->
 
-  <script type="text/javascript">/*<![CDATA[*/ (function(undefined){if(!window.bbc){window.bbc={}}var ROLLING_PERIOD_DAYS=30;window.bbc.Mandolin=function(id,segments,opts){var now=new Date().getTime(),storedItem,DEFAULT_START=now,DEFAULT_RATE=1,COOKIE_NAME="ckpf_mandolin";opts=opts||{};this._id=id;this._segmentSet=segments;this._store=new window.window.bbc.Mandolin.Storage(COOKIE_NAME);this._opts=opts;this._rate=(opts.rate!==undefined)?+opts.rate:DEFAULT_RATE;this._startTs=(opts.start!==undefined)?new Date(opts.start).getTime():new Date(DEFAULT_START).getTime();this._endTs=(opts.end!==undefined)?new Date(opts.end).getTime():daysFromNow(ROLLING_PERIOD_DAYS);this._signupEndTs=(opts.signupEnd!==undefined)?new Date(opts.signupEnd).getTime():this._endTs;this._segment=null;if(typeof id!=="string"){throw new Error("Invalid Argument: id must be defined and be a string")}if(Object.prototype.toString.call(segments)!=="[object Array]"){throw new Error("Invalid Argument: Segments are required.")}if(opts.rate!==undefined&&(opts.rate<0||opts.rate>1)){throw new Error("Invalid Argument: Rate must be between 0 and 1.")}if(this._startTs>this._endTs){throw new Error("Invalid Argument: end date must occur after start date.")}if(!(this._startTs<this._signupEndTs&&this._signupEndTs<=this._endTs)){throw new Error("Invalid Argument: SignupEnd must be between start and end date")}removeExpired.call(this,now);if((storedItem=this._store.getItem(this._id))){this._segment=storedItem.segment}else{if(this._startTs<=now&&now<this._signupEndTs&&now<=this._endTs&&this._store.isEnabled()===true){this._segment=pick(segments,this._rate);if(opts.end===undefined){this._store.setItem(this._id,{segment:this._segment})}else{this._store.setItem(this._id,{segment:this._segment,end:this._endTs})}log.call(this,"mandolin_segment")}}log.call(this,"mandolin_view")};window.bbc.Mandolin.prototype.getSegment=function(){return this._segment};function log(actionType,params){var that=this;require(["istats-1"],function(istats){istats.log(actionType,that._id+":"+that._segment,params?params:{})})}function removeExpired(expires){var items=this._store.getItems(),expiresInt=+expires;for(var key in items){if(items[key].end!==undefined&&+items[key].end<expiresInt){this._store.removeItem(key)}}}function getLastExpirationDate(data){var winner=0,rollingExpire=daysFromNow(ROLLING_PERIOD_DAYS);for(var key in data){if(data[key].end===undefined&&rollingExpire>winner){winner=rollingExpire}else{if(+data[key].end>winner){winner=+data[key].end}}}return(winner)?new Date(winner):new Date(rollingExpire)}window.bbc.Mandolin.prototype.log=function(params){log.call(this,"mandolin_log",params)};window.bbc.Mandolin.prototype.convert=function(params){log.call(this,"mandolin_convert",params);this.convert=function(){}};function daysFromNow(n){var endDate;endDate=new Date().getTime()+(n*60*60*24)*1000;return endDate}function pick(segments,rate){var picked,min=0,max=segments.length-1;if(typeof rate==="number"&&Math.random()>rate){return null}do{picked=Math.floor(Math.random()*(max-min+1))+min}while(picked>max);return segments[picked]}window.bbc.Mandolin.Storage=function(name){this._cookieName=name;this._isEnabled=(bbccookies.isAllowed(this._cookieName)===true&&bbccookies.cookiesEnabled()===true)};window.bbc.Mandolin.Storage.prototype.setItem=function(key,value){var storeData=this.getItems();storeData[key]=value;this.save(storeData);return value};window.bbc.Mandolin.Storage.prototype.isEnabled=function(){return this._isEnabled};window.bbc.Mandolin.Storage.prototype.getItem=function(key){var storeData=this.getItems();return storeData[key]};window.bbc.Mandolin.Storage.prototype.removeItem=function(key){var storeData=this.getItems();delete storeData[key];this.save(storeData)};window.bbc.Mandolin.Storage.prototype.getItems=function(){return deserialise(this.readCookie(this._cookieName)||"")};window.bbc.Mandolin.Storage.prototype.save=function(data){window.bbccookies.set(this._cookieName+"="+encodeURIComponent(serialise(data))+"; expires="+getLastExpirationDate(data).toUTCString()+";")};window.bbc.Mandolin.Storage.prototype.readCookie=function(name){var nameEQ=name+"=",ca=window.bbccookies.get().split(";"),i,c;for(i=0;i<ca.length;i++){c=ca[i];while(c.charAt(0)===" "){c=c.substring(1,c.length)}if(c.indexOf(nameEQ)===0){return decodeURIComponent(c.substring(nameEQ.length,c.length))}}return null};function serialise(o){var str="";for(var p in o){if(o.hasOwnProperty(p)){str+='"'+p+'"'+":"+(typeof o[p]==="object"?(o[p]===null?"null":"{"+serialise(o[p])+"}"):'"'+o[p].toString().replace(/"/g,'\\"')+'"')+","}}return str.replace(/,\}/g,"}").replace(/,$/g,"")}function deserialise(str){var o;eval("o = {"+str+"}");return o}})(); /*]]>*/</script>  <script>  document.documentElement.className += (document.documentElement.className? ' ' : '') + 'orb-js';  fig.manager.confirm(); </script> <script src="http://static.bbci.co.uk/frameworks/barlesque/2.62.2/orb/4/script/orb/api.min.js"></script>    <script type="text/javascript"> /*<![CDATA[*/ function oqsSurveyManager(w, flag) {  var defaultThreshold = 0.7, usePulseThreshold = (flag === 'OFF')? 1 : defaultThreshold, activeThreshold; w.oqs = w.oqs || {}; if ( w.document.cookie.match(/(?:^|; *)ckns_oqs_usePulseThreshold=([\d.]+)/) ) { activeThreshold = RegExp.$1; } else if (typeof w.oqs_usePulseThreshold !== 'undefined') { activeThreshold = w.oqs_usePulseThreshold; } else { activeThreshold = usePulseThreshold; } w.oqs.usePulse = (w.Math.random() < activeThreshold); if (!w.oqs.usePulse) {  w.document.write('<script type="text/javascript" src="http://static.bbci.co.uk/frameworks/barlesque/2.62.2/orb/4/script/vendor/edr.js"><'+'/script>'); } } oqsSurveyManager(window, 'ON'); /*]]>*/ </script>  <script type="text/javascript"> /* <![CDATA[ */ define('id-statusbar-config', { 'translation_signedout': "Sign in", 'translation_signedin': "Your account", 'use_overlay' : false, 'signin_url' : "https://ssl.bbc.co.uk/id/signin", 'locale' : "en-GB", 'policyname' : "", 'ptrt' : "http://www.bbc.co.uk/" }); /* ]]> */ </script>  <script type="text/javascript"> (function () { if (! window.require) { throw new Error('idcta: could not find require'); } var map = {}; map['idapp-1'] = 'http://static.bbci.co.uk/idapp/0.63.13/modules/idapp/idapp-1'; map['idcta/idcta-1'] = 'http://static.bbci.co.uk/id/0.23.4/modules/idcta/idcta-1'; require({paths: map}); define('id-config', {"idapp":{"version":"0.63.13","hostname":"ssl.bbc.co.uk","insecurehostname":"www.bbc.co.uk","tld":"bbc.co.uk"},"idtranslations":{"version":"0.27.10"},"identity":{"baseUrl":"https:\/\/talkback.live.bbc.co.uk\/identity"},"pathway":{"name":null,"staticAssetUrl":"http:\/\/static.bbci.co.uk\/idapp\/0.63.13\/modules\/idapp\/idapp-1\/View.css"}}); })(); </script>    <script type="text/javascript">/*<![CDATA[*/ window.istats = (window.istats || {}); (istats.head = function(w,d) { w.istats._linkTracked = w.istats._trackingCookie = decodeURIComponent( (d.cookie.match(/\bsa_labels=([^;]+)/)||[]).pop() || '' ); var host = w.location.host, m = host.match(/(bbc(?:\.co\.uk|\.com))$/i); d.cookie = 'sa_labels=; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=' + (m? m[1] : host) + '; path=/'; })(window,document); /*]]>*/</script>  <!-- BBCDOTCOM template: responsive , adsEnabled: true -->
+  <script type="text/javascript">/*<![CDATA[*/ (function(undefined){if(!window.bbc){window.bbc={}}var ROLLING_PERIOD_DAYS=30;window.bbc.Mandolin=function(id,segments,opts){var now=new Date().getTime(),storedItem,DEFAULT_START=now,DEFAULT_RATE=1,COOKIE_NAME="ckpf_mandolin";opts=opts||{};this._id=id;this._segmentSet=segments;this._store=new window.window.bbc.Mandolin.Storage(COOKIE_NAME);this._opts=opts;this._rate=(opts.rate!==undefined)?+opts.rate:DEFAULT_RATE;this._startTs=(opts.start!==undefined)?new Date(opts.start).getTime():new Date(DEFAULT_START).getTime();this._endTs=(opts.end!==undefined)?new Date(opts.end).getTime():daysFromNow(ROLLING_PERIOD_DAYS);this._signupEndTs=(opts.signupEnd!==undefined)?new Date(opts.signupEnd).getTime():this._endTs;this._segment=null;if(typeof id!=="string"){throw new Error("Invalid Argument: id must be defined and be a string")}if(Object.prototype.toString.call(segments)!=="[object Array]"){throw new Error("Invalid Argument: Segments are required.")}if(opts.rate!==undefined&&(opts.rate<0||opts.rate>1)){throw new Error("Invalid Argument: Rate must be between 0 and 1.")}if(this._startTs>this._endTs){throw new Error("Invalid Argument: end date must occur after start date.")}if(!(this._startTs<this._signupEndTs&&this._signupEndTs<=this._endTs)){throw new Error("Invalid Argument: SignupEnd must be between start and end date")}removeExpired.call(this,now);if((storedItem=this._store.getItem(this._id))){this._segment=storedItem.segment}else{if(this._startTs<=now&&now<this._signupEndTs&&now<=this._endTs&&this._store.isEnabled()===true){this._segment=pick(segments,this._rate);if(opts.end===undefined){this._store.setItem(this._id,{segment:this._segment})}else{this._store.setItem(this._id,{segment:this._segment,end:this._endTs})}log.call(this,"mandolin_segment")}}log.call(this,"mandolin_view")};window.bbc.Mandolin.prototype.getSegment=function(){return this._segment};function log(actionType,params){var that=this;require(["istats-1"],function(istats){istats.log(actionType,that._id+":"+that._segment,params?params:{})})}function removeExpired(expires){var items=this._store.getItems(),expiresInt=+expires;for(var key in items){if(items[key].end!==undefined&&+items[key].end<expiresInt){this._store.removeItem(key)}}}function getLastExpirationDate(data){var winner=0,rollingExpire=daysFromNow(ROLLING_PERIOD_DAYS);for(var key in data){if(data[key].end===undefined&&rollingExpire>winner){winner=rollingExpire}else{if(+data[key].end>winner){winner=+data[key].end}}}return(winner)?new Date(winner):new Date(rollingExpire)}window.bbc.Mandolin.prototype.log=function(params){log.call(this,"mandolin_log",params)};window.bbc.Mandolin.prototype.convert=function(params){log.call(this,"mandolin_convert",params);this.convert=function(){}};function daysFromNow(n){var endDate;endDate=new Date().getTime()+(n*60*60*24)*1000;return endDate}function pick(segments,rate){var picked,min=0,max=segments.length-1;if(typeof rate==="number"&&Math.random()>rate){return null}do{picked=Math.floor(Math.random()*(max-min+1))+min}while(picked>max);return segments[picked]}window.bbc.Mandolin.Storage=function(name){this._cookieName=name;this._isEnabled=(bbccookies.isAllowed(this._cookieName)===true&&bbccookies.cookiesEnabled()===true)};window.bbc.Mandolin.Storage.prototype.setItem=function(key,value){var storeData=this.getItems();storeData[key]=value;this.save(storeData);return value};window.bbc.Mandolin.Storage.prototype.isEnabled=function(){return this._isEnabled};window.bbc.Mandolin.Storage.prototype.getItem=function(key){var storeData=this.getItems();return storeData[key]};window.bbc.Mandolin.Storage.prototype.removeItem=function(key){var storeData=this.getItems();delete storeData[key];this.save(storeData)};window.bbc.Mandolin.Storage.prototype.getItems=function(){return deserialise(this.readCookie(this._cookieName)||"")};window.bbc.Mandolin.Storage.prototype.save=function(data){window.bbccookies.set(this._cookieName+"="+encodeURIComponent(serialise(data))+"; expires="+getLastExpirationDate(data).toUTCString()+";")};window.bbc.Mandolin.Storage.prototype.readCookie=function(name){var nameEQ=name+"=",ca=window.bbccookies.get().split(";"),i,c;for(i=0;i<ca.length;i++){c=ca[i];while(c.charAt(0)===" "){c=c.substring(1,c.length)}if(c.indexOf(nameEQ)===0){return decodeURIComponent(c.substring(nameEQ.length,c.length))}}return null};function serialise(o){var str="";for(var p in o){if(o.hasOwnProperty(p)){str+='"'+p+'"'+":"+(typeof o[p]==="object"?(o[p]===null?"null":"{"+serialise(o[p])+"}"):'"'+o[p].toString().replace(/"/g,'\\"')+'"')+","}}return str.replace(/,\}/g,"}").replace(/,$/g,"")}function deserialise(str){var o;eval("o = {"+str+"}");return o}})(); /*]]>*/</script>  <script>  document.documentElement.className += (document.documentElement.className? ' ' : '') + 'orb-js';  fig.manager.confirm(); </script> <script src="http://static.bbci.co.uk/frameworks/barlesque/2.63.2/orb/4/script/orb/api.min.js"></script>    <script type="text/javascript"> /*<![CDATA[*/ function oqsSurveyManager(w, flag) {  var defaultThreshold = 0, usePulseThreshold = (flag === 'OFF')? 1 : defaultThreshold, activeThreshold; w.oqs = w.oqs || {}; /* we support cookie override for testing */ if ( w.document.cookie.match(/(?:^|; *)ckns_oqs_usePulseThreshold=([\d.]+)/) ) { activeThreshold = RegExp.$1; } /* we support clientside override */ else if (typeof w.oqs_usePulseThreshold !== 'undefined') { activeThreshold = w.oqs_usePulseThreshold; } else { activeThreshold = usePulseThreshold; } w.oqs.usePulse = (w.Math.random() < activeThreshold); if (!w.oqs.usePulse) {  w.document.write('<script type="text/javascript" src="http://static.bbci.co.uk/frameworks/barlesque/2.63.2/orb/4/script/vendor/edr.js"><'+'/script>'); } } oqsSurveyManager(window, 'ON'); /*]]>*/ </script>  <script type="text/javascript"> /* <![CDATA[ */ define('id-statusbar-config', { 'translation_signedout': "Sign in", 'translation_signedin': "Your account", 'use_overlay' : false, 'signin_url' : "https://ssl.bbc.co.uk/id/signin", 'locale' : "en-GB", 'policyname' : "", 'ptrt' : "http://www.bbc.co.uk/" }); /* ]]> */ </script>  <script type="text/javascript"> (function () { if (! window.require) { throw new Error('idcta: could not find require'); } var map = {}; map['idapp-1'] = 'http://static.bbci.co.uk/idapp/0.63.13/modules/idapp/idapp-1'; map['idcta/idcta-1'] = 'http://static.bbci.co.uk/id/0.23.4/modules/idcta/idcta-1'; require({paths: map}); define('id-config', {"idapp":{"version":"0.63.13","hostname":"ssl.bbc.co.uk","insecurehostname":"www.bbc.co.uk","tld":"bbc.co.uk"},"idtranslations":{"version":"0.27.10"},"identity":{"baseUrl":"https:\/\/talkback.live.bbc.co.uk\/identity"},"pathway":{"name":null,"staticAssetUrl":"http:\/\/static.bbci.co.uk\/idapp\/0.63.13\/modules\/idapp\/idapp-1\/View.css"}}); })(); </script>    <script type="text/javascript">/*<![CDATA[*/ window.istats = (window.istats || {}); (istats.head = function(w,d) { w.istats._linkTracked = w.istats._trackingCookie = decodeURIComponent( (d.cookie.match(/\bsa_labels=([^;]+)/)||[]).pop() || '' ); var host = w.location.host, m = host.match(/(bbc(?:\.co\.uk|\.com))$/i); d.cookie = 'sa_labels=; expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=' + (m? m[1] : host) + '; path=/'; })(window,document); /*]]>*/</script> <!-- BBCDOTCOM template: responsive , adsEnabled: true -->
 
-  <style type="text/css">.bbccom_display_none{display:none;}</style>  <script type="text/javascript"> /*<![CDATA[*/ var bbcdotcom = false; (function(){ if(typeof require !== 'undefined') { require({ paths:{ "bbcdotcom":"http://static.bbci.co.uk/bbcdotcom/0.3.247/script" } }); } })(); /*]]>*/ </script> <script type="text/javascript"> /*<![CDATA[*/  var bbcdotcom = { advert: { write: function () {}, show: function () {}, isActive: function () { return false; }, layout: function() { return { reset: function() {} } } }, config: { init: function() {}, isActive: function() {}, setSections: function() {}, setAdsEnabled: function() {}, setAssetPrefix: function() {} }, survey: { init: function(){ return false; } }, data: {}, init: function() {}, objects: function(str) { return false; }, locale: { set: function() {} }, setAdKeyValue: function() {}, utils: { addHtmlTagClass: function() {} } };  if (typeof orb !== 'undefined' && typeof orb.fig === 'function') { if(orb.fig('ad') && 0 === orb.fig('uk')) { bbcdotcom.data = { ads: orb.fig('ad') ? 1 : 0, stats: (0 == orb.fig('uk')) ? 1 : 0, statsProvider: orb.fig('ap') }; bbcdotcom.siteCatalyst = {"ch":"","cdp":"3","ce":"UTF-8"};  document.write('<script type="text/javascript" src="http://www.bbc.co.uk/wwscripts/flag">\x3C/script>'); } } /*]]>*/ </script>  <script type="text/javascript"> /*<![CDATA[*/ if (window.bbcdotcom && typeof bbcdotcom.flag == 'undefined' || (bbcdotcom && typeof bbcdotcom.data.ads !== 'undefined' && bbcdotcom.flag.a != 1)) { /* Check flagpole and disable adverts if necessary. "a" -> "worldwide/adverts" */ bbcdotcom.data.ads = 0; }  if (/[?|&]ads-debug/.test(window.location.href)) { bbcdotcom.data.ads = 1; bbcdotcom.data.stats = 1; } if (window.bbcdotcom && (bbcdotcom.data.ads == 1 || bbcdotcom.data.stats == 1)) { (function() { var useSSL = 'https:' == document.location.protocol; var src = (useSSL ? 'https:' : 'http:') + '//www.googletagservices.com/tag/js/gpt.js'; document.write('<scr' + 'ipt src="' + src + '">\x3C/script>'); })(); document.write('<link rel="stylesheet" type="text/css" href="http://static.bbci.co.uk/bbcdotcom/0.3.247/style/orb/bbccom.css" />'); if (typeof navigator !== 'undefined' && typeof navigator.userAgent !== 'undefined' && navigator.userAgent.indexOf('MSIE 7.0') !== -1) { document.write('<link rel="stylesheet" type="text/css" href="http://static.bbci.co.uk/bbcdotcom/0.3.247/style/orb/bbccom-ie7.css" />'); } if (/(sandbox|int)(.dev)*.bbc.co*/.test(window.location.href) || /[?|&]ads-debug/.test(window.location.href)) {  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/config.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/objects.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/utils.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/events.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/init.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/di.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/locale.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/sections.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/currencyProviders.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/keyValues.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/layout.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/wallpaper.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/breakpoints.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/ad.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/slot.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/adFactory.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/adRegister.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/adRenderer.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/adUnit.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/dfppRequest.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/adsenseRenderer.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/api.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/onLoad.js">\x3C/script>');  document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/siteCatalyst.js">\x3C/script>');  } else { document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/bbcdotcom.js">\x3C/script>'); } if(/[\\?&]ads=([^&#]*)/.test(window.location.href)) { document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.247/script/orb/adverts/adSuites.js">\x3C/script>'); } } /*]]>*/ </script>  <script type="text/javascript"> /*<![CDATA[*/ if (window.bbcdotcom && (bbcdotcom.data.ads == 1 || bbcdotcom.data.stats == 1)) { bbcdotcom.config.setAdsEnabled(true); bbcdotcom.config.init(bbcdotcom.data, window.location);  bbcdotcom.config.setAssetPrefix("http://static.bbci.co.uk/bbcdotcom/0.3.247/"); bbcdotcom.setAdKeyValue('site', ''); bbcdotcom.setAdKeyValue('keyword', '');      if (bbcdotcom.objects('bbcdotcom.locale.set')) { bbcdotcom.locale.set('advertisementText', 'Advertisement'); bbcdotcom.locale.set('advertInfoPageUrl', 'http://www.bbc.co.uk/faqs/online/adverts_general'); bbcdotcom.locale.set('inAssociationWithText', 'In association with'); bbcdotcom.locale.set('sponsoredByText', 'Sponsored by'); } document.write('<!--[if IE 7]> <script type="text/javascript">bbcdotcom.config.setIE7(true);\x3C/script> <![endif]-->'); document.write('<!--[if IE 8]> <script type="text/javascript">bbcdotcom.config.setIE8(true);\x3C/script> <![endif]-->');  } /*]]>*/ </script>              
+<style type="text/css">.bbccom_display_none{display:none;}</style>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var bbcdotcom = false;
+    (function(){
+        if(typeof require !== 'undefined') {
+            require({
+                paths:{
+                    "bbcdotcom":"http://static.bbci.co.uk/bbcdotcom/0.3.250/script"
+                }
+            });
+        }
+    })();
+    /*]]>*/
+</script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+        var bbcdotcom = {
+        advert: {
+            write: function () {},
+            show: function () {},
+            isActive: function ()    {
+                return false;
+            },
+            layout: function() {
+                return {
+                    reset: function() {}
+                }
+            }
+        },
+        config: {
+            init: function() {},
+            isActive: function() {},
+            setSections: function() {},
+            setAdsEnabled: function() {},
+            setAssetPrefix: function() {}
+        },
+        survey: {
+            init: function(){ return false; }
+        },
+        data: {},
+        init: function() {},
+        objects: function(str) {
+            return false;
+        },
+        locale: {
+            set: function() {}
+        },
+        setAdKeyValue: function() {},
+        utils: {
+            addHtmlTagClass: function() {}
+        }
+    };
+        if (typeof orb !== 'undefined' && typeof orb.fig === 'function') {
+        if(orb.fig('ad') && 0 === orb.fig('uk')) {
+            bbcdotcom.data = {
+                ads: orb.fig('ad') ? 1 : 0,
+                stats: (0 == orb.fig('uk')) ? 1 : 0,
+                statsProvider: orb.fig('ap')
+            };
+            bbcdotcom.siteCatalyst = {"ch":"","cdp":"3","ce":"UTF-8"};
+                        document.write('<script type="text/javascript" src="http://www.bbc.co.uk/wwscripts/flag">\x3C/script>');
+        }
+    }
+    /*]]>*/
+</script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    if (window.bbcdotcom && typeof bbcdotcom.flag == 'undefined' || (bbcdotcom && typeof bbcdotcom.data.ads !== 'undefined' && bbcdotcom.flag.a != 1)) {
+        /* Check flagpole and disable adverts if necessary.  "a" -> "worldwide/adverts" */
+        bbcdotcom.data.ads = 0;
+    }
+        if (/[?|&]ads-debug/.test(window.location.href)) {
+        bbcdotcom.data.ads = 1;
+        bbcdotcom.data.stats = 1;
+    }
+    if (window.bbcdotcom && (bbcdotcom.data.ads == 1 || bbcdotcom.data.stats == 1)) {
+                    (function() {
+                var useSSL = 'https:' == document.location.protocol;
+                var src = (useSSL ? 'https:' : 'http:') +
+                        '//www.googletagservices.com/tag/js/gpt.js';
+                document.write('<scr' + 'ipt src="' + src + '">\x3C/script>');
+            })();
+                document.write('<link rel="stylesheet" type="text/css" href="http://static.bbci.co.uk/bbcdotcom/0.3.250/style/orb/bbccom.css" />');
+        if (typeof navigator !== 'undefined' &&
+                typeof navigator.userAgent !== 'undefined' &&
+                navigator.userAgent.indexOf('MSIE 7.0') !== -1) {
+            document.write('<link rel="stylesheet" type="text/css" href="http://static.bbci.co.uk/bbcdotcom/0.3.250/style/orb/bbccom-ie7.css" />');
+        }
+        if (/(sandbox|int)(.dev)*.bbc.co*/.test(window.location.href) || /[?|&]ads-debug/.test(window.location.href)) {
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/config.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/objects.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/utils.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/events.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/init.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/di.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/locale.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/sections.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/currencyProviders.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/keyValues.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/layout.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/wallpaper.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/breakpoints.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/ad.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/slot.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/adFactory.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/adRegister.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/adRenderer.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/adUnit.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/dfppRequest.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/adsenseRenderer.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/api.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/onLoad.js">\x3C/script>');
+                            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/siteCatalyst.js">\x3C/script>');
+                    } else {
+            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/bbcdotcom.js">\x3C/script>');
+        }
+        if(/[\\?&]ads=([^&#]*)/.test(window.location.href)) {
+            document.write('<script type="text/javascript" src="http://static.bbci.co.uk/bbcdotcom/0.3.250/script/orb/adverts/adSuites.js">\x3C/script>');
+        }
+    }
+    /*]]>*/
+</script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    if (window.bbcdotcom && (bbcdotcom.data.ads == 1 || bbcdotcom.data.stats == 1)) {
+        bbcdotcom.config.init(bbcdotcom.data, window.location);
+        bbcdotcom.config.setAdsEnabled(true);
+                        bbcdotcom.config.setAssetPrefix("http://static.bbci.co.uk/bbcdotcom/0.3.250/");
+        bbcdotcom.setAdKeyValue('site', '');
+        bbcdotcom.setAdKeyValue('keyword', '');
+                                                if (window.bbcdotcom && bbcdotcom.locale) {
+            bbcdotcom.locale.set('advertisementText', 'Advertisement');
+            bbcdotcom.locale.set('advertInfoPageUrl', 'http://www.bbc.co.uk/faqs/online/adverts_general');
+            bbcdotcom.locale.set('inAssociationWithText', 'In association with');
+            bbcdotcom.locale.set('sponsoredByText', 'Sponsored by');
+        }
+        document.write('<!--[if IE 7]> <script type="text/javascript">bbcdotcom.config.setIE7(true);\x3C/script> <![endif]-->');
+        document.write('<!--[if IE 8]> <script type="text/javascript">bbcdotcom.config.setIE8(true);\x3C/script> <![endif]-->');
+            }
+    /*]]>*/
+</script>
+             
