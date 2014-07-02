@@ -1,6 +1,6 @@
-# locservices-ui-js  [![Build Status](https://travis-ci.org/BBC-Location-Services/locservices-ui-js.svg)](https://travis-ci.org/BBC-Location-Services/locservices-ui-js)
+# locservices-ui-js  
 
-[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/) [![devDependency Status](https://david-dm.org/BBC-Location-Services/locservices-ui-js/dev-status.svg?theme=shields.io)](https://david-dm.org/BBC-Location-Services/locservices-ui-js#info=devDependencies)
+[![Build Status](https://travis-ci.org/BBC-Location-Services/locservices-ui-js.svg)](https://travis-ci.org/BBC-Location-Services/locservices-ui-js) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/) [![devDependency Status](https://david-dm.org/BBC-Location-Services/locservices-ui-js/dev-status.svg?theme=shields.io)](https://david-dm.org/BBC-Location-Services/locservices-ui-js#info=devDependencies)
 
 This project consists of several UI components for creating location based searches.  Each component is loosely coupled allowing you to mix and match them to generate your desired experience.
 
