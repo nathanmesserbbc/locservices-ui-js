@@ -1,6 +1,10 @@
-/*global describe, beforeEach, locservices, it:false*/
+/*global describe, beforeEach, it:false*/
 
-define(['locservices/ui/component/component', 'locservices/ui/translations/en'], function(Component, En) {
+define([
+  'locservices/ui/component/component',
+  'locservices/ui/translations/en',
+  'jquery'
+], function(Component, En, $) {
 
   describe('The component module', function() {
     'use strict';
@@ -10,6 +14,42 @@ define(['locservices/ui/component/component', 'locservices/ui/translations/en'],
 
     beforeEach(function() {
       component = new Component();
+    });
+
+    describe('emit()', function() {
+      it('uses eventNamespaceBase for errors', function() {
+        var stub = sinon.stub($, 'emit');
+        component.eventNamespaceBase = 'foo';
+        component.emit('error', []);
+        expect(stub.calledWith('foo:error', [])).toBe(true);
+        stub.restore();
+      });
+      it('uses eventNamespace for any other event name', function() {
+        var stub = sinon.stub($, 'emit');
+        component.eventNamespace = 'foobar';
+        component.emit('geolocation:location', []);
+        expect(stub.calledWith('foobar:geolocation:location', [])).toBe(true);
+        stub.restore();
+      });
+    });
+
+    describe('on()', function() {
+      it('uses eventNamespaceBase for errors', function() {
+        var stub = sinon.stub($, 'on');
+        var fn = function() {};
+        component.eventNamespaceBase = 'foo';
+        component.on('error', fn);
+        expect(stub.calledWith('foo:error', fn)).toBe(true);
+        stub.restore();
+      });
+      it('uses eventNamespace for any other event name', function() {
+        var stub = sinon.stub($, 'on');
+        var fn = function() {};
+        component.eventNamespace = 'foobar';
+        component.on('geolocation:location', fn);
+        expect(stub.calledWith('foobar:geolocation:location', fn)).toBe(true);
+        stub.restore();
+      });
     });
 
     describe('setComponentOptions()', function() {

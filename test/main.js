@@ -1,5 +1,3 @@
-/* global requirejs */
-
 var allTestFiles = ['pubsub'];
 var TEST_REGEXP = /(spec|test)\.js$/i;
 

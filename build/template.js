@@ -1,9 +1,6 @@
 
 'use strict';
 
-var request = require('request');
-var parse   = require('xml2js').parseString;
-
 module.exports = function(grunt) {
   return function() {
     var config    = grunt.config.data.config;

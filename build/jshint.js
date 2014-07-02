@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function() {
   return {
     options: {
       jshintrc: true
@@ -15,6 +15,7 @@ module.exports = function(grunt) {
       files: {
         src: [
           '<%= config.paths.js %>**/*.js',
+          '!<%= config.paths.js %>/app.js',
           '<%= config.paths.test %>**/*.js',
           '!<%= config.paths.test %>/vendor/**/*.js'
         ]

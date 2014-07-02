@@ -1,9 +1,10 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function() {
   return {
     options: {
-      compress: true
+      compress: true,
+      report: 'gzip'
     },
     build: {
       files: [

@@ -1,4 +1,4 @@
-/*global console,debugger:false*/
+/*global console,debugger:false,unused:false */
 console.log('demo start...');
 
 require(['jquery', 'vendor/events/pubsub'], function(jQuery) {

@@ -1,11 +1,12 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function() {
   return {
     options: {
       compile: false,
       noIDs: false,
-      noUniversalSelectors: false
+      noUniversalSelectors: false,
+      strictPropertyOrder: false
     },
     build: {
       src: '<%= config.paths.css %>**/*.css'
