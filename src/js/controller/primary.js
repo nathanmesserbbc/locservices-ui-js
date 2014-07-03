@@ -35,10 +35,22 @@ define([
 
   function Primary(options) {
     verify(options);
-    var namespace = options.namespace || 'locservices:ui:primary';
+
+    var self = this;
+    var userLocations,
+        namespace = options.namespace || 'locservices:ui:primary';
 
     this.api = new Api(options.api);
     this.container = options.container;
+    this.container.addClass('ls-ui-controller-primary');
+
+    $.on(namespace + ':component:search:results', function() {
+      userLocations.container.addClass('ls-ui-hidden');
+    });
+
+    $.on(namespace + ':component:geolocation:available', function() {
+      self.container.addClass('li-ui-ctrl-geolocation');
+    });
 
     new Search({
       api: this.api,
@@ -67,14 +79,10 @@ define([
       container: this.container.find('.ls-ui-search-results')
     });
 
-    var userLocations = new UserLocations({
+    userLocations = new UserLocations({
       translations: options.translations,
       eventNamespace: namespace,
       container: this.container.find('.ls-ui-user-locations')
-    });
-
-    $.on(namespace + ':component:search:results', function() {
-      userLocations.container.addClass('ls-ui-hidden');
     });
   }
 

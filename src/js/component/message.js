@@ -21,10 +21,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.set(error);
     });
 
-    $.on(self.eventNamespaceBase + ':component:search:start', function(value) {
-      self.set('Searching for "' + value + '"');
-    });
-
     $.on(self.eventNamespaceBase + ':component:search:end', function() {
       self.clear();
     });

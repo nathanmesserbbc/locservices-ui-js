@@ -81,13 +81,6 @@ define([
         expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
-      it('should set content on search start', function() {
-        message.set('');
-        $.emit('message-test:component:search:start', ['Cardiff']);
-        expect(message.element.text()).toBe('Searching for "Cardiff"');
-        expect(message.element.hasClass('ls-ui-active')).toBe(true);
-      });
-
       it('should set content on when search results are available', function() {
         message.set('');
         $.emit('message-test:component:search:results', { search: 'Cardiff' });
