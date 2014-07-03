@@ -69,6 +69,7 @@ define([
 
     var userLocations = new UserLocations({
       translations: options.translations,
+      eventNamespace: namespace,
       container: this.container.find('.ls-ui-user-locations')
     });
 

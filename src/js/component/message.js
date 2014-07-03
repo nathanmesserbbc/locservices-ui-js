@@ -29,7 +29,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.clear();
     });
 
-    $.on(self.eventNamespaceBase + ':component:search-results:location', function() {
+    $.on(self.eventNamespaceBase + ':component:search_results:location', function() {
       self.clear();
     });
 

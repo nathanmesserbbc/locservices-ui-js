@@ -46,7 +46,6 @@ define(['jquery'], function($) {
     if (eventName === 'error') {
       ns = this.eventNamespaceBase;
     }
-
     $.emit(ns + ':' + eventName, args);
   };
 
