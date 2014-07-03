@@ -159,7 +159,7 @@ define([
         geolocation.reverseGeocode();
 
         expect(emitStub.calledOnce).toBe(true);
-        expect(emitStub.calledWith('geolocation:location', [location])).toBe(true);
+        expect(emitStub.calledWith('location', [location])).toBe(true);
 
         geoStub.restore();
         revStub.restore();
