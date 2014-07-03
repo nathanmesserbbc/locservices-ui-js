@@ -67,9 +67,13 @@ define([
       container: this.container.find('.ls-ui-search-results')
     });
 
-    new UserLocations({
+    var userLocations = new UserLocations({
       translations: options.translations,
       container: this.container.find('.ls-ui-user-locations')
+    });
+
+    $.on(namespace + ':component:search:results', function() {
+      userLocations.container.addClass('ls-ui-hidden');
     });
   }
 
