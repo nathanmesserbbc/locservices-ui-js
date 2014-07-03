@@ -4,6 +4,7 @@ require.config({
   baseUrl: '/',
   paths: {
     'jquery' : 'vendor/jquery/dist/jquery',
+    'pubsub' : 'vendor/events/pubsub',
     'locservices/ui' : 'js',
     'locservices/core': 'vendor/locservices-core-js/src'
   }
@@ -11,8 +12,9 @@ require.config({
 
 require([
   'jquery',
-  'js/translations/en',
-  'js/component/user_locations'
+  'locservices/ui/translations/en',
+  'locservices/ui/component/user_locations',
+  'pubsub'
 ], function($, En, UserLocations) {
 
   var userLocations = new UserLocations({

@@ -26,6 +26,7 @@ require.config({
     'pubsub' : 'src/vendor/events/pubsub',
     'jquery' : 'src/vendor/jquery/dist/jquery',
     'locservices/ui' : 'src/js',
-    'locservices/core': 'src/vendor/locservices-core-js/src'
+    'locservices/core': 'src/vendor/locservices-core-js/src',
+    'fixtures': 'test/fixtures'
   }
 });
