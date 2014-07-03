@@ -136,7 +136,7 @@ function(
    * @param {Object} location
    */
   UserLocations.prototype.addRecentLocation = function(location) {
-    
+
     //@todo test this method
 
     // should not have to do this try/catch
