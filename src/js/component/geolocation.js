@@ -89,7 +89,7 @@ define([
             }]);
           } else {
             self._button.removeAttr('disabled').removeClass('disabled');
-            self.emit('geolocation:location', [location]);
+            self.emit('location', [location]);
           }
         },
         // http error

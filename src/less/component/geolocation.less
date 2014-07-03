@@ -1,41 +1,6 @@
-@bg-color: #404040;
-@text-light-colour: white;
-@img-root: "../../img";
-
-.locservices-ui-component-geolocation {
-  background: @bg-color;
-  text-align: left;
-  border: none;
-  padding: 0;
-  display: block;
-  width: 100%;
-  font-size: 1em;
-  cursor: pointer;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-
-  .locservices-ui-component-geolocation-icon {
-    display: inline-block;
-    width: 36px;
-    height: 36px;
-    background: url("@{img-root}/locator_sprite_1x.png") no-repeat -73px 8px;
-    float: right;
-  }
-
-  .locservices-ui-component-geolocation-label {
-    display: inline-block;
-    height: 36px;
-    color: @text-light-colour;
-    font-size: 1.3em;
-    line-height: 2.7em;
-    padding-left: 10px;
-  }
-}
+@import '../_variables';
+@import './geolocation/_base';
 
 @media (min-width: 600px) {
-  .locservices-ui-component-geolocation {
-    width: 36px;
-    .locservices-ui-component-geolocation-label { display: none; }
-  }
+  @import './geolocation/_min600';
 }

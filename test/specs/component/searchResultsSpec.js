@@ -58,10 +58,6 @@ define([
 
       });
 
-      it('should add a title to the search-results component', function() {
-        expect(searchResults.title).toBeDefined();
-      });
-
       it('should add a moreResults to the search-results component', function() {
         expect(searchResults.moreResults).toBeDefined();
       });
@@ -178,7 +174,6 @@ define([
 
         searchResults.clear();
 
-        expect(searchResults.title.text()).toEqual('');
         expect(searchResults.list.children().length).toEqual(0);
         expect(searchResults.moreResults.hasClass('active')).toBe(false);
       });
