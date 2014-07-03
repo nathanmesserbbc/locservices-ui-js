@@ -180,7 +180,7 @@ define([
         expect(results._data).toEqual({});
       });
 
-      it('should be empty when SearchResults object is instantiated', function() {
+      it('should store results data against the id', function() {
         searchResults._data = {};
 
         var locations = [{
@@ -210,6 +210,11 @@ define([
 
         expect(searchResults.list.children().length).toEqual(0);
         expect(searchResults.moreResults.hasClass('active')).toBe(false);
+      });
+
+      it('should clear the stored data', function() {
+        searchResults.clear();
+
         expect(searchResults._data).toEqual({});
       });
     });
