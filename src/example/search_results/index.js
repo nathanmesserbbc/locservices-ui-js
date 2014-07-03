@@ -30,7 +30,6 @@ require([
   });
   api.search('cardiff', {
     success: function(res) {
-      console.log(res.metadata);
       $.emit('locservices:ui:component:search:results', [res.metadata, res.results]);
     }
   });
