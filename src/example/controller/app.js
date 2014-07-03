@@ -39,4 +39,8 @@ require([
     $('.primary-search').removeClass('active');
   });
 
+  $.on(namespace + ':controller:location', function(location) {
+    window.location = 'http://beta.bbc.co.uk/travelbeta/' + location.id + '/incidents/road';
+  });
+
 });

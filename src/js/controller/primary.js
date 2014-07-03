@@ -73,6 +73,14 @@ define([
       self.container.addClass('ls-ui-ctrl-active');
     });
 
+    $.on(namespace + ':component:geolocation:location', function(location) {
+      $.emit(namespace + ':controller:location', [location]);
+    });
+
+    $.on(namespace + ':component:search_results:location', function(location) {
+      $.emit(namespace + ':controller:location', [location]);
+    });
+
     this.closeButton.on('click', function(e) {
       e.preventDefault();
       message.clear();
