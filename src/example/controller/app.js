@@ -32,11 +32,11 @@ require([
   });
 
   $.on(namespace + ':controller:active', function() {
-    $('#orb-modules').toggleClass('active');
+    $('body').addClass('active');
   });
 
   $.on(namespace + ':controller:inactive', function() {
-    $('#orb-modules').toggleClass('active');
+    $('body').removeClass('active');
   });
 
 });
