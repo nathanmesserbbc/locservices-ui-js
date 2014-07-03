@@ -32,11 +32,11 @@ require([
   });
 
   $.on(namespace + ':controller:active', function() {
-    $('body').addClass('active');
+    $('.primary-search').addClass('active');
   });
 
   $.on(namespace + ':controller:inactive', function() {
-    $('body').removeClass('active');
+    $('.primary-search').removeClass('active');
   });
 
 });

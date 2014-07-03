@@ -53,7 +53,7 @@ define([
     this.container.addClass('ls-ui-ctrl-primary');
 
     this.closeButton = closeBtn(options.translations);
-    this.container.append(this.closeButton);
+    this.container.find('.ls-ui-o').append(this.closeButton);
 
     $.on(namespace + ':error', function() {
       $.emit(namespace + ':controller:active');
