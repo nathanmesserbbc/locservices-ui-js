@@ -145,6 +145,15 @@ define([
         stub.restore();
       });
 
+      // it('should emit an event when a search has focus', function() {
+      //   var stub = sinon.stub($, 'emit');
+      //   var eventName = 'locservices:ui:component:search:focus';
+      //
+      //   search.input.trigger('focus');
+      //   expect(stub.calledWith(eventName)).toBe(true);
+      //   stub.restore();
+      // });
+
     });
 
   });

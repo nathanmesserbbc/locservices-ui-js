@@ -33,16 +33,32 @@ define([
     }
   };
 
+  var closeBtn = function(translations) {
+    return $('<button />')
+            .addClass('ls-ui-close')
+            .text(translations.get('primary_search.close'));
+  };
+
   function Primary(options) {
     verify(options);
 
     var self = this;
     var userLocations,
+        results,
+        message,
         namespace = options.namespace || 'locservices:ui:primary';
 
     this.api = new Api(options.api);
     this.container = options.container;
-    this.container.addClass('ls-ui-controller-primary');
+    this.container.addClass('ls-ui-ctrl-primary');
+
+    this.closeButton = closeBtn(options.translations);
+    this.container.append(this.closeButton);
+
+    $.on(namespace + ':error', function() {
+      $.emit(namespace + ':controller:active');
+      self.container.addClass('ls-ui-ctrl-active');
+    });
 
     $.on(namespace + ':component:search:results', function() {
       userLocations.container.addClass('ls-ui-hidden');
@@ -50,6 +66,19 @@ define([
 
     $.on(namespace + ':component:geolocation:available', function() {
       self.container.addClass('li-ui-ctrl-geolocation');
+    });
+
+    $.on(namespace + ':component:search:focus', function() {
+      $.emit(namespace + ':controller:active');
+      self.container.addClass('ls-ui-ctrl-active');
+    });
+
+    this.closeButton.on('click', function(e) {
+      e.preventDefault();
+      message.clear();
+      results.clear();
+      $.emit(namespace + ':controller:inactive');
+      self.container.removeClass('ls-ui-ctrl-active');
     });
 
     new Search({
@@ -66,13 +95,13 @@ define([
       container: this.container.find('.ls-ui-geolocation')
     });
 
-    new Message({
+    message = new Message({
       translations: options.translations,
       eventNamespace: namespace,
       container: this.container.find('.ls-ui-message')
     });
 
-    new SearchResults({
+    results = new SearchResults({
       api: this.api,
       translations: options.translations,
       eventNamespace: namespace,

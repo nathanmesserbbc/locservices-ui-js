@@ -14,7 +14,8 @@ define(function() {
     'geolocation.error.browser': 'We are unable to use your location.',
     'geolocation.error.browser.permission': 'Please enable Location Services in your device settings or browser.',
     'geolocation.error.outsideContext': 'Your location is not currently supported by this application.',
-    'message.geolocation.detect': 'Detecting your location.'
+    'message.geolocation.detect': 'Detecting your location.',
+    'primary_search.close': 'Close'
   };
 
   function TranslationsEn() {}

@@ -95,13 +95,6 @@ define([
         expect(message.element.hasClass('ls-ui-active')).toBe(false);
       });
 
-      it('should set detection message on geolocation start', function() {
-        message.set('');
-        $.emit('message-test:component:geolocation:start');
-        expect(message.element.text()).toBe('Detecting your location.');
-        expect(message.element.hasClass('ls-ui-active')).toBe(true);
-      });
-
       it('should remove content on geolocation end', function() {
         message.set('');
         $.emit('message-test:component:search:end');
