@@ -1,11 +1,6 @@
-.ls-ui-controller-primary {
-  .locservices-ui-component-geolocation {
-    display: none;
-  }
-}
+@import '../_variables';
+@import './primary/_base';
 
-.li-ui-ctrl-geolocation {
-  .locservices-ui-component-geolocation {
-    display: none;
-  }
+@media (min-width: 600px) {
+  @import './primary/_min600';
 }
