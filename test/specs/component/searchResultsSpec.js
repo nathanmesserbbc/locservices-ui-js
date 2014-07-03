@@ -169,6 +169,40 @@ define([
 
     });
 
+    describe('_data', function() {
+
+      it('should be empty when SearchResults object is instantiated', function() {
+        var results = new SearchResults({
+          translations: new En(),
+          container: $('#search-results'),
+          api: new API()
+        });
+        expect(results._data).toEqual({});
+      });
+
+      it('should be empty when SearchResults object is instantiated', function() {
+        searchResults._data = {};
+
+        var locations = [{
+          id: 123,
+          name: 'Cardiff',
+          placeType: 'settlement'
+        }, {
+          id: 456,
+          name: 'Swansea',
+          placeType: 'region'
+        }];
+
+        $.emit('locservices:ui:component:search:results', [{ search: 'test', totalResults: 2 }, locations]);
+
+        expect(searchResults._data[123].name).toEqual('Cardiff');
+        expect(searchResults._data[123].placeType).toEqual('settlement');
+        expect(searchResults._data[456].name).toEqual('Swansea');
+        expect(searchResults._data[456].placeType).toEqual('region');
+      });
+
+    });
+
     describe('clear()', function() {
       it('should clear out the SearchResults container', function() {
 
@@ -176,6 +210,7 @@ define([
 
         expect(searchResults.list.children().length).toEqual(0);
         expect(searchResults.moreResults.hasClass('active')).toBe(false);
+        expect(searchResults._data).toEqual({});
       });
     });
 

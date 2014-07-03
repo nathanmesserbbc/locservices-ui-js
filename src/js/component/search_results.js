@@ -23,11 +23,15 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.setComponentOptions(options);
     $.on(this.eventNamespaceBase + ':component:search:results', function(metadata, results) {
       if (metadata.totalResults === 1) {
-        self.emit('location', [results[0].id]);
+        var result = results[0];
+        self.emit('location', [{ id: result.id, name: result.name, placeType: result.placeType }]);
         return;
       }
       self.render(metadata, results);
     });
+
+    self._data = {};
+
     self.setup();
   }
   SearchResults.prototype = new Component();
@@ -50,7 +54,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       var locationId;
       evt.preventDefault();
       locationId = $(evt.target).data('id');
-      self.emit('location', [locationId]);
+      self.emit('location', [self._data[locationId]]);
       self.clear();
       return false;
     });
@@ -82,6 +86,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     for (i = 0; i < results.length; i++) {
       result = results[i];
+      this._data[result.id] = {
+        id: result.id,
+        name: result.name,
+        placeType: result.placeType
+      };
       label = result.name;
       if (result.container) {
         label += ', ' + result.container;
@@ -108,6 +117,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   SearchResults.prototype.clear = function() {
     this.moreResults.removeClass('active');
     this.list.empty();
+    this._data = {};
   };
 
   return SearchResults;
