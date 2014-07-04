@@ -43,17 +43,17 @@ define([
     verify(options);
 
     var self = this;
-    var userLocations,
-        results,
-        message,
-        namespace = options.namespace || 'locservices:ui:primary';
 
-    this.api = new Api(options.api);
-    this.container = options.container;
-    this.container.addClass('ls-ui-ctrl-primary');
+    self.userLocations,
+    self.results,
+    self.message = undefined;
+    self.api = new Api(options.api);
+    self.container = options.container;
+    self.container.addClass('ls-ui-ctrl-primary');
+    self.closeButton = closeBtn(options.translations);
+    self.container.find('.ls-ui-o').append(this.closeButton);
 
-    this.closeButton = closeBtn(options.translations);
-    this.container.find('.ls-ui-o').append(this.closeButton);
+    var namespace = options.namespace || 'locservices:ui:primary';
 
     $.on(namespace + ':error', function() {
       $.emit(namespace + ':controller:active');
@@ -61,7 +61,7 @@ define([
     });
 
     $.on(namespace + ':component:search:results', function() {
-      userLocations.container.addClass('ls-ui-hidden');
+      self.userLocations.container.addClass('ls-ui-hidden');
     });
 
     $.on(namespace + ':component:geolocation:available', function() {
@@ -81,42 +81,42 @@ define([
       $.emit(namespace + ':controller:location', [location]);
     });
 
-    this.closeButton.on('click', function(e) {
+    self.closeButton.on('click', function(e) {
       e.preventDefault();
-      message.clear();
-      results.clear();
+      self.message.clear();
+      self.results.clear();
       $.emit(namespace + ':controller:inactive');
       self.container.removeClass('ls-ui-ctrl-active');
     });
 
-    new Search({
+    self.search = new Search({
       api: this.api,
       translations: options.translations,
       eventNamespace: namespace,
       container: this.container.find('.ls-ui-search')
     });
 
-    new Geolocation({
+    self.geolocation = new Geolocation({
       api: this.api,
       translations: options.translations,
       eventNamespace: namespace,
       container: this.container.find('.ls-ui-geolocation')
     });
 
-    message = new Message({
+    self.message = new Message({
       translations: options.translations,
       eventNamespace: namespace,
       container: this.container.find('.ls-ui-message')
     });
 
-    results = new SearchResults({
+    self.results = new SearchResults({
       api: this.api,
       translations: options.translations,
       eventNamespace: namespace,
       container: this.container.find('.ls-ui-search-results')
     });
 
-    userLocations = new UserLocations({
+    self.userLocations = new UserLocations({
       translations: options.translations,
       eventNamespace: namespace,
       container: this.container.find('.ls-ui-user-locations')

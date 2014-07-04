@@ -19,7 +19,7 @@ require([
 ], function($, SearchController, En) {
 
   var namespace = $('.primary-search').data('namespace');
-
+  var element   = $('.primary-search');
   new SearchController({
     api: {
       env: 'live',
@@ -27,16 +27,16 @@ require([
       placetypes: ['road', 'settlement']
     },
     namespace: namespace,
-    container: $('.primary-search'),
+    container: element,
     translations: new En()
   });
 
   $.on(namespace + ':controller:active', function() {
-    $('.primary-search').addClass('active');
+    element.addClass('active');
   });
 
   $.on(namespace + ':controller:inactive', function() {
-    $('.primary-search').removeClass('active');
+    element.removeClass('active');
   });
 
   $.on(namespace + ':controller:location', function(location) {
