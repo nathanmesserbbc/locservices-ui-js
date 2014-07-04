@@ -50,13 +50,13 @@ define([
           container: $('<div />')
         });
       });
-      //
-      // it('should emit an event when clicked', function() {
-      //   var spy = sinon.spy($, 'emit');
-      //   button.button.trigger('click');
-      //   expect(spy.getCall(1)).toEqual('locservices:ui:component:close_button:clicked');
-      //   $.emit.restore();
-      // });
+
+      it('should emit an event when clicked', function() {
+        var spy = sinon.spy($, 'emit');
+        button.button.trigger('click');
+        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:component:close_button:clicked');
+        $.emit.restore();
+      });
 
     });
   });
