@@ -34,7 +34,6 @@ define([
     if (this.isSupported === false) {
       return;
     }
-
     options = options || {};
     options.componentId = 'geolocation';
 
@@ -47,6 +46,8 @@ define([
     var self = this;
 
     this.setComponentOptions(options);
+
+    this.emit('available');
 
     var label = this.translations.get('geolocation.button.label');
     this.container.append(template.replace('{text}', label));

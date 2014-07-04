@@ -1,0 +1,78 @@
+.ls-ui-ctrl-primary {
+  position: relative;
+  padding: 20px 0;
+
+  .locservices-ui-component-geolocation {
+    position: absolute;
+    display: none;
+    top: 88px;
+  }
+
+  .ls-ui-comp-search {
+    .ls-ui-input, .ls-ui-submit {
+      background-color: white;
+    }
+  }
+
+  .ls-ui-comp-userLocations {
+    display: none;
+  }
+
+  .ls-ui-close {
+    display: none;
+    position: absolute;
+    top: 25px;
+    right: 0;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border: none;
+    text-indent: -9999px;
+    background: transparent url("@{img-root}/controller/overlay_close_icon.png") center center no-repeat;
+  }
+}
+
+.ls-ui-ctrl-active {
+  background: white;
+
+  .ls-ui-close {
+    display: block;
+  }
+
+  .site-name {
+    color: @font-title-active-color;
+  }
+
+  .ls-ui-comp-search {
+    .ls-ui-input, .ls-ui-submit {
+      background-color: @ls-ui-input-background;
+    }
+  }
+
+  .ls-ui-comp-userLocations {
+    display: block;
+  }
+}
+
+.li-ui-ctrl-geolocation {
+  .ls-ui-wrap {
+    margin-top: 64px;
+  }
+  .locservices-ui-component-geolocation {
+    display: block;
+    margin-bottom: 8px;
+  }
+}
+
+.site-name {
+  width: 240px;
+  position: relative;
+  z-index: 2;
+  margin: 0 0 20px;
+  font-family: @font-title;
+  font-size: @font48;
+  -webkit-font-smoothing: antialiased;
+  font-weight: normal;
+  color: @font-title-color;
+  text-transform: uppercase;
+}
