@@ -28,8 +28,9 @@ define([
 
     this._waitingForResults = false;
     this._timeoutId = null;
+    this._highlightedSearchResultIndex = null;
 
-    if (!(typeof options.api === "object")) {
+    if (typeof options.api !== 'object') {
       throw new Error('AutoComplete requires an api option');
     }
     this._api = options.api;
@@ -44,9 +45,6 @@ define([
     if (!options.api) {
       throw new Error('AutoComplete requires an api option');
     }
-
-    // autocomplete results get appended to the body
-    options.container = $('body');
 
     this.setComponentOptions(options);
 
@@ -92,7 +90,7 @@ define([
    * @return {string} the prepared string
    */
   AutoComplete.prototype.prepareSearchTerm = function(searchTerm) {
-    return String(searchTerm).replace(/^\s\s*/, "").replace(/\s\s*$/, "");
+    return String(searchTerm).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
   };
 
   /**
@@ -106,7 +104,7 @@ define([
     var value;
     var hasRequiredLength;
 
-    if ("string" !== typeof searchTerm) {
+    if ('string' !== typeof searchTerm) {
       return false;
     }
 
@@ -124,10 +122,7 @@ define([
     var searchTerm = this.prepareSearchTerm(this.input.val());
     var self = this;
 
-    if (this._waitingForResults
-      || !this.isValidSearchTerm(searchTerm)
-      || searchTerm.length <= minChars
-    ) {
+    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length <= minChars) {
       return;
     }
 
@@ -155,13 +150,11 @@ define([
 
   /**
    * Clear rendered search results from the DOM
-   *
-   * @return void
    */
   AutoComplete.prototype.clearSearchResults = function() {
 
     this.searchResultsData = null;
-    this.highlightedSearchResultIndex = null;
+    this._highlightedSearchResultIndex = null;
 
     if (this.searchResults) {
       this.searchResults.remove();
@@ -173,14 +166,15 @@ define([
    * Render the response from an auto-complete json XHR as dom elements
    *
    * @param {Array} results the search results
-   * @param {Object} metadata the search metadata
    */
-  AutoComplete.prototype.renderSearchResults = function(results, metadata) {
+  AutoComplete.prototype.renderSearchResults = function(results) {
 
     var self;
-    var html;
+    var html = '';
     var searchResultIndex;
     var noOfSearchResults;
+    var fullName = '';
+    var location = {};
 
     self = this;
     this.searchResultsData = results;
@@ -192,13 +186,13 @@ define([
     }
 
     if (!this.searchResults) {
-      this.container.append('<div class="ls-ui-autocomplete-container"><ul class="ls-ui-autocomplete-results" /></div>');
+      this.container.append('<ul class="ls-ui-autocomplete-results" />');
       this.searchResults = this.container.find('.ls-ui-autocomplete-results');
 
-      this.searchResults.on("mouseover", "li", function() {
+      this.searchResults.on('mouseover', 'li', function() {
         self.highlightSearchResultByIndex($(this).index(), false);
-      }).on("mouseout", "li", function(event) {
-//        self.searchResultMouseOutHandler(event.target);
+      }).on('mouseout', 'li', function() {
+        $(this).removeClass('active');
       });
 
       this.positionSearchResults();
@@ -206,17 +200,13 @@ define([
 //      self.addSearchResultKeyHandler();
     }
 
-    html = '';
-    var fullName = '';
-    var location = {};
-
     for (searchResultIndex = 0; searchResultIndex < noOfSearchResults; searchResultIndex++) {
       location = results[searchResultIndex];
       fullName = location.name;
       if (location.container) {
         fullName += ', ' + location.container;
       }
-      html += "<li>" + fullName + "</li>";
+      html += '<li><a href="#" data-location="' + location.id + '">' + fullName + '</a></li>';
     }
 
     this.searchResults.html(html);
@@ -224,16 +214,15 @@ define([
 
   /**
    * Position the search result dom element adjacent to the input field
-   *
-   * @return void
    */
   AutoComplete.prototype.positionSearchResults = function() {
 
     var inputOffset = this.input.offset();
 
-    this.container.css({
+    this.searchResults.css({
       left : parseInt(inputOffset.left, 0),
-      top  : parseInt(inputOffset.top, 0) + this.input.outerHeight()
+      top : parseInt(inputOffset.top, 0) + this.input.outerHeight(),
+      width: parseInt(this.input.outerWidth(), 0)
     });
   };
 
@@ -243,7 +232,7 @@ define([
    */
   AutoComplete.prototype.escapeKeyHandler = function() {
 
-    if (null !== this.highlightedSearchResultIndex) {
+    if (null !== this._highlightedSearchResultIndex) {
       this.input.val(this.currentSearchTerm);
     }
 
@@ -258,12 +247,12 @@ define([
    */
   AutoComplete.prototype.enterKeyHandler = function(event) {
 
-    if (null !== this.highlightedSearchResultIndex) {
+    if (null !== this._highlightedSearchResultIndex) {
       event.preventDefault();
-      this.submitSearchResultByIndex(this.highlightedSearchResultIndex);
+      var location = this.searchResultsData[this._highlightedSearchResultIndex];
+      this.emit('location', [location]);
     }
 
-    this.clearInputChangedTimeout();
     this.clearSearchResults();
   };
 
@@ -272,13 +261,13 @@ define([
    */
   AutoComplete.prototype.highlightNextSearchResult = function() {
 
-    var index = this.highlightedSearchResultIndex;
+    var index = this._highlightedSearchResultIndex;
 
     if (null === index) {
       index = 0;
     } else {
       index++;
-      if (this.searchResultsData.results.length <= index) {
+      if (this.searchResultsData.length <= index) {
         this.removeSearchResultHighlight(true);
         return;
       }
@@ -293,10 +282,10 @@ define([
   AutoComplete.prototype.highlightPrevSearchResult = function() {
     var index;
 
-    index = this.highlightedSearchResultIndex;
+    index = this._highlightedSearchResultIndex;
 
     if (null === index) {
-      index = this.searchResultsData.results.length - 1;
+      index = this.searchResultsData.length - 1;
     } else {
       index--;
       if (0 > index) {
@@ -320,19 +309,21 @@ define([
    *
    * @param {int} index the index to select
    * @param {boolean} updateInputValue should the input field value be set
-   * @return void
    */
   AutoComplete.prototype.highlightSearchResultByIndex = function(index, updateInputValue) {
 
-    var searchResult;
+    var searchResult = this.searchResultsData[index];
+    var fullName = searchResult.name;
+    if (searchResult.container) {
+      fullName += ', ' + searchResult.container;
+    }
 
     this.removeSearchResultHighlight();
-    searchResult = this.searchResultsData[index];
-    this.highlightedSearchResultIndex = index;
-    $(this.searchResults.find("li")[index]).addClass("active");
+    this._highlightedSearchResultIndex = index;
+    $(this.searchResults.find('li')[index]).addClass('active');
 
     if (updateInputValue) {
-      this.input.val(searchResult.fullName);
+      this.input.val(fullName);
     }
   };
 
@@ -340,12 +331,11 @@ define([
    * Remove any highlighted search result
    *
    * @param {boolean} updateInputValue should the input field value be set
-   * @return void
    */
   AutoComplete.prototype.removeSearchResultHighlight = function(updateInputValue) {
 
-    this.highlightedSearchResultIndex = null;
-    this.searchResults.find("li.active").removeClass("active");
+    this._highlightedSearchResultIndex = null;
+    this.searchResults.find('li.active').removeClass('active');
 
     if (updateInputValue) {
       this.input.val(this.currentSearchTerm);
