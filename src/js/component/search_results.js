@@ -21,13 +21,17 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.api = options.api;
     }
     self.setComponentOptions(options);
-    $.on(this.eventNamespaceBase + ':component:search:results', function(metadata, results) {
+    $.on(this.eventNamespaceBase + ':component:search:results', function(results, metadata) {
       if (metadata.totalResults === 1) {
-        self.emit('location', [results[0].id]);
+        var result = results[0];
+        self.emit('location', [result]);
         return;
       }
-      self.render(metadata, results);
+      self.render(results, metadata);
     });
+
+    self._data = {};
+
     self.setup();
   }
   SearchResults.prototype = new Component();
@@ -50,7 +54,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       var locationId;
       evt.preventDefault();
       locationId = $(evt.target).data('id');
-      self.emit('location', [locationId]);
+      self.emit('location', [self._data[locationId]]);
       self.clear();
       return false;
     });
@@ -60,7 +64,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.api.search(self.searchTerm, {
         start: self.offset + 10,
         success: function(resp) {
-          self.render(resp.metadata, resp.results);
+          self.render(resp.results, resp.metadata);
         }
       });
       return false;
@@ -71,10 +75,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   /**
    * Render some search results.
    *
-   * @param {Object} metadata
    * @param {Array} results
+   * @param {Object} metadata
    */
-  SearchResults.prototype.render = function(metadata, results) {
+  SearchResults.prototype.render = function(results, metadata) {
     var i, result, label, html = '';
 
     this.offset = metadata.start || 0;
@@ -82,6 +86,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     for (i = 0; i < results.length; i++) {
       result = results[i];
+      this._data[result.id] = result;
       label = result.name;
       if (result.container) {
         label += ', ' + result.container;
@@ -108,6 +113,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   SearchResults.prototype.clear = function() {
     this.moreResults.removeClass('active');
     this.list.empty();
+    this._data = {};
   };
 
   return SearchResults;
