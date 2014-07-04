@@ -18,7 +18,7 @@ require([
   'vendor/events/pubsub'
 ], function($, SearchController, En) {
 
-  var namespace = $('.primary-search').data('namespace');
+  var namespace = 'primary';
   var element   = $('.primary-search');
   new SearchController({
     api: {
