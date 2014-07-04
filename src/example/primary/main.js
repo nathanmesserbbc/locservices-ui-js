@@ -22,7 +22,7 @@ require([
   var element   = $('.primary-search');
   new SearchController({
     api: {
-      env: 'live',
+      env: 'int',
       protocol: 'http',
       placetypes: ['road', 'settlement']
     },

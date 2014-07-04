@@ -39,6 +39,9 @@ define([
             .text(translations.get('primary_search.close'));
   };
 
+  var outside  = $('<div />').addClass('ls-ui-o');
+  var searchEl = $('<div />').addClass('ls-ui-ctrl-primary-search');
+
   function Primary(options) {
     verify(options);
 
@@ -51,7 +54,7 @@ define([
     self.container = options.container;
     self.container.addClass('ls-ui-ctrl-primary');
     self.closeButton = closeBtn(options.translations);
-    self.container.find('.ls-ui-o').append(this.closeButton);
+    self.container.append(outside.append(searchEl));
 
     var namespace = options.namespace || 'locservices:ui';
 
@@ -61,7 +64,7 @@ define([
     });
 
     $.on(namespace + ':component:search:results', function() {
-      self.userLocations.container.addClass('ls-ui-hidden');
+      self.container.find('.ls-ui-comp-userLocations').addClass('ls-ui-hidden');
     });
 
     $.on(namespace + ':component:geolocation:available', function() {
@@ -93,34 +96,36 @@ define([
       api: this.api,
       translations: options.translations,
       eventNamespace: namespace,
-      container: this.container.find('.ls-ui-search')
+      container: searchEl
     });
 
     self.geolocation = new Geolocation({
       api: this.api,
       translations: options.translations,
       eventNamespace: namespace,
-      container: this.container.find('.ls-ui-geolocation')
+      container: outside
     });
 
     self.message = new Message({
       translations: options.translations,
       eventNamespace: namespace,
-      container: this.container.find('.ls-ui-message')
+      container: outside
     });
 
     self.results = new SearchResults({
       api: this.api,
       translations: options.translations,
       eventNamespace: namespace,
-      container: this.container.find('.ls-ui-search-results')
+      container: outside
     });
 
     self.userLocations = new UserLocations({
       translations: options.translations,
       eventNamespace: namespace,
-      container: this.container.find('.ls-ui-user-locations')
+      container: outside
     });
+
+    outside.append(self.closeButton);
   }
 
   return Primary;

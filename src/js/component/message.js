@@ -51,8 +51,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   };
 
   var render = function(container) {
-    container.addClass('ls-ui-message')
-             .append($('<p />'));
+    var comp = $('<div / >').addClass('ls-ui-comp-message');
+    container.append(comp.append($('<p />')));
   };
 
   return Message;
