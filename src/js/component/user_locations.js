@@ -52,8 +52,8 @@ function(
       if (location.isPreferred) {
         li.addClass('ls-ui-comp-userLocations-preferred');
       }
-      if (location.isPreferrable) {
-        li.addClass('ls-ui-comp-userLocations-preferrable');
+      if (location.isPreferable) {
+        li.addClass('ls-ui-comp-userLocations-preferable');
         li.append(linkAction);
       }
       li.append(linkName).append(linkRemove);
@@ -215,7 +215,7 @@ function(
       noOfLocationsRemaining--;
       preferredLocation = this.preferredLocation.get();
       preferredLocation.isPreferred = true;
-      preferredLocation.isPreferrable = true;
+      preferredLocation.isPreferable = true;
       locations.push(preferredLocation);
     }
 
@@ -232,7 +232,7 @@ function(
             )
           ) {
             noOfLocationsRemaining--;
-            recentLocation.isPreferrable = this.preferredLocation.isValidLocation(recentLocation);
+            recentLocation.isPreferable = this.preferredLocation.isValidLocation(recentLocation);
             locations.push(recentLocation);
           }
           if (0 === noOfLocationsRemaining) {
