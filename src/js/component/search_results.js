@@ -21,13 +21,13 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.api = options.api;
     }
     self.setComponentOptions(options);
-    $.on(this.eventNamespaceBase + ':component:search:results', function(metadata, results) {
+    $.on(this.eventNamespaceBase + ':component:search:results', function(results, metadata) {
       if (metadata.totalResults === 1) {
         var result = results[0];
         self.emit('location', [result]);
         return;
       }
-      self.render(metadata, results);
+      self.render(results, metadata);
     });
 
     self._data = {};
@@ -64,7 +64,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.api.search(self.searchTerm, {
         start: self.offset + 10,
         success: function(resp) {
-          self.render(resp.metadata, resp.results);
+          self.render(resp.results, resp.metadata);
         }
       });
       return false;
@@ -75,10 +75,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   /**
    * Render some search results.
    *
-   * @param {Object} metadata
    * @param {Array} results
+   * @param {Object} metadata
    */
-  SearchResults.prototype.render = function(metadata, results) {
+  SearchResults.prototype.render = function(results, metadata) {
     var i, result, label, html = '';
 
     this.offset = metadata.start || 0;

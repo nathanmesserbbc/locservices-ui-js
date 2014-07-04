@@ -30,7 +30,7 @@ require([
   });
   api.search('cardiff', {
     success: function(res) {
-      $.emit('locservices:ui:component:search:results', [res.metadata, res.results]);
+      $.emit('locservices:ui:component:search:results', [res.results, res.metadata]);
     }
   });
 });

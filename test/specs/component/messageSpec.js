@@ -90,7 +90,7 @@ define([
 
       it('should set content on when search results are available', function() {
         message.set('');
-        $.emit('message-test:component:search:results', { search: 'Cardiff' });
+        $.emit('message-test:component:search:results', [[], { search: 'Cardiff' }]);
         expect(message.element.text()).toBe('Search results for: "Cardiff"');
         expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });

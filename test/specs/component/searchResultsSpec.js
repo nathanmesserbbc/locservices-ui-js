@@ -78,7 +78,7 @@ define([
           api: new API()
         });
 
-        $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
 
         expect(render.called).toBe(true);
 
@@ -87,7 +87,7 @@ define([
 
       it('should render results to unordered list', function() {
 
-        $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
 
         expect($('#search-results ul li').length).toEqual(responseMultiple.results.length);
 
@@ -101,7 +101,7 @@ define([
           api: new API()
         });
 
-        $.emit('locservices:ui:component:search:results', [responseWithSingleResult.metadata, responseWithSingleResult.results]);
+        $.emit('locservices:ui:component:search:results', [responseWithSingleResult.results, responseWithSingleResult.metadata]);
 
         expect(render.called).toBe(false);
 
@@ -121,7 +121,7 @@ define([
           api: new API()
         });
 
-        $.emit('locservices:ui:component:search:results', [responseWithSingleResult.metadata, responseWithSingleResult.results]);
+        $.emit('locservices:ui:component:search:results', [responseWithSingleResult.results, responseWithSingleResult.metadata]);
 
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search-results:location');
 
@@ -137,7 +137,7 @@ define([
           api: new API()
         });
 
-        $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
 
         results.list.find('a').trigger('click');
 
@@ -150,20 +150,20 @@ define([
     describe('more results', function() {
 
       it('should add new results to list', function() {
-        $.emit('locservices:ui:component:search:results', [responseMultiple.metadata, responseMultiple.results]);
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
         expect(searchResults.list.children().length).toEqual(10);
 
-        $.emit('locservices:ui:component:search:results', [responseMultipleMore.metadata, responseMultipleMore.results]);
+        $.emit('locservices:ui:component:search:results', [responseMultipleMore.results, responseMultipleMore.metadata]);
         expect(searchResults.list.children().length).toEqual(20);
       });
 
       it('should not display more results button if less than 10 results', function() {
-        $.emit('locservices:ui:component:search:results', [{ search: 'test', totalResults: 9 }, []]);
+        $.emit('locservices:ui:component:search:results', [[], { search: 'test', totalResults: 9 }]);
         expect(searchResults.moreResults.hasClass('active')).toBe(false);
       });
 
       it('should not display more results button if offset + 10 is grater than totalResults', function() {
-        $.emit('locservices:ui:component:search:results', [{ search: 'test', start: 80, totalResults: 84 }, []]);
+        $.emit('locservices:ui:component:search:results', [[], { search: 'test', start: 80, totalResults: 84 }]);
         expect(searchResults.moreResults.hasClass('active')).toBe(false);
       });
 
@@ -193,7 +193,7 @@ define([
           placeType: 'region'
         }];
 
-        $.emit('locservices:ui:component:search:results', [{ search: 'test', totalResults: 2 }, locations]);
+        $.emit('locservices:ui:component:search:results', [locations, { search: 'test', totalResults: 2 }]);
 
         expect(searchResults._data[123].name).toEqual('Cardiff');
         expect(searchResults._data[123].placeType).toEqual('settlement');
