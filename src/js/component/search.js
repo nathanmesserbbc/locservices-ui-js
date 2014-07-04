@@ -45,6 +45,9 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       e.preventDefault();
       self.search(self.input.val());
     });
+    self.input.on('focus', function() {
+      self.emit('focus');
+    });
   }
   Search.prototype = new Component();
   Search.prototype.constructor = Search;

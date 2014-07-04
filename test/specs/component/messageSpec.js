@@ -81,13 +81,6 @@ define([
         expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
-      it('should set content on search start', function() {
-        message.set('');
-        $.emit('message-test:component:search:start', ['Cardiff']);
-        expect(message.element.text()).toBe('Searching for "Cardiff"');
-        expect(message.element.hasClass('ls-ui-active')).toBe(true);
-      });
-
       it('should set content on when search results are available', function() {
         message.set('');
         $.emit('message-test:component:search:results', [[], { search: 'Cardiff' }]);
@@ -100,13 +93,6 @@ define([
         $.emit('message-test:component:search:end');
         expect(message.element.text()).toBe('');
         expect(message.element.hasClass('ls-ui-active')).toBe(false);
-      });
-
-      it('should set detection message on geolocation start', function() {
-        message.set('');
-        $.emit('message-test:component:geolocation:start');
-        expect(message.element.text()).toBe('Detecting your location.');
-        expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
       it('should remove content on geolocation end', function() {

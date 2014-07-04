@@ -32,12 +32,12 @@ define([
 
     describe('constructor()', function() {
 
-      it('should set this.componentId to "search-results"', function() {
-        expect(searchResults.componentId).toBe('search-results');
+      it('should set this.componentId to "search_results"', function() {
+        expect(searchResults.componentId).toBe('search_results');
       });
 
-      it('should set this.eventNamespace to "locservices:ui:component:search-results"', function() {
-        expect(searchResults.eventNamespace).toBe('locservices:ui:component:search-results');
+      it('should set this.eventNamespace to "locservices:ui:component:search_results"', function() {
+        expect(searchResults.eventNamespace).toBe('locservices:ui:component:search_results');
       });
 
     });
@@ -123,7 +123,7 @@ define([
 
         $.emit('locservices:ui:component:search:results', [responseWithSingleResult.results, responseWithSingleResult.metadata]);
 
-        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search-results:location');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search_results:location');
 
         $.emit.restore();
       });
@@ -141,7 +141,7 @@ define([
 
         results.list.find('a').trigger('click');
 
-        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search-results:location');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search_results:location');
 
         $.emit.restore();
       });

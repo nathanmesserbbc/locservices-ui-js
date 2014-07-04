@@ -18,15 +18,25 @@ require([
   'vendor/events/pubsub'
 ], function($, SearchController, En) {
 
+  var namespace = $('.primary-search').data('namespace');
+
   new SearchController({
     api: {
       env: 'live',
       protocol: 'http',
       placetypes: ['road', 'settlement']
     },
-    namespace: $('.primary-search').data('namespace'),
+    namespace: namespace,
     container: $('.primary-search'),
     translations: new En()
+  });
+
+  $.on(namespace + ':controller:active', function() {
+    $('body').addClass('active');
+  });
+
+  $.on(namespace + ':controller:inactive', function() {
+    $('body').removeClass('active');
   });
 
 });

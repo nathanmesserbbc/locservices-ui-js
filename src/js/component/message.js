@@ -21,24 +21,16 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.set(error);
     });
 
-    $.on(self.eventNamespaceBase + ':component:search:start', function(value) {
-      self.set('Searching for "' + value + '"');
-    });
-
     $.on(self.eventNamespaceBase + ':component:search:end', function() {
       self.clear();
     });
 
-    $.on(self.eventNamespaceBase + ':component:search-results:location', function() {
+    $.on(self.eventNamespaceBase + ':component:search_results:location', function() {
       self.clear();
     });
 
     $.on(self.eventNamespaceBase + ':component:search:results', function(results, metadata) {
       self.set('Search results for: "' + metadata.search + '"');
-    });
-
-    $.on(self.eventNamespaceBase + ':component:geolocation:start', function() {
-      self.set(self.translations.get('message.geolocation.detect'));
     });
 
     $.on(self.eventNamespaceBase + ':component:geolocation:end', function() {

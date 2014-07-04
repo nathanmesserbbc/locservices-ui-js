@@ -13,7 +13,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   function SearchResults(options) {
     var self = this;
     options = options || {};
-    options.componentId = 'search-results';
+    options.componentId = 'search_results';
 
     if (undefined === options.api) {
       throw new Error('SearchResults requires api parameter');
