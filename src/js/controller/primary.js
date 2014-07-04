@@ -7,7 +7,8 @@ define([
   'locservices/ui/component/message',
   'locservices/ui/component/geolocation',
   'locservices/ui/component/search_results',
-  'locservices/ui/component/user_locations'
+  'locservices/ui/component/user_locations',
+  'locservices/ui/component/close_button'
 ], function(
   $,
   Api,
@@ -15,7 +16,8 @@ define([
   Message,
   Geolocation,
   SearchResults,
-  UserLocations
+  UserLocations,
+  CloseButton
 ) {
   'use strict';
 
@@ -33,12 +35,6 @@ define([
     }
   };
 
-  var closeBtn = function(translations) {
-    return $('<button />')
-            .addClass('ls-ui-close')
-            .text(translations.get('primary_search.close'));
-  };
-
   var outside  = $('<div />').addClass('ls-ui-o');
   var searchEl = $('<div />').addClass('ls-ui-ctrl-primary-search');
 
@@ -53,7 +49,6 @@ define([
     self.api = new Api(options.api);
     self.container = options.container;
     self.container.addClass('ls-ui-ctrl-primary');
-    self.closeButton = closeBtn(options.translations);
     self.container.append(outside.append(searchEl));
 
     var namespace = options.namespace || 'locservices:ui';
@@ -84,8 +79,7 @@ define([
       $.emit(namespace + ':controller:location', [location]);
     });
 
-    self.closeButton.on('click', function(e) {
-      e.preventDefault();
+    $.on(namespace + ':component:close_button:clicked', function() {
       self.message.clear();
       self.results.clear();
       $.emit(namespace + ':controller:inactive');
@@ -125,7 +119,11 @@ define([
       container: outside
     });
 
-    outside.append(self.closeButton);
+    self.closeButton = new CloseButton({
+      translations: options.translations,
+      eventNamespace: namespace,
+      container: outside
+    });
   }
 
   return Primary;
