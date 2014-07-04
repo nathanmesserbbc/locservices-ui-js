@@ -53,7 +53,7 @@ define([
     self.closeButton = closeBtn(options.translations);
     self.container.find('.ls-ui-o').append(this.closeButton);
 
-    var namespace = options.namespace || 'locservices:ui:primary';
+    var namespace = options.namespace || 'locservices:ui';
 
     $.on(namespace + ':error', function() {
       $.emit(namespace + ':controller:active');

@@ -1,14 +1,7 @@
 .ls-ui-ctrl-primary {
 
-  .ls-ui-wrap {
-    margin: 5px 0 0 240px;
-  }
-
-  .ls-ui-message {
-    margin: 0 92px 0 240px;
-  }
-  .ls-ui-search-results {
-    margin: 0 82px 0 240px;
+  .ls-ui-ctrl-primary-search {
+    margin: 5px 0 0 0;
   }
 
   .ls-ui-close {
@@ -19,23 +12,28 @@
 
 .ls-ui-ctrl-active {
 
-  .ls-ui-wrap {
+  .ls-ui-ctrl-primary-search {
     margin-right: 41px;
   }
 }
 
 
 .li-ui-ctrl-geolocation {
-  .ls-ui-wrap {
+  .ls-ui-ctrl-primary-search,
+  .li-ui-comp-search-results-container,
+  .ls-ui-comp-message {
     margin-right: 41px;
   }
+
   .locservices-ui-component-geolocation {
     top: 0;
     right: 0;
   }
 
   &.ls-ui-ctrl-active {
-    .ls-ui-wrap {
+    .ls-ui-ctrl-primary-search,
+    .li-ui-comp-search-results-container,
+    .ls-ui-comp-message {
       margin-right: 82px;
     }
 
@@ -45,9 +43,4 @@
       right: 41px;
     }
   }
-}
-
-.site-name {
-  position: absolute;
-  top: -5px;
 }

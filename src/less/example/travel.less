@@ -9,3 +9,25 @@
     background: white;
   }
 }
+
+
+.site-name {
+  width: 240px;
+  position: relative;
+  z-index: 2;
+  margin: 0 0 20px;
+  font-family: @font-title;
+  font-size: @font48;
+  -webkit-font-smoothing: antialiased;
+  font-weight: normal;
+  color: @font-title-color;
+  text-transform: uppercase;
+}
+
+
+@media (min-width: 600px) {
+  .site-name {
+    position: absolute;
+    top: -5px;
+  }
+}
