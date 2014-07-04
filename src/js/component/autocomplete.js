@@ -48,11 +48,11 @@ define([
 
     this.setComponentOptions(options);
 
-    this.on('results', function(results, metadata) {
-      self.renderSearchResults(results, metadata);
+    this.on('results', function(results) {
+      self.renderSearchResults(results);
     });
 
-    $(document).on('keydown', function(event) {
+    $(document).on('keyup', function(event) {
       switch (event.keyCode) {
 
         case KEY_CODE.escape:
@@ -115,6 +115,25 @@ define([
   };
 
   /**
+   * Highlights a string by wrapping the term in <strong> tags
+   *
+   * @param {String} str the string
+   * @param {String} term the term to search for
+   * @return {String}
+   */
+  AutoComplete.prototype.highlightTerm = function(str, term) {
+
+    var re = new RegExp(term, 'i');
+    var index = str.search(re);
+
+    if (index >= 0) {
+      return str.substr(0, index) + '<strong>' + str.substr(index, (index + term.length)) + '</strong>' + str.substr((index + term.length));
+    }
+
+    return str;
+  };
+
+  /**
    * Perform an autoComplete request
    */
   AutoComplete.prototype.autoComplete = function() {
@@ -122,7 +141,7 @@ define([
     var searchTerm = this.prepareSearchTerm(this.input.val());
     var self = this;
 
-    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length <= minChars) {
+    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length < minChars) {
       return;
     }
 
@@ -131,6 +150,7 @@ define([
     this._timeoutId = setTimeout(function() {
 
       self._waitingForResults = true;
+      self.currentSearchTerm = searchTerm;
 
       self._api.autoComplete(searchTerm, {
         success: function(data) {
@@ -171,16 +191,14 @@ define([
 
     var self;
     var html = '';
-    var searchResultIndex;
-    var noOfSearchResults;
+    var i = 0;
     var fullName = '';
     var location = {};
 
     self = this;
     this.searchResultsData = results;
-    noOfSearchResults = results.length;
 
-    if (0 === noOfSearchResults) {
+    if (0 === results.length) {
       this.clearSearchResults();
       return;
     }
@@ -196,20 +214,25 @@ define([
       });
 
       this.positionSearchResults();
-//      this.addSearchResultClickListener();
 //      self.addSearchResultKeyHandler();
     }
 
-    for (searchResultIndex = 0; searchResultIndex < noOfSearchResults; searchResultIndex++) {
-      location = results[searchResultIndex];
+    for (i = 0; i < results.length; i++) {
+      location = results[i];
       fullName = location.name;
       if (location.container) {
         fullName += ', ' + location.container;
       }
-      html += '<li><a href="#" data-location="' + location.id + '">' + fullName + '</a></li>';
+      fullName = self.highlightTerm(fullName, this.currentSearchTerm);
+      html += '<li><a href="#" data-index="' + i + '">' + fullName + '</a></li>';
     }
 
     this.searchResults.html(html);
+
+    this.searchResults.find('li a').on('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    });
   };
 
   /**
