@@ -46,7 +46,7 @@ define([
             container: null
           });
         };
-        expect(failure).toThrow();
+        expect(failure).toThrow(new Error('Search requires api parameter'));
       });
     });
 

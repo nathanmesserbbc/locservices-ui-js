@@ -22,16 +22,15 @@ define([
   'use strict';
 
   var verify = function(options) {
-    var requiredOptions = ['api', 'translations', 'container'];
-    var count = requiredOptions.length;
+    var required = ['api', 'translations', 'container'];
+    var count    = required.length;
 
     for (var i = 0; i < count; i++) {
-      var option = requiredOptions[i];
+      var option = required[i];
 
-      if (options[option]) {
-        continue;
+      if (!options[option]) {
+        throw new Error('Primary Controller requires an ' + option + ' option.');
       }
-      throw('Primary controller requires an ' + option + ' option.');
     }
   };
 
@@ -51,77 +50,77 @@ define([
     self.container.addClass('ls-ui-ctrl-primary');
     self.container.append(outside.append(searchEl));
 
-    var namespace = options.namespace || 'locservices:ui';
+    self.namespace = options.namespace || 'locservices:ui';
 
-    $.on(namespace + ':error', function() {
-      $.emit(namespace + ':controller:active');
+    $.on(self.namespace + ':error', function() {
+      $.emit(self.namespace + ':controller:active');
       self.container.addClass('ls-ui-ctrl-active');
     });
 
-    $.on(namespace + ':component:search:results', function() {
+    $.on(self.namespace + ':component:search:results', function() {
       self.container.find('.ls-ui-comp-userLocations').addClass('ls-ui-hidden');
     });
 
-    $.on(namespace + ':component:geolocation:available', function() {
+    $.on(self.namespace + ':component:geolocation:available', function() {
       self.container.addClass('li-ui-ctrl-geolocation');
     });
 
-    $.on(namespace + ':component:search:focus', function() {
-      $.emit(namespace + ':controller:active');
+    $.on(self.namespace + ':component:search:focus', function() {
+      $.emit(self.namespace + ':controller:active');
       self.container.addClass('ls-ui-ctrl-active');
     });
 
-    $.on(namespace + ':component:geolocation:location', function(location) {
-      $.emit(namespace + ':controller:location', [location]);
+    $.on(self.namespace + ':component:geolocation:location', function(location) {
+      $.emit(self.namespace + ':controller:location', [location]);
     });
 
-    $.on(namespace + ':component:search_results:location', function(location) {
-      $.emit(namespace + ':controller:location', [location]);
+    $.on(self.namespace + ':component:search_results:location', function(location) {
+      $.emit(self.namespace + ':controller:location', [location]);
     });
 
-    $.on(namespace + ':component:close_button:clicked', function() {
+    $.on(self.namespace + ':component:close_button:clicked', function() {
       self.message.clear();
       self.results.clear();
-      $.emit(namespace + ':controller:inactive');
+      $.emit(self.namespace + ':controller:inactive');
       self.container.removeClass('ls-ui-ctrl-active');
     });
 
     self.search = new Search({
       api: this.api,
       translations: options.translations,
-      eventNamespace: namespace,
+      eventNamespace: self.namespace,
       container: searchEl
     });
 
     self.geolocation = new Geolocation({
       api: this.api,
       translations: options.translations,
-      eventNamespace: namespace,
+      eventNamespace: self.namespace,
       container: outside
     });
 
     self.message = new Message({
       translations: options.translations,
-      eventNamespace: namespace,
+      eventNamespace: self.namespace,
       container: outside
     });
 
     self.results = new SearchResults({
       api: this.api,
       translations: options.translations,
-      eventNamespace: namespace,
+      eventNamespace: self.namespace,
       container: outside
     });
 
     self.userLocations = new UserLocations({
       translations: options.translations,
-      eventNamespace: namespace,
+      eventNamespace: self.namespace,
       container: outside
     });
 
     self.closeButton = new CloseButton({
       translations: options.translations,
-      eventNamespace: namespace,
+      eventNamespace: self.namespace,
       container: outside
     });
   }
