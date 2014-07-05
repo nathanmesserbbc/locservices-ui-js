@@ -21,6 +21,9 @@ define([
 ) {
   'use strict';
 
+  var outside  = $('<div />').addClass('ls-ui-o');
+  var searchEl = $('<div />').addClass('ls-ui-ctrl-primary-search');
+
   var verify = function(options) {
     var required = ['api', 'translations', 'container'];
     var count    = required.length;
@@ -34,17 +37,31 @@ define([
     }
   };
 
-  var outside  = $('<div />').addClass('ls-ui-o');
-  var searchEl = $('<div />').addClass('ls-ui-ctrl-primary-search');
-
   function Primary(options) {
     verify(options);
 
     var self = this;
-
-    self.userLocations,
-    self.results,
-    self.message = undefined;
+    var events = {
+      onLocation: function(location) {
+        $.emit(self.namespace + ':controller:location', [location]);
+      },
+      onActive: function() {
+        $.emit(self.namespace + ':controller:active');
+        self.container.addClass('ls-ui-ctrl-active');
+      },
+      onGeolocation: function() {
+        self.container.addClass('li-ui-ctrl-geolocation');
+      },
+      onSearchResults: function() {
+        self.container.find('.ls-ui-comp-userLocations').addClass('ls-ui-hidden');
+      },
+      onClose: function() {
+        self.message.clear();
+        self.results.clear();
+        $.emit(self.namespace + ':controller:inactive');
+        self.container.removeClass('ls-ui-ctrl-active');
+      }
+    };
     self.api = new Api(options.api);
     self.container = options.container;
     self.container.addClass('ls-ui-ctrl-primary');
@@ -52,38 +69,14 @@ define([
 
     self.namespace = options.namespace || 'locservices:ui';
 
-    $.on(self.namespace + ':error', function() {
-      $.emit(self.namespace + ':controller:active');
-      self.container.addClass('ls-ui-ctrl-active');
-    });
-
-    $.on(self.namespace + ':component:search:results', function() {
-      self.container.find('.ls-ui-comp-userLocations').addClass('ls-ui-hidden');
-    });
-
-    $.on(self.namespace + ':component:geolocation:available', function() {
-      self.container.addClass('li-ui-ctrl-geolocation');
-    });
-
-    $.on(self.namespace + ':component:search:focus', function() {
-      $.emit(self.namespace + ':controller:active');
-      self.container.addClass('ls-ui-ctrl-active');
-    });
-
-    $.on(self.namespace + ':component:geolocation:location', function(location) {
-      $.emit(self.namespace + ':controller:location', [location]);
-    });
-
-    $.on(self.namespace + ':component:search_results:location', function(location) {
-      $.emit(self.namespace + ':controller:location', [location]);
-    });
-
-    $.on(self.namespace + ':component:close_button:clicked', function() {
-      self.message.clear();
-      self.results.clear();
-      $.emit(self.namespace + ':controller:inactive');
-      self.container.removeClass('ls-ui-ctrl-active');
-    });
+    $.on(self.namespace + ':error', events.onActive);
+    $.on(self.namespace + ':component:search:focus', events.onActive);
+    $.on(self.namespace + ':component:search:results', events.onSearchResults);
+    $.on(self.namespace + ':component:geolocation:location', events.onLocation);
+    $.on(self.namespace + ':component:auto_complete:location', events.onLocation);
+    $.on(self.namespace + ':component:search_results:location', events.onLocation);
+    $.on(self.namespace + ':component:geolocation:available', events.onGeolocation);
+    $.on(self.namespace + ':component:close_button:clicked', events.onClose);
 
     self.search = new Search({
       api: this.api,
