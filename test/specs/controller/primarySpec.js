@@ -92,5 +92,67 @@ define([
         expect(failure).toThrow(new Error('Primary Controller requires an container option.'));
       });
     });
+
+    describe('events', function() {
+
+      beforeEach(function() {
+        api = new Api();
+        container = $('<div />');
+        translations = new Translations();
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations
+        });
+      });
+
+      it('should emit an active event on internal error', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:error');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:active');
+
+        $.emit.restore();
+      });
+
+      it('should update itself if geolocation is available', function() {
+        var spy = sinon.spy(controller.container, 'addClass');
+        $.emit('locservices:ui:component:geolocation:available');
+        expect(spy.getCall(0).args[0]).toEqual('li-ui-ctrl-geolocation');
+
+        controller.container.addClass.restore();
+      });
+
+      it('should emit an active event when search becomes focused', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:search:focus');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:active');
+
+        $.emit.restore();
+      });
+
+      it('should emit a location when located using geolocation', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:geolocation:location', [{}]);
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+
+        $.emit.restore();
+      });
+
+      it('should emit a location when a location is selected from the results', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:search_results:location', [{}]);
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+
+        $.emit.restore();
+      });
+
+      it('should emit an inactive event when the close button is clicked', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:close_button:clicked');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:inactive');
+
+        $.emit.restore();
+      });
+    });
   });
 });
