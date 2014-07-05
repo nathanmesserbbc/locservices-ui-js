@@ -4,7 +4,8 @@
   "description": "A set of UI components for navigating location",
   "author": "BBC Location Services Team",
   "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install"
+    "postinstall": "./node_modules/bower/bin/bower install",
+    "test": "grunt test:cli"
   },
   "private": true,
   "repository": {
