@@ -74,6 +74,7 @@ define([
     $.on(self.namespace + ':component:search:results', events.onSearchResults);
     $.on(self.namespace + ':component:geolocation:location', events.onLocation);
     $.on(self.namespace + ':component:auto_complete:location', events.onLocation);
+    $.on(self.namespace + ':component:user_locations:location', events.onLocation);
     $.on(self.namespace + ':component:search_results:location', events.onLocation);
     $.on(self.namespace + ':component:geolocation:available', events.onGeolocation);
     $.on(self.namespace + ':component:close_button:clicked', events.onClose);

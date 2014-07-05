@@ -146,6 +146,22 @@ define([
         $.emit.restore();
       });
 
+      it('should emit a location when a location is selected from the auto complete', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:auto_complete:location', [{}]);
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+
+        $.emit.restore();
+      });
+
+      it('should emit a location when a location is selected from the user locations', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:user_locations:location', [{}]);
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+
+        $.emit.restore();
+      });
+
       it('should emit an inactive event when the close button is clicked', function() {
         var spy = sinon.spy($, 'emit');
         $.emit('locservices:ui:component:close_button:clicked');
