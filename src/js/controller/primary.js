@@ -64,8 +64,8 @@ define([
     };
     self.api = new Api(options.api);
     self.container = options.container;
-    self.container.addClass('ls-ui-ctrl-primary');
-    self.container.append(outside.append(searchEl));
+    self.container.addClass('ls-ui-ctrl-primary')
+                  .append(outside.append(searchEl));
 
     self.namespace = options.namespace || 'locservices:ui';
 
