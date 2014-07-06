@@ -17,6 +17,12 @@
   }
 }
 
+.ls-ui-ctrl-open {
+  .ls-ui-ctrl-primary-search {
+    margin-right: 0;
+  }
+}
+
 
 .li-ui-ctrl-geolocation {
   .ls-ui-ctrl-primary-search,
@@ -41,6 +47,18 @@
       position: absolute;
       top: 0;
       right: 41px;
+    }
+  }
+
+  &.ls-ui-ctrl-open {
+    .ls-ui-ctrl-primary-search,
+    .li-ui-comp-search-results-container,
+    .ls-ui-comp-message {
+      margin-right: 41px;
+    }
+
+    .ls-ui-comp-geolocation {
+      right: 0;
     }
   }
 }

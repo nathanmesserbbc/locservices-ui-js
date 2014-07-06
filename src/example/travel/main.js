@@ -20,16 +20,6 @@ require([
 
   var namespace = 'primary';
   var element   = $('.primary-search');
-  new SearchController({
-    api: {
-      env: 'int',
-      protocol: 'http',
-      'place-types': ['road', 'settlement']
-    },
-    namespace: namespace,
-    container: element,
-    translations: new En()
-  });
 
   $.on(namespace + ':controller:active', function() {
     element.addClass('active');
@@ -43,6 +33,18 @@ require([
 
   $.on(namespace + ':controller:location', function(location) {
     window.location = 'http://beta.bbc.co.uk/travelbeta/' + location.id + '/incidents/road';
+  });
+
+  new SearchController({
+    api: {
+      env: 'int',
+      protocol: 'http',
+      'place-types': ['road', 'settlement']
+    },
+    namespace: namespace,
+    container: element,
+    translations: new En(),
+    alwaysOpen: false
   });
 
 });

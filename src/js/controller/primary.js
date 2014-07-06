@@ -41,6 +41,8 @@ define([
     verify(options);
 
     var self = this;
+    var alwaysOpen = options.alwaysOpen || false;
+
     var events = {
       onLocation: function(location) {
         $.emit(self.namespace + ':controller:location', [location]);
@@ -65,6 +67,7 @@ define([
     };
     self.api = new Api(options.api);
     self.container = options.container;
+
     self.container.addClass('ls-ui-ctrl-primary')
                   .append(outside.append(searchEl));
 
@@ -113,11 +116,18 @@ define([
       container: outside
     });
 
-    self.closeButton = new CloseButton({
-      translations: options.translations,
-      eventNamespace: self.namespace,
-      container: outside
-    });
+    if (!alwaysOpen) {
+      self.closeButton = new CloseButton({
+        translations: options.translations,
+        eventNamespace: self.namespace,
+        container: outside
+      });
+    }
+
+    if (alwaysOpen) {
+      self.container.addClass('ls-ui-ctrl-open');
+      $.emit(self.namespace + ':component:search:focus');
+    }
   }
 
   return Primary;
