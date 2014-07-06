@@ -60,6 +60,7 @@ define([
         self.results.clear();
         $.emit(self.namespace + ':controller:inactive');
         self.container.removeClass('ls-ui-ctrl-active');
+        self.container.find('.ls-ui-comp-userLocations').removeClass('ls-ui-hidden');
       }
     };
     self.api = new Api(options.api);

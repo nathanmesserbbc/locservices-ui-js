@@ -5,15 +5,35 @@
     min-height: 600px;
     background: url("@{img-root}/example/travel-background.jpg") no-repeat;
   }
-  .active & {
-    background: white;
+}
+
+.ls-ui-ctrl-primary {
+  background: #ffa500;
+  padding-top: 40px;
+
+  .ls-ui-comp-close-button {
+    top: -100px;
+  }
+  .ls-ui-comp-search {
+    .ls-ui-input, .ls-ui-submit {
+      background-color: white;
+    }
+  }
+}
+.ls-ui-ctrl-active {
+  background: white;
+
+  .ls-ui-comp-search {
+    .ls-ui-input, .ls-ui-submit {
+      background-color: @ls-ui-input-background;
+    }
   }
 }
 
-
 .site-name {
   width: 240px;
-  position: relative;
+  position: absolute;
+  top: 50px;
   z-index: 2;
   margin: 0 0 20px;
   font-family: @font-title;
@@ -24,10 +44,30 @@
   text-transform: uppercase;
 }
 
+.site-name-invert {
+  color: #000;
+}
 
 @media (min-width: 600px) {
   .site-name {
     position: absolute;
-    top: -5px;
+    top: 56px;
+  }
+  .ls-ui-ctrl-primary {
+    padding-top: 20px;
+    padding-bottom: 6px;
+
+    .ls-ui-ctrl-primary-search {
+      margin-top: 0;
+    }
+    .ls-ui-ctrl-primary-search,
+    .ls-ui-comp-message,
+    .li-ui-comp-search-results-container {
+      margin-left: 240px;
+    }
+
+    .ls-ui-comp-close-button {
+      top: 0px;
+    }
   }
 }
