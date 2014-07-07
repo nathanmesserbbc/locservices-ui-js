@@ -62,9 +62,13 @@ define([
 
     self.searchResults.on('mouseover', 'li', function() {
       self.highlightSearchResultByIndex($(this).index(), false);
-    }).on('mouseout', 'li', function() {
+    });
+
+    self.searchResults.on('mouseout', 'li', function() {
       $(this).removeClass('ls-ui-active');
-    }).on('mousedown', 'li', function() {
+    });
+
+    self.searchResults.on('mousedown', 'li', function() {
       var location = self.searchResultsData[$(this).index()];
       self.emit('location', [location]);
       self.clear();
@@ -256,7 +260,6 @@ define([
     if (null !== this._highlightedSearchResultIndex) {
       this.input.val(this.currentSearchTerm);
     }
-
     this.clear();
   };
 
@@ -273,7 +276,6 @@ define([
       var location = this.searchResultsData[this._highlightedSearchResultIndex];
       this.emit('location', [location]);
     }
-
     this.clear();
   };
 
@@ -313,7 +315,6 @@ define([
         return;
       }
     }
-
     this.highlightSearchResultByIndex(index, true);
   };
 
