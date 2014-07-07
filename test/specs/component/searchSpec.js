@@ -46,7 +46,7 @@ define([
             container: null
           });
         };
-        expect(failure).toThrow();
+        expect(failure).toThrow(new Error('Search requires api parameter'));
       });
     });
 
@@ -145,14 +145,13 @@ define([
         stub.restore();
       });
 
-      // it('should emit an event when a search has focus', function() {
-      //   var stub = sinon.stub($, 'emit');
-      //   var eventName = 'locservices:ui:component:search:focus';
-      //
-      //   search.input.trigger('focus');
-      //   expect(stub.calledWith(eventName)).toBe(true);
-      //   stub.restore();
-      // });
+      it('should emit an event when a search has focus', function() {
+        var spy = sinon.spy($, 'emit');
+        search.input.triggerHandler('focus');
+
+        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:component:search:focus');
+        $.emit.restore();
+      });
 
     });
 

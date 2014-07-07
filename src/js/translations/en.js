@@ -6,6 +6,7 @@ define(function() {
     'user_locations.heading': 'Your locations',
     'user_locations.recent': 'Prefer',
     'user_locations.remove': 'Remove',
+    'close_button.label': 'Close',
     'search.placeholder': 'Enter a town, city or UK postcode',
     'search.submit': 'Search',
     'search.submit.title': 'Search for a location',

@@ -18,25 +18,29 @@ require([
   'vendor/events/pubsub'
 ], function($, SearchController, En) {
 
-  var namespace = $('.primary-search').data('namespace');
-
+  var namespace = 'primary';
+  var element   = $('.primary-search');
   new SearchController({
     api: {
-      env: 'live',
+      env: 'int',
       protocol: 'http',
       placetypes: ['road', 'settlement']
     },
     namespace: namespace,
-    container: $('.primary-search'),
+    container: element,
     translations: new En()
   });
 
   $.on(namespace + ':controller:active', function() {
-    $('body').addClass('active');
+    element.addClass('active');
   });
 
   $.on(namespace + ':controller:inactive', function() {
-    $('body').removeClass('active');
+    element.removeClass('active');
+  });
+
+  $.on(namespace + ':controller:location', function(location) {
+    window.location = 'http://beta.bbc.co.uk/travelbeta/' + location.id + '/incidents/road';
   });
 
 });
