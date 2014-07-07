@@ -42,7 +42,7 @@ define([
     self.searchResultsData = null;
     self.setComponentOptions(options);
 
-    self.searchResults = $('<ul />').addClass('ls-ui-auto_complete-results');
+    self.searchResults = $('<ul />').addClass('ls-ui-comp-auto_complete');
     self.container.append(self.searchResults);
 
     self.on('results', function(results) {
