@@ -44,7 +44,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     var internalContainer = $('<div />').addClass('li-ui-comp-search_results');
     this.list = $('<ul />');
-    this.moreResults = $('<a />').attr('href', '').addClass('ls-ui-comp-search_results-more').text('Show more results');
+    this.moreResults = $('<a />')
+                          .attr('href', '')
+                          .addClass('ls-ui-comp-search_results-more')
+                          .text('Show more results');
 
     internalContainer.append(this.list).append(this.moreResults);
     this.container.append(internalContainer);
@@ -83,7 +86,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     this.offset = metadata.start || 0;
     this.searchTerm = metadata.search;
-    
+
     for (i = 0; i < results.length; i++) {
       result = results[i];
       this._data[result.id] = result;
