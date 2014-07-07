@@ -11,6 +11,8 @@ build/Release
 node_modules
 bower_components
 vendor
+!src/vendor/events/locservices-core-js/**/*
+!src/vendor/events/jquery/**/*
 !src/vendor/events/pubsub.js
 !test/vendor
 src/css

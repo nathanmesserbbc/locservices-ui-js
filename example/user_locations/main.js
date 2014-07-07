@@ -1,7 +1,7 @@
 /*global console,debugger:false*/
 
 require.config({
-  baseUrl: '/locservices-ui-js',
+  baseUrl: '/',
   paths: {
     'jquery' : 'vendor/jquery/dist/jquery',
     'pubsub' : 'vendor/events/pubsub',
