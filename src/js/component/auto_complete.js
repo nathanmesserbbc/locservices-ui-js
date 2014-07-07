@@ -285,15 +285,16 @@ define([
     var index = this._highlightedSearchResultIndex;
 
     if (null === index) {
-      this.highlightSearchResultByIndex(0, true);
-      return;
+      index = 0;
+    } else {
+      index++;
+      if (this.searchResultsData.length <= index) {
+        this.removeSearchResultHighlight(true);
+        return;
+      }
     }
-    index++;
 
-    if (this.searchResultsData.length <= index) {
-      this.removeSearchResultHighlight(true);
-      return;
-    }
+    this.highlightSearchResultByIndex(index, true);
   };
 
   /**
