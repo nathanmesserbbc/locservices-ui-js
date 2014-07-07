@@ -1,0 +1,16 @@
+.DS_Store
+tmp
+
+# Logs
+npm-debug.log
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directory
+node_modules
+bower_components
+vendor
+!src/vendor/events/pubsub.js
+!test/vendor
+src/css
