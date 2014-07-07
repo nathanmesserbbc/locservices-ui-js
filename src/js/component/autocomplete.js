@@ -61,7 +61,7 @@ define([
     this.searchResults.on('mouseover', 'li', function() {
       self.highlightSearchResultByIndex($(this).index(), false);
     }).on('mouseout', 'li', function() {
-      $(this).removeClass('active');
+      $(this).removeClass('ls-ui-active');
     }).on('mousedown', 'li', function() {
       var location = self.searchResultsData[$(this).index()];
       self.emit('location', [location]);
@@ -355,7 +355,7 @@ define([
   AutoComplete.prototype.removeSearchResultHighlight = function(updateInputValue) {
 
     this._highlightedSearchResultIndex = null;
-    this.searchResults.find('li.active').removeClass('active');
+    this.searchResults.find('li.ls-ui-active').removeClass('ls-ui-active');
 
     if (updateInputValue) {
       this.input.val(this.currentSearchTerm);
