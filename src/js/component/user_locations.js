@@ -22,17 +22,19 @@ function(
     preferredLocationList: $('<ul/>').addClass('ls-ui-comp-user_locations-preferred'),
 
     preferredLocationHeading: function(translations) {
-      return $('<p />').text(
-        translations.get('user_locations.main.heading')
-      );
+      return $('<p />')
+        .text(
+          translations.get('user_locations.heading.preferred')
+        );
     },
 
     recentLocationsList: $('<ul/>').addClass('ls-ui-comp-user_locations-recent'),
 
     recentLocationsHeading: function(translations, noOfLocations) {
-      return $('<p />').text(
-        translations.get('user_locations.recent.heading') + ' (' + noOfLocations + ')'
-      );
+      return $('<p />')
+        .text(
+          translations.get('user_locations.heading.recent') + ' (' + noOfLocations + ')'
+        );
     },
 
     location: function(translations, location) {
@@ -67,6 +69,14 @@ function(
       li.append(linkName).append(linkRemove);
 
       return li;
+    },
+
+    message: function(translations, hasRecentLocations) {
+      var value = translations.get('user_locations.message.preferred');
+      if (hasRecentLocations) {
+        value += ' ' + translations.get('user_locations.message.change_preferred');
+      }
+      return $('<p/>').text(value);
     }
   };
 
@@ -185,8 +195,9 @@ function(
    */
   UserLocations.prototype.render = function() {
     var preferredLocation;
-    var locations;
-    var noOfLocations;
+    var recentLocations;
+    var hasRecentLocations;
+    var noOfRecentLocations;
     var locationIndex;
 
     templates.element.empty();
@@ -211,19 +222,28 @@ function(
 
     /* Recent Locations */
 
-    locations = this.getRecentLocations();
-    noOfLocations = locations.length;
+    recentLocations = this.getRecentLocations();
+    noOfRecentLocations = recentLocations.length;
+    hasRecentLocations = 0 < noOfRecentLocations;
 
-    templates.element.append(templates.recentLocationsHeading(this.translations, noOfLocations));
+    templates.element.append(
+      templates.recentLocationsHeading(this.translations, noOfRecentLocations)
+    );
 
-    if (0 < noOfLocations) {
-      for (locationIndex = 0; locationIndex < noOfLocations; locationIndex++) {
+    if (hasRecentLocations) {
+      for (locationIndex = 0; locationIndex < noOfRecentLocations; locationIndex++) {
         templates.recentLocationsList.append(
-          templates.location(this.translations, locations[locationIndex])
+          templates.location(this.translations, recentLocations[locationIndex])
         );
       }
       templates.element.append(templates.recentLocationsList);
     }
+
+    /* Message */
+
+    templates.element.append(
+      templates.message(this.translations, hasRecentLocations)
+    );
   };
 
   /**
