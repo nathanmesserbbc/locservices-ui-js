@@ -1,0 +1,66 @@
+.travel #orb-modules {
+  min-height: 600px;
+  background: url("../../img/example/travel-background.jpg") no-repeat;
+}
+.ls-ui-ctrl-primary {
+  background: #ffa500;
+  padding-top: 40px;
+}
+.ls-ui-ctrl-primary .ls-ui-comp-close_button {
+  top: -62px;
+}
+.ls-ui-ctrl-primary .ls-ui-comp-search .ls-ui-input,
+.ls-ui-ctrl-primary .ls-ui-comp-search .ls-ui-submit {
+  background-color: white;
+}
+.ls-ui-ctrl-active {
+  background: white;
+}
+.ls-ui-ctrl-active .ls-ui-comp-search .ls-ui-input,
+.ls-ui-ctrl-active .ls-ui-comp-search .ls-ui-submit {
+  background-color: #e6e6e6;
+}
+.li-ui-ctrl-geolocation .ls-ui-comp-close-button {
+  top: -100px;
+}
+.site-name {
+  width: 240px;
+  position: absolute;
+  top: 50px;
+  z-index: 2;
+  margin: 0 0 20px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  font-size: 4.8em;
+  -webkit-font-smoothing: antialiased;
+  font-weight: normal;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+.site-name-invert {
+  color: #000;
+}
+@media (min-width: 600px) {
+  .site-name {
+    position: absolute;
+    top: 56px;
+  }
+  .ls-ui-ctrl-primary {
+    padding-top: 20px;
+    padding-bottom: 6px;
+  }
+  .ls-ui-ctrl-primary .ls-ui-ctrl-primary-search {
+    margin-top: 0;
+  }
+  .ls-ui-ctrl-primary .ls-ui-ctrl-primary-search,
+  .ls-ui-ctrl-primary .ls-ui-comp-message,
+  .ls-ui-ctrl-primary .li-ui-comp-search_results {
+    margin-left: 240px;
+  }
+  .ls-ui-ctrl-primary .ls-ui-comp-user_locations,
+  .ls-ui-ctrl-primary .ls-ui-comp-search_results-more {
+    margin-bottom: 18px;
+  }
+  .ls-ui-ctrl-primary .ls-ui-comp-close-button {
+    top: 0px;
+  }
+}

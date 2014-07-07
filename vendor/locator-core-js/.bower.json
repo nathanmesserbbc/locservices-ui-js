@@ -1,0 +1,27 @@
+{
+  "name": "locservices-core-js",
+  "ignore": [
+    "**/.*",
+    "*.json",
+    "*.md",
+    "Gruntfile.js",
+    "test"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "qunit": "~1.12.0",
+    "sinonjs": "~1.7.3",
+    "sinon-qunit": "~1.0.0"
+  },
+  "private": false,
+  "homepage": "https://github.com/BBC-Location-Services/locservices-core-js",
+  "_release": "e9b1d868d0",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "e9b1d868d093a18eb26409ad01659d20d2426c21"
+  },
+  "_source": "https://github.com/BBC-Location-Services/locservices-core-js.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/BBC-Location-Services/locservices-core-js.git"
+}
