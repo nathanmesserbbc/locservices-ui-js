@@ -31,8 +31,13 @@
       text-decoration: underline;
     }
 }
-.ls-ui-comp-userLocations-recent,
-.ls-ui-comp-userLocations-preferred {
+.ls-ui-comp-userLocations li {
+    padding-left: 25px;
+}
+.ls-ui-comp-userLocations .ls-ui-comp-userLocations-preferrable {
+    padding-left: 0;
+}
+.ls-ui-comp-userLocations-action {
     float: left;
     width: 25px;
     height: 25px;
@@ -40,7 +45,7 @@
     text-indent: -10000px;
     background: url("@{asset-path}/user_locations/star_empty_sm.png") no-repeat;
 }
-.ls-ui-comp-userLocations-preferred {
+.ls-ui-comp-userLocations-preferred .ls-ui-comp-userLocations-action {
     background: url("@{asset-path}/user_locations/star_filled_sm.png") no-repeat;
 }
 .ls-ui-comp-userLocations-remove {
