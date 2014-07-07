@@ -1,0 +1,40 @@
+.ls-ui-comp-geolocation {
+  background: #404040;
+  text-align: left;
+  border: none;
+  padding: 0;
+  display: block;
+  width: 100%;
+  font-size: 1em;
+  cursor: pointer;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.ls-ui-comp-geolocation .ls-ui-comp-geolocation-icon {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  background: url("../../img/locator_sprite_1x.png") no-repeat -73px 8px;
+  float: right;
+}
+.ls-ui-comp-geolocation .ls-ui-comp-geolocation-label {
+  display: inline-block;
+  height: 36px;
+  color: #ffffff;
+  font-size: 1.3em;
+  line-height: 2.7em;
+  padding-left: 10px;
+}
+.ls-ui-comp-geolocation::-moz-focus-inner {
+  padding: 0;
+  margin: 0;
+}
+@media (min-width: 600px) {
+  .ls-ui-comp-geolocation {
+    width: 36px;
+  }
+  .ls-ui-comp-geolocation .ls-ui-comp-geolocation-label {
+    display: none;
+  }
+}

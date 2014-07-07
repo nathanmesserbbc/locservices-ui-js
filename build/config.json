@@ -10,7 +10,8 @@
     "minjs": "dist/js/",
     "css": "src/css/",
     "test": "test/",
-    "template": "build/template"
+    "template": "build/template",
+    "dist": "dist/"
   },
   "server": {
     "host": "localhost.bbc.co.uk",

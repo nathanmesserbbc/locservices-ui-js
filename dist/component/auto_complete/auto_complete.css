@@ -1,0 +1,26 @@
+.ls-ui-comp-auto_complete {
+  z-index: 999;
+  background: white;
+  margin: 0;
+  padding: 0;
+}
+.ls-ui-comp-auto_complete a {
+  color: #323232;
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+}
+.ls-ui-comp-auto_complete .ls-ui-active a {
+  color: white;
+  background: #323232;
+}
+.ls-ui-comp-auto_complete li {
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  list-style: none;
+  color: #323232;
+  text-decoration: none;
+  font-size: 1.4em;
+  line-height: 1.2;
+}
