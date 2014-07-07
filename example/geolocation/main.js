@@ -1,3 +1,12 @@
+require.config({
+    baseUrl: '/locservices-ui-js',
+    paths: {
+        jquery: '/vendor/jquery/dist/jquery',
+        'locservices/ui': '/js',
+        'locservices/core': '/vendor/locservices-core-js/src'
+    }
+});
+
 require([
   'jquery',
   'locservices/ui/component/geolocation',

@@ -1,13 +1,13 @@
 /* global require */
 
 require.config({
-  baseUrl: '/',
+  baseUrl: '/locservices-ui-js',
 
   paths: {
-    'pubsub' : './vendor/events/pubsub',
-    'jquery' : './vendor/jquery/dist/jquery',
-    'locservices/ui' : './js',
-    'locservices/core': './vendor/locservices-core-js/src'
+    'pubsub' : 'vendor/events/pubsub',
+    'jquery' : 'vendor/jquery/dist/jquery',
+    'locservices/ui' : 'js',
+    'locservices/core': 'vendor/locservices-core-js/src'
   }
 });
 
