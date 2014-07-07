@@ -51,12 +51,12 @@ function(
       var linkAction = $('<a/>')
         .addClass('ls-ui-comp-user_locations-action')
         .attr('href', '?locationId=' + locationId)
-        .text(translations.get('user_locations.recent'));
+        .text(translations.get('user_locations.action.recent'));
 
       var linkRemove = $('<a/>')
         .addClass('ls-ui-comp-user_locations-remove')
         .attr('href', '?locationId=' + locationId)
-        .text(translations.get('user_locations.remove'));
+        .text(translations.get('user_locations.action.remove'));
 
       var li = $('<li />');
       if (location.isPreferred) {
