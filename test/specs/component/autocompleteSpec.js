@@ -109,6 +109,16 @@ define([
 //      });
     });
 
+    describe('events', function() {
+
+      it('should react to search starting', function() {
+        expect(autoComplete._searchSubmitted).toBe(false);
+
+        $.emit('locservices:ui:component:search:start');
+        expect(autoComplete._searchSubmitted).toBe(true);
+      });
+    });
+
   });
 
 });

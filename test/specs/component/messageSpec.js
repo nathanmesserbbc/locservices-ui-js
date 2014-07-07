@@ -109,6 +109,13 @@ define([
         expect(message.element.hasClass('ls-ui-active')).toBe(false);
       });
 
+      it('should remove content on auto complete rendering results', function() {
+        message.set('Detecting your location');
+        $.emit('message-test:component:autocomplete:render');
+        expect(message.element.text()).toBe('');
+        expect(message.element.hasClass('ls-ui-active')).toBe(false);
+      });
+
     });
 
   });

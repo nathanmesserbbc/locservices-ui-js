@@ -40,6 +40,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     $.on(self.eventNamespaceBase + ':component:geolocation:end', function() {
       self.clear();
     });
+
+    $.on(this.eventNamespaceBase + ':component:autocomplete:render', function() {
+      self.clear();
+    });
   }
   Message.prototype = new Component();
   Message.prototype.constructor = Message;

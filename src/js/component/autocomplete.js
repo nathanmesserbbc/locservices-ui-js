@@ -27,6 +27,7 @@ define([
     options.componentId = 'autocomplete';
 
     this._waitingForResults = false;
+    this._searchSubmitted = false;
     this._timeoutId = null;
     this._highlightedSearchResultIndex = null;
 
@@ -41,11 +42,29 @@ define([
 
     this.input = options.element;
     this.input.attr('autocomplete', 'off');
+    this.searchResultsData = null;
 
     this.setComponentOptions(options);
 
     this.on('results', function(results) {
       self.renderSearchResults(results);
+    });
+
+    $.on(this.eventNamespaceBase + ':component:search:start', function() {
+      self._searchSubmitted = true;
+    });
+
+    this.searchResults = $('<ul />').addClass('ls-ui-autocomplete-results');
+    this.container.append(this.searchResults);
+
+    this.searchResults.on('mouseover', 'li', function() {
+      self.highlightSearchResultByIndex($(this).index(), false);
+    }).on('mouseout', 'li', function() {
+      $(this).removeClass('active');
+    }).on('mousedown', 'li', function() {
+      var location = self.searchResultsData[$(this).index()];
+      self.emit('location', [location]);
+      self.clear();
     });
 
     $(document).on('keydown', function(event) {
@@ -152,15 +171,25 @@ define([
 
     this._timeoutId = setTimeout(function() {
 
+      if (true === self._searchSubmitted) {
+        return;
+      }
+
       self._waitingForResults = true;
       self.currentSearchTerm = searchTerm;
 
       self._api.autoComplete(searchTerm, {
         success: function(data) {
           self._waitingForResults = false;
+          if (true === self._searchSubmitted) {
+            return;
+          }
           self.emit('results', [data.results, data.metadata]);
         },
         error: function() {
+          if (true === self._searchSubmitted) {
+            return;
+          }
           self.emit('error', [{
             code: 'autocomplete.error.search',
             message: 'There was a problem searching for the search term'
@@ -169,20 +198,19 @@ define([
       });
     }, inputDelay);
 
+    this._searchSubmitted = false;
+
   };
 
   /**
    * Clear rendered search results from the DOM
    */
-  AutoComplete.prototype.clearSearchResults = function() {
+  AutoComplete.prototype.clear = function() {
 
     this.searchResultsData = null;
     this._highlightedSearchResultIndex = null;
-
-    if (this.searchResults) {
-      this.searchResults.remove();
-      this.searchResults = null;
-    }
+    this.searchResults.empty();
+    this.emit('clear');
   };
 
   /**
@@ -199,29 +227,13 @@ define([
     var location = {};
 
     self = this;
-    this.searchResultsData = results;
+    self.searchResultsData = results;
 
     if (0 === results.length) {
-      this.clearSearchResults();
+      this.clear();
       return;
     }
-
-    if (!this.searchResults) {
-      this.container.append('<ul class="ls-ui-autocomplete-results" />');
-      this.searchResults = this.container.find('.ls-ui-autocomplete-results');
-
-      this.searchResults.on('mouseover', 'li', function() {
-        self.highlightSearchResultByIndex($(this).index(), false);
-      }).on('mouseout', 'li', function() {
-        $(this).removeClass('active');
-      }).on('mousedown', 'li', function() {
-        location = self.searchResultsData[$(this).index()];
-        self.emit('location', [location]);
-        self.clearSearchResults();
-      });
-
-      this.positionSearchResults();
-    }
+    self.emit('render');
 
     for (i = 0; i < results.length; i++) {
       location = results[i];
@@ -232,26 +244,12 @@ define([
       fullName = self.highlightTerm(fullName, this.currentSearchTerm);
       html += '<li><a href="#" data-index="' + i + '">' + fullName + '</a></li>';
     }
-
-    this.searchResults.html(html);
+    this.searchResults.empty();
+    this.searchResults.append(html);
 
     this.searchResults.find('li a').on('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-    });
-  };
-
-  /**
-   * Position the search result dom element adjacent to the input field
-   */
-  AutoComplete.prototype.positionSearchResults = function() {
-
-    var inputOffset = this.input.offset();
-
-    this.searchResults.css({
-      left : parseInt(inputOffset.left, 0),
-      top : parseInt(inputOffset.top, 0) + this.input.outerHeight(),
-      width: parseInt(this.input.outerWidth(), 0)
     });
   };
 
@@ -265,7 +263,7 @@ define([
       this.input.val(this.currentSearchTerm);
     }
 
-    this.clearSearchResults();
+    this.clear();
   };
 
   /**
@@ -282,7 +280,7 @@ define([
       this.emit('location', [location]);
     }
 
-    this.clearSearchResults();
+    this.clear();
   };
 
   /**
@@ -301,7 +299,6 @@ define([
         return;
       }
     }
-
     this.highlightSearchResultByIndex(index, true);
   };
 
