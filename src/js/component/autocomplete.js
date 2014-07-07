@@ -52,7 +52,7 @@ define([
       self.renderSearchResults(results);
     });
 
-    $(document).on('keyup', function(event) {
+    $(document).on('keydown', function(event) {
       switch (event.keyCode) {
 
         case KEY_CODE.escape:
@@ -75,7 +75,14 @@ define([
           break;
 
         default:
-          self.autoComplete();
+          break;
+      }
+    });
+
+    this.input.on('keyup', function(e) {
+      var code = e.keyCode;
+      if (code !== KEY_CODE.escape && code !== KEY_CODE.enter && code !== KEY_CODE.upArrow && code !== KEY_CODE.downArrow) {
+        self.autoComplete();
       }
     });
   }
@@ -86,8 +93,8 @@ define([
   /**
    * Prepare a string for validation
    *
-   * @param {string} searchTerm the string to prepare
-   * @return {string} the prepared string
+   * @param {String} searchTerm the string to prepare
+   * @return {String} the prepared string
    */
   AutoComplete.prototype.prepareSearchTerm = function(searchTerm) {
     return String(searchTerm).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
@@ -96,8 +103,8 @@ define([
   /**
    * Validate a search term
    *
-   * @param {string} searchTerm the string to validate
-   * @return {boolean} is the search term valid
+   * @param {String} searchTerm the string to validate
+   * @return {Boolean} is the search term valid
    */
   AutoComplete.prototype.isValidSearchTerm = function(searchTerm) {
 
@@ -191,7 +198,7 @@ define([
 
     var self;
     var html = '';
-    var i = 0;
+    var i;
     var fullName = '';
     var location = {};
 
@@ -211,10 +218,13 @@ define([
         self.highlightSearchResultByIndex($(this).index(), false);
       }).on('mouseout', 'li', function() {
         $(this).removeClass('active');
+      }).on('mousedown', 'li', function() {
+        location = self.searchResultsData[$(this).index()];
+        self.emit('location', [location]);
+        self.clearSearchResults();
       });
 
       this.positionSearchResults();
-//      self.addSearchResultKeyHandler();
     }
 
     for (i = 0; i < results.length; i++) {
@@ -330,8 +340,8 @@ define([
   /**
    * Select a search result by index.
    *
-   * @param {int} index the index to select
-   * @param {boolean} updateInputValue should the input field value be set
+   * @param {Number} index the index to select
+   * @param {Boolean} updateInputValue should the input field value be set
    */
   AutoComplete.prototype.highlightSearchResultByIndex = function(index, updateInputValue) {
 
@@ -353,7 +363,7 @@ define([
   /**
    * Remove any highlighted search result
    *
-   * @param {boolean} updateInputValue should the input field value be set
+   * @param {Boolean} updateInputValue should the input field value be set
    */
   AutoComplete.prototype.removeSearchResultHighlight = function(updateInputValue) {
 

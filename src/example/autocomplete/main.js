@@ -7,7 +7,8 @@ require([
 ], function($, AutoComplete, En, Api) {
 
   var container = $('.autocomplete-container');
-  var input = $('#autocomplete-form input[type=text]');
+  var input = $('#search-input-text');
+  var resultContainer = $('#selected-location');
 
   var autoComplete = new AutoComplete({
     api: new Api(),
@@ -16,8 +17,12 @@ require([
     container: container
   });
 
-  autoComplete.on('location', function(location) {
-    console.log(location);
+  autoComplete.on('location', function(location) {console.log(arguments);
+    var name = location.name;
+    if (location.container) {
+      name += ', ' + location.container;
+    }
+    resultContainer.text('Selected Location: ' + name);
   });
 
 });
