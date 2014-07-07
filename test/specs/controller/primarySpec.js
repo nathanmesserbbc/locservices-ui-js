@@ -165,7 +165,7 @@ define([
       it('should emit an inactive event when the close button is clicked', function() {
         var spy = sinon.spy($, 'emit');
         $.emit('locservices:ui:component:close_button:clicked');
-        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:inactive');
+        expect(spy.getCall(2).args[0]).toEqual('locservices:ui:controller:inactive');
 
         $.emit.restore();
       });

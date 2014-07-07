@@ -24,28 +24,54 @@ define([
     var self = this;
 
     options = options || {};
-    options.componentId = 'autocomplete';
-
-    this._waitingForResults = false;
-    this._timeoutId = undefined;
-    this._highlightedSearchResultIndex = null;
+    options.componentId = 'auto_complete';
 
     if (typeof options.api !== 'object') {
       throw new Error('AutoComplete requires an api option');
     }
-    this._api = options.api;
-
     if (!options.element instanceof $) {
       throw new Error('AutoComplete requires an element option');
     }
 
-    this.input = options.element;
-    this.input.attr('autocomplete', 'off');
+    self._waitingForResults = false;
+    self._searchSubmitted = false;
+    self._timeoutId = undefined;
+    self._highlightedSearchResultIndex = null;
+    self._api = options.api;
+    self.input = options.element.attr('autocomplete', 'off');
+    self.searchResultsData = null;
+    self.setComponentOptions(options);
 
-    this.setComponentOptions(options);
+    self.searchResults = $('<ul />').addClass('ls-ui-comp-auto_complete');
+    self.container.append(self.searchResults);
 
-    this.on('results', function(results) {
-      self.renderSearchResults(results);
+    self.on('results', function(results) {
+      self.render(results);
+    });
+
+    $.on(self.eventNamespaceBase + ':component:search:start', function() {
+      self._searchSubmitted = true;
+    });
+
+    self.input.on('keyup', function(e) {
+      var code = e.keyCode;
+      if (code !== KEY_CODE.escape && code !== KEY_CODE.enter && code !== KEY_CODE.upArrow && code !== KEY_CODE.downArrow) {
+        self.autoComplete();
+      }
+    });
+
+    self.searchResults.on('mouseover', 'li', function() {
+      self.highlightSearchResultByIndex($(this).index(), false);
+    });
+
+    self.searchResults.on('mouseout', 'li', function() {
+      $(this).removeClass('ls-ui-active');
+    });
+
+    self.searchResults.on('mousedown', 'li', function() {
+      var location = self.searchResultsData[$(this).index()];
+      self.emit('location', [location]);
+      self.clear();
     });
 
     $(document).on('keydown', function(event) {
@@ -74,17 +100,132 @@ define([
           break;
       }
     });
-
-    this.input.on('keyup', function(e) {
-      var code = e.keyCode;
-      if (code !== KEY_CODE.escape && code !== KEY_CODE.enter && code !== KEY_CODE.upArrow && code !== KEY_CODE.downArrow) {
-        self.autoComplete();
-      }
-    });
   }
 
   AutoComplete.prototype = new Component();
   AutoComplete.prototype.constructor = AutoComplete;
+
+  /**
+   * Perform an autoComplete request
+   */
+  AutoComplete.prototype.autoComplete = function() {
+
+    var searchTerm = this.prepareSearchTerm(this.input.val());
+    var self = this;
+
+    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length < minChars) {
+      return;
+    }
+
+    clearTimeout(this._timeoutId);
+
+    this._timeoutId = setTimeout(function() {
+
+      if (true === self._searchSubmitted) {
+        return;
+      }
+      self._waitingForResults = true;
+      self.currentSearchTerm = searchTerm;
+
+      self._api.autoComplete(searchTerm, {
+        success: function(data) {
+          self._waitingForResults = false;
+          if (true === self._searchSubmitted) {
+            return;
+          }
+          self.emit('results', [data.results, data.metadata]);
+        },
+        error: function() {
+          if (true === self._searchSubmitted) {
+            return;
+          }
+          self.emit('error', [{
+            code: 'auto_complete.error.search',
+            message: 'There was a problem searching for the search term'
+          }]);
+        }
+      });
+    }, inputDelay);
+
+    this._searchSubmitted = false;
+  };
+
+  /**
+   * Clear rendered search results from the DOM
+   */
+  AutoComplete.prototype.clear = function() {
+
+    this.searchResultsData = null;
+    this._highlightedSearchResultIndex = null;
+    this.searchResults.empty();
+    this.emit('clear');
+  };
+
+  /**
+   * Render the response from an auto-complete json XHR as dom elements
+   *
+   * @param {Array} results the search results
+   */
+  AutoComplete.prototype.render = function(results) {
+
+    if (0 === results.length) {
+      this.clear();
+      return;
+    }
+    var self;
+    var html = '';
+    var i;
+    var fullName = '';
+    var location = {};
+    self = this;
+    self.searchResultsData = results;
+    self.emit('render');
+
+    for (i = 0; i < results.length; i++) {
+      location = results[i];
+      fullName = location.name;
+      if (location.container) {
+        fullName += ', ' + location.container;
+      }
+      fullName = self.highlightTerm(fullName, this.currentSearchTerm);
+      html += '<li><a href="#" data-index="' + i + '">' + fullName + '</a></li>';
+    }
+    this.searchResults.empty();
+    this.searchResults.append(html);
+
+    this.searchResults.find('li a').on('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  };
+
+  /**
+   * Handle an escape key event. Clear any displyaed results and reset the
+   * input field text if required.
+   */
+  AutoComplete.prototype.escapeKeyHandler = function() {
+
+    if (null !== this._highlightedSearchResultIndex) {
+      this.input.val(this.currentSearchTerm);
+    }
+    this.clear();
+  };
+
+  /**
+   * Handle an enter key event. If the user has selected an autocomplete
+   * result then submit it.
+   *
+   * @param {Object} event the key event
+   */
+  AutoComplete.prototype.enterKeyHandler = function(event) {
+
+    if (null !== this._highlightedSearchResultIndex) {
+      event.preventDefault();
+      var location = this.searchResultsData[this._highlightedSearchResultIndex];
+      this.emit('location', [location]);
+    }
+    this.clear();
+  };
 
   /**
    * Prepare a string for validation
@@ -137,155 +278,6 @@ define([
   };
 
   /**
-   * Perform an autoComplete request
-   */
-  AutoComplete.prototype.autoComplete = function() {
-
-    var searchTerm = this.prepareSearchTerm(this.input.val());
-    var self = this;
-
-    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length < minChars) {
-      return;
-    }
-
-    clearTimeout(this._timeoutId);
-
-    this._timeoutId = setTimeout(function() {
-
-      self._waitingForResults = true;
-      self.currentSearchTerm = searchTerm;
-
-      self._api.autoComplete(searchTerm, {
-        success: function(data) {
-          self._waitingForResults = false;
-          self.emit('results', [data.results, data.metadata]);
-        },
-        error: function() {
-          self.emit('error', [{
-            code: 'autocomplete.error.search',
-            message: 'There was a problem searching for the search term'
-          }]);
-        }
-      });
-    }, inputDelay);
-
-  };
-
-  /**
-   * Clear rendered search results from the DOM
-   */
-  AutoComplete.prototype.clearSearchResults = function() {
-
-    this.searchResultsData = null;
-    this._highlightedSearchResultIndex = null;
-
-    if (this.searchResults) {
-      this.searchResults.remove();
-      this.searchResults = null;
-    }
-  };
-
-  /**
-   * Render the response from an auto-complete json XHR as dom elements
-   *
-   * @param {Array} results the search results
-   */
-  AutoComplete.prototype.renderSearchResults = function(results) {
-
-    var self;
-    var html = '';
-    var i;
-    var fullName = '';
-    var location = {};
-
-    self = this;
-    this.searchResultsData = results;
-
-    if (0 === results.length) {
-      this.clearSearchResults();
-      return;
-    }
-
-    if (!this.searchResults) {
-      this.container.append('<ul class="ls-ui-autocomplete-results" />');
-      this.searchResults = this.container.find('.ls-ui-autocomplete-results');
-
-      this.searchResults.on('mouseover', 'li', function() {
-        self.highlightSearchResultByIndex($(this).index(), false);
-      }).on('mouseout', 'li', function() {
-        $(this).removeClass('ls-ui-active');
-      }).on('mousedown', 'li', function() {
-        location = self.searchResultsData[$(this).index()];
-        self.emit('location', [location]);
-        self.clearSearchResults();
-      });
-
-      this.positionSearchResults();
-    }
-
-    for (i = 0; i < results.length; i++) {
-      location = results[i];
-      fullName = location.name;
-      if (location.container) {
-        fullName += ', ' + location.container;
-      }
-      fullName = self.highlightTerm(fullName, this.currentSearchTerm);
-      html += '<li><a href="#" data-index="' + i + '">' + fullName + '</a></li>';
-    }
-
-    this.searchResults.html(html);
-
-    this.searchResults.find('li a').on('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    });
-  };
-
-  /**
-   * Position the search result dom element adjacent to the input field
-   */
-  AutoComplete.prototype.positionSearchResults = function() {
-
-    var inputOffset = this.input.offset();
-
-    this.searchResults.css({
-      left : parseInt(inputOffset.left, 0),
-      top : parseInt(inputOffset.top, 0) + this.input.outerHeight(),
-      width: parseInt(this.input.outerWidth(), 0)
-    });
-  };
-
-  /**
-   * Handle an escape key event. Clear any displyaed results and reset the
-   * input field text if required.
-   */
-  AutoComplete.prototype.escapeKeyHandler = function() {
-
-    if (null !== this._highlightedSearchResultIndex) {
-      this.input.val(this.currentSearchTerm);
-    }
-
-    this.clearSearchResults();
-  };
-
-  /**
-   * Handle an enter key event. If the user has selected an autocomplete
-   * result then submit it.
-   *
-   * @param {Object} event the key event
-   */
-  AutoComplete.prototype.enterKeyHandler = function(event) {
-
-    if (null !== this._highlightedSearchResultIndex) {
-      event.preventDefault();
-      var location = this.searchResultsData[this._highlightedSearchResultIndex];
-      this.emit('location', [location]);
-    }
-
-    this.clearSearchResults();
-  };
-
-  /**
    * Select the next search result.
    */
   AutoComplete.prototype.highlightNextSearchResult = function() {
@@ -309,9 +301,8 @@ define([
    * Select the previous search result.
    */
   AutoComplete.prototype.highlightPrevSearchResult = function() {
-    var index;
 
-    index = this._highlightedSearchResultIndex;
+    var index = this._highlightedSearchResultIndex;
 
     if (null === index) {
       index = this.searchResultsData.length - 1;
@@ -322,7 +313,6 @@ define([
         return;
       }
     }
-
     this.highlightSearchResultByIndex(index, true);
   };
 
@@ -357,12 +347,11 @@ define([
   AutoComplete.prototype.removeSearchResultHighlight = function(updateInputValue) {
 
     this._highlightedSearchResultIndex = null;
-    this.searchResults.find('li.active').removeClass('active');
+    this.searchResults.find('li.ls-ui-active').removeClass('ls-ui-active');
 
     if (updateInputValue) {
       this.input.val(this.currentSearchTerm);
     }
-
   };
 
   return AutoComplete;

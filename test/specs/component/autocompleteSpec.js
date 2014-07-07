@@ -1,7 +1,7 @@
 /*global define, describe, it, expect, beforeEach, afterEach */
 define([
   'jquery',
-  'locservices/ui/component/autocomplete',
+  'locservices/ui/component/auto_complete',
   'locservices/ui/translations/en',
   'locservices/core/api'
 ], function($, AutoComplete, En, Api) {
@@ -31,7 +31,7 @@ define([
 
     describe('constructor', function() {
       it('sets the componentId to autocomplete', function() {
-        expect(autoComplete.componentId).toEqual('autocomplete');
+        expect(autoComplete.componentId).toEqual('auto_complete');
       });
       it('disables html autocomplete for the input element', function() {
         expect(inputElement.attr('autocomplete')).toEqual('off');
@@ -113,6 +113,16 @@ define([
 //      });
     });
 
+    describe('events', function() {
+
+      it('should react to search starting', function() {
+        expect(autoComplete._searchSubmitted).toBe(false);
+
+        $.emit('locservices:ui:component:search:start');
+        expect(autoComplete._searchSubmitted).toBe(true);
+      });
+    });
+
     describe('prepareSearchTerm()', function() {
       it('removes all spaces from the right and left of the search term', function() {
         expect(autoComplete.prepareSearchTerm('  foo  ')).toEqual('foo');
@@ -121,10 +131,10 @@ define([
 
     describe('isValidSearchTerm()', function() {
       it('returns false for invalid search terms', function() {
-        
+
         var terms = [123, true, false, {}, 'C'];
         var assertionCount = 0;
-        
+
         $.each(terms, function(i, term) {
           expect(autoComplete.isValidSearchTerm(term)).toBe(false);
           assertionCount++;
@@ -245,14 +255,14 @@ define([
   describe('clearSearchResults()', function() {
     it('removes the markup from the dom', function() {
       autoComplete.searchResults = $('<div />');
-      var stub = sinon.stub(autoComplete.searchResults, 'remove');
-      autoComplete.clearSearchResults();
+      var stub = sinon.stub(autoComplete.searchResults, 'empty');
+      autoComplete.clear();
       expect(stub.calledOnce).toBe(true);
       stub.restore();
     });
   });
 
-  describe('renderSearchResults()', function() {
+  describe('render()', function() {
 
     var results = [
       { id: 12, name: 'Pontypridd' },
@@ -261,27 +271,27 @@ define([
 
     it('appends the search results to the container', function() {
       autoComplete.currentSearchTerm = 'foo';
-      autoComplete.renderSearchResults(results);
+      autoComplete.render(results);
       expect(container.find('ul li').length).toEqual(results.length);
     });
 
     it('highlights the search term for each entry', function() {
       var stub = sinon.stub(autoComplete, 'highlightTerm');
       autoComplete.currentSearchTerm = 'foo';
-      autoComplete.renderSearchResults(results);
+      autoComplete.render(results);
       expect(stub.calledTwice).toBe(true);
       stub.restore();
     });
 
     it('uses the name and container properties to render label', function() {
       autoComplete.currentSearchTerm = 'foo';
-      autoComplete.renderSearchResults(results);
+      autoComplete.render(results);
       expect(container.find('ul li:eq(1) a').text()).toEqual('Cardiff, Cardiff');
     });
 
     it('highlights the result on mouse over', function() {
       autoComplete.currentSearchTerm = 'foo';
-      autoComplete.renderSearchResults(results);
+      autoComplete.render(results);
 
       var stub = sinon.stub(autoComplete, 'highlightSearchResultByIndex');
       var li = container.find('ul li:eq(0)');

@@ -6,6 +6,7 @@ define([
   'locservices/ui/component/search',
   'locservices/ui/component/message',
   'locservices/ui/component/geolocation',
+  'locservices/ui/component/auto_complete',
   'locservices/ui/component/search_results',
   'locservices/ui/component/user_locations',
   'locservices/ui/component/close_button'
@@ -15,6 +16,7 @@ define([
   Search,
   Message,
   Geolocation,
+  AutoComplete,
   SearchResults,
   UserLocations,
   CloseButton
@@ -55,14 +57,15 @@ define([
         self.container.addClass('li-ui-ctrl-geolocation');
       },
       onSearchResults: function() {
-        self.container.find('.ls-ui-comp-userLocations').addClass('ls-ui-hidden');
+        self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
       },
       onClose: function() {
         self.message.clear();
         self.results.clear();
+        self.autoComplete.clear();
         $.emit(self.namespace + ':controller:inactive');
         self.container.removeClass('ls-ui-ctrl-active');
-        self.container.find('.ls-ui-comp-userLocations').removeClass('ls-ui-hidden');
+        self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
       }
     };
     self.api = new Api(options.api);
@@ -75,6 +78,7 @@ define([
 
     $.on(self.namespace + ':error', events.onActive);
     $.on(self.namespace + ':component:search:focus', events.onActive);
+    $.on(self.namespace + ':component:auto_complete:render', events.onSearchResults);
     $.on(self.namespace + ':component:search:results', events.onSearchResults);
     $.on(self.namespace + ':component:geolocation:location', events.onLocation);
     $.on(self.namespace + ':component:auto_complete:location', events.onLocation);
@@ -88,6 +92,14 @@ define([
       translations: options.translations,
       eventNamespace: self.namespace,
       container: searchEl
+    });
+
+    self.autoComplete = new AutoComplete({
+      api: this.api,
+      translations: options.translations,
+      eventNamespace: self.namespace,
+      element: self.search.input,
+      container: outside
     });
 
     self.geolocation = new Geolocation({
