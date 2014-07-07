@@ -42,9 +42,12 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   SearchResults.prototype.setup = function() {
 
-    var internalContainer = $('<div />').addClass('li-ui-comp-search-results-container');
+    var internalContainer = $('<div />').addClass('li-ui-comp-search_results');
     this.list = $('<ul />');
-    this.moreResults = $('<a />').attr('href', '').addClass('ls-ui-comp-search-results-more').text('Show more results');
+    this.moreResults = $('<a />')
+                          .attr('href', '')
+                          .addClass('ls-ui-comp-search_results-more')
+                          .text('Show more results');
 
     internalContainer.append(this.list).append(this.moreResults);
     this.container.append(internalContainer);
@@ -101,17 +104,23 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     }
 
     if (metadata.totalResults > 10 && (this.offset + 10) < metadata.totalResults) {
-      this.moreResults.addClass('active');
+      this.moreResults.addClass('ls-ui-comp-search_results-active');
     } else {
-      this.moreResults.removeClass('active');
+      this.moreResults.removeClass('ls-ui-comp-search_results-active');
     }
+
+    this.emit('results', {
+      searchTerm: this.searchTerm,
+      offset: this.offset,
+      totalResults: metadata.totalResults
+    });
   };
 
   /**
    * Clear / empty the DOM components
    */
   SearchResults.prototype.clear = function() {
-    this.moreResults.removeClass('active');
+    this.moreResults.removeClass('ls-ui-comp-search_results-active');
     this.list.empty();
     this._data = {};
   };

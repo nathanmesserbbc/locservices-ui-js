@@ -17,7 +17,7 @@ function(
 
   var templates = {
 
-    element: $('<div />').addClass('ls-ui-comp-userLocations'),
+    element: $('<div />').addClass('ls-ui-comp-user_locations'),
 
     heading: function(translations, noOfLocations) {
       return $('<p />').text(
@@ -31,7 +31,7 @@ function(
       var locationId = location.id;
 
       var linkName = $('<a/>')
-        .addClass('ls-ui-comp-userLocations-name')
+        .addClass('ls-ui-comp-user_locations-name')
         .attr('href', '?locationId=' + locationId)
         .html($('<strong/>').text(location.name));
       if (location.container) {
@@ -39,21 +39,21 @@ function(
       }
 
       var linkAction = $('<a/>')
-        .addClass('ls-ui-comp-userLocations-action')
+        .addClass('ls-ui-comp-user_locations-action')
         .attr('href', '?locationId=' + locationId)
         .text(translations.get('user_locations.recent'));
 
       var linkRemove = $('<a/>')
-        .addClass('ls-ui-comp-userLocations-remove')
+        .addClass('ls-ui-comp-user_locations-remove')
         .attr('href', '?locationId=' + locationId)
         .text(translations.get('user_locations.remove'));
 
       var li = $('<li />');
       if (location.isPreferred) {
-        li.addClass('ls-ui-comp-userLocations-preferred');
+        li.addClass('ls-ui-comp-user_locations-preferred');
       }
       if (location.isPreferable) {
-        li.addClass('ls-ui-comp-userLocations-preferable');
+        li.addClass('ls-ui-comp-user_locations-preferable');
         li.append(linkAction);
       }
       li.append(linkName).append(linkRemove);
@@ -82,10 +82,10 @@ function(
       e.preventDefault();
       e.stopPropagation();
       target = $(e.target);
-      if (target.hasClass('ls-ui-comp-userLocations-recent')) {
+      if (target.hasClass('ls-ui-comp-user_locations-recent')) {
         locationId = target.attr('href').split('=')[1];
         self.setPreferredLocationById(locationId);
-      } else if (target.hasClass('ls-ui-comp-userLocations-remove')) {
+      } else if (target.hasClass('ls-ui-comp-user_locations-remove')) {
         locationId = target.attr('href').split('=')[1];
         self.removeLocationById(locationId);
       }

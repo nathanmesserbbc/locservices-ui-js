@@ -14,20 +14,19 @@ define([
   describe('The search-results', function() {
     'use strict';
 
-    var searchResults;
+    var searchResults, container;
 
     beforeEach(function() {
-      $('body').append('<div id="search-results"></div>');
-
+      container = $('<div />');
       searchResults = new SearchResults({
         translations: new En(),
-        container: $('#search-results'),
+        container: container,
         api: new API()
       });
     });
 
     afterEach(function() {
-      $('#search-results').remove();
+      container.remove();
     });
 
     describe('constructor()', function() {
@@ -40,6 +39,20 @@ define([
         expect(searchResults.eventNamespace).toBe('locservices:ui:component:search_results');
       });
 
+      it('should listen for search results event and call render()', function() {
+        var stub;
+        stub = sinon.stub(searchResults, 'render');
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
+        expect(stub.calledOnce).toBe(true);
+      });
+
+      it('should trigger: locservices:ui:component:search-results:location for single location returned via search', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:search:results', [responseWithSingleResult.results, responseWithSingleResult.metadata]);
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search_results:location');
+        $.emit.restore();
+      });
+
     });
 
     describe('setup()', function() {
@@ -48,21 +61,18 @@ define([
         var setup = sinon.spy(SearchResults.prototype, 'setup');
         new SearchResults({
           translations: new En(),
-          container: $('#search-results'),
+          container: container,
           api: new API()
         });
-
         expect(setup.calledOnce).toBe(true);
-
         SearchResults.prototype.setup.restore();
-
       });
 
-      it('should add a moreResults to the search-results component', function() {
+      it('should add a moreResults to the search_results component', function() {
         expect(searchResults.moreResults).toBeDefined();
       });
 
-      it('should add a list to the search-results component', function() {
+      it('should add a list to the search_results component', function() {
         expect(searchResults.list).toBeDefined();
       });
 
@@ -70,43 +80,14 @@ define([
 
     describe('render()', function() {
 
-      it('should listen to events from search component and call render()', function() {
-        var render = sinon.spy(SearchResults.prototype, 'render');
-        new SearchResults({
-          translations: new En(),
-          container: $('#search-results'),
-          api: new API()
-        });
-
-        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
-
-        expect(render.called).toBe(true);
-
-        SearchResults.prototype.render.restore();
-      });
-
       it('should render results to unordered list', function() {
-
-        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
-
-        expect($('#search-results ul li').length).toEqual(responseMultiple.results.length);
-
+        searchResults.render(responseMultiple.results, responseMultiple.metadata);
+        expect(container.find('li').length).toEqual(responseMultiple.results.length);
       });
 
-      it('should not call render() if single result returned', function() {
-        var render = sinon.spy(SearchResults.prototype, 'render');
-        new SearchResults({
-          translations: new En(),
-          container: $('#search-results'),
-          api: new API()
-        });
+      // @todo Test the label includes name and container
 
-        $.emit('locservices:ui:component:search:results', [responseWithSingleResult.results, responseWithSingleResult.metadata]);
-
-        expect(render.called).toBe(false);
-
-        SearchResults.prototype.render.restore();
-      });
+      // @todo Test the <li> contains a link (and locationId)
 
     });
 
@@ -128,7 +109,7 @@ define([
         $.emit.restore();
       });
 
-      it('should trigger: locservices:ui:component:search-results:location for single location returned via search', function() {
+      it('should trigger: locservices:ui:component:search-results:location when a search result is clicked', function() {
         var spy = sinon.spy($, 'emit');
 
         var results = new SearchResults({
@@ -140,11 +121,34 @@ define([
         $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
 
         results.list.find('a').trigger('click');
-
-        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search_results:location');
+        var lastCall = spy.callCount - 1;
+        expect(spy.getCall(lastCall).args[0]).toEqual('locservices:ui:component:search_results:location');
 
         $.emit.restore();
       });
+
+      it('should trigger: locservices:ui:component:search_results:results when displaying list of results', function() {
+        var spy = sinon.spy($, 'emit');
+
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
+
+        var lastCall = spy.callCount - 1;
+        expect(spy.getCall(lastCall).args[0]).toEqual('locservices:ui:component:search_results:results');
+
+        $.emit.restore();
+      });
+
+      it('should send results data when triggering locservices:ui:component:search_results:results', function() {
+        var spy = sinon.spy($, 'emit');
+
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
+
+        var lastCall = spy.callCount - 1;
+        expect(spy.getCall(lastCall).args[1]).toEqual({ searchTerm:'Cardiff',offset:0,totalResults:84 });
+
+        $.emit.restore();
+      });
+
     });
 
     describe('more results', function() {
@@ -159,12 +163,12 @@ define([
 
       it('should not display more results button if less than 10 results', function() {
         $.emit('locservices:ui:component:search:results', [[], { search: 'test', totalResults: 9 }]);
-        expect(searchResults.moreResults.hasClass('active')).toBe(false);
+        expect(searchResults.moreResults.hasClass('ls-ui-comp-search_results-active')).toBe(false);
       });
 
       it('should not display more results button if offset + 10 is grater than totalResults', function() {
         $.emit('locservices:ui:component:search:results', [[], { search: 'test', start: 80, totalResults: 84 }]);
-        expect(searchResults.moreResults.hasClass('active')).toBe(false);
+        expect(searchResults.moreResults.hasClass('ls-ui-comp-search_results-active')).toBe(false);
       });
 
     });
@@ -172,12 +176,7 @@ define([
     describe('_data', function() {
 
       it('should be empty when SearchResults object is instantiated', function() {
-        var results = new SearchResults({
-          translations: new En(),
-          container: $('#search-results'),
-          api: new API()
-        });
-        expect(results._data).toEqual({});
+        expect(searchResults._data).toEqual({});
       });
 
       it('should store results data against the id', function() {
@@ -204,19 +203,18 @@ define([
     });
 
     describe('clear()', function() {
+
       it('should clear out the SearchResults container', function() {
-
         searchResults.clear();
-
         expect(searchResults.list.children().length).toEqual(0);
-        expect(searchResults.moreResults.hasClass('active')).toBe(false);
+        expect(searchResults.moreResults.hasClass('ls-ui-comp-search_results-active')).toBe(false);
       });
 
       it('should clear the stored data', function() {
         searchResults.clear();
-
         expect(searchResults._data).toEqual({});
       });
+
     });
 
   });
