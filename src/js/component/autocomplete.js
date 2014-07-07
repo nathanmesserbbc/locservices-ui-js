@@ -42,10 +42,6 @@ define([
     this.input = options.element;
     this.input.attr('autocomplete', 'off');
 
-    if (!options.api) {
-      throw new Error('AutoComplete requires an api option');
-    }
-
     this.setComponentOptions(options);
 
     this.on('results', function(results) {
@@ -328,13 +324,6 @@ define([
     }
 
     this.highlightSearchResultByIndex(index, true);
-  };
-
-  /**
-   * Clear the results from the page.
-   */
-  AutoComplete.prototype.clearResults = function() {
-    this.container.html('');
   };
 
   /**
