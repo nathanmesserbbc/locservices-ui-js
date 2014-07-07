@@ -30,7 +30,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.render(results, metadata);
     });
 
-    $.on(this.eventNamespaceBase + ':component:autocomplete:render', function() {
+    $.on(this.eventNamespaceBase + ':component:auto_complete:render', function() {
       self.clear();
     });
 

@@ -221,7 +221,7 @@ define([
           name: 'Cardiff',
           placeType: 'settlement'
         };
-        $.emit('locservices:ui:component:autocomplete:render');
+        $.emit('locservices:ui:component:auto_complete:render');
 
         expect(searchResults._data).toEqual({});
       });

@@ -9,7 +9,7 @@ require.config({
 
 require([
   'jquery',
-  'locservices/ui/component/autocomplete',
+  'locservices/ui/component/auto_complete',
   'locservices/ui/translations/en',
   'locservices/core/api',
   'vendor/events/pubsub'

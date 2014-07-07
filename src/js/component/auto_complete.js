@@ -24,7 +24,7 @@ define([
     var self = this;
 
     options = options || {};
-    options.componentId = 'autocomplete';
+    options.componentId = 'auto_complete';
 
     if (typeof options.api !== 'object') {
       throw new Error('AutoComplete requires an api option');
@@ -42,7 +42,7 @@ define([
     self.searchResultsData = null;
     self.setComponentOptions(options);
 
-    self.searchResults = $('<ul />').addClass('ls-ui-autocomplete-results');
+    self.searchResults = $('<ul />').addClass('ls-ui-auto_complete-results');
     self.container.append(self.searchResults);
 
     self.on('results', function(results) {
@@ -186,7 +186,7 @@ define([
             return;
           }
           self.emit('error', [{
-            code: 'autocomplete.error.search',
+            code: 'auto_complete.error.search',
             message: 'There was a problem searching for the search term'
           }]);
         }

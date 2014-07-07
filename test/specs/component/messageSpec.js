@@ -111,7 +111,7 @@ define([
 
       it('should remove content on auto complete rendering results', function() {
         message.set('Detecting your location');
-        $.emit('message-test:component:autocomplete:render');
+        $.emit('message-test:component:auto_complete:render');
         expect(message.element.text()).toBe('');
         expect(message.element.hasClass('ls-ui-active')).toBe(false);
       });

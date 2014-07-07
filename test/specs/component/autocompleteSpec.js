@@ -1,7 +1,7 @@
 /*global define, describe, it, expect, beforeEach, afterEach */
 define([
   'jquery',
-  'locservices/ui/component/autocomplete',
+  'locservices/ui/component/auto_complete',
   'locservices/ui/translations/en',
   'locservices/core/api'
 ], function($, AutoComplete, En, Api) {
@@ -31,7 +31,7 @@ define([
 
     describe('constructor', function() {
       it('sets the componentId to autocomplete', function() {
-        expect(autoComplete.componentId).toEqual('autocomplete');
+        expect(autoComplete.componentId).toEqual('auto_complete');
       });
       it('disables html autocomplete for the input element', function() {
         expect(inputElement.attr('autocomplete')).toEqual('off');
