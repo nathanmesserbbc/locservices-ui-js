@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: '/',
+    baseUrl: '/locservices-ui-js',
     paths: {
         jquery: '/vendor/jquery/dist/jquery',
         'locservices/ui': '/js',

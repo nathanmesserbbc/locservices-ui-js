@@ -1,7 +1,7 @@
 /* global require, alert */
 
 require.config({
-  baseUrl: '/',
+  baseUrl: '/locservices-ui-js',
 
   paths: {
     'pubsub' : 'vendor/events/pubsub',

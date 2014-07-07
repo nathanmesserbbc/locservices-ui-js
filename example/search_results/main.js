@@ -1,7 +1,7 @@
 /* global require */
 
 require.config({
-  baseUrl: '/',
+  baseUrl: '/locservices-ui-js',
 
   paths: {
     'jquery' : 'vendor/jquery/dist/jquery',
