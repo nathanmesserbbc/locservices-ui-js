@@ -27,7 +27,7 @@ define([
     options.componentId = 'autocomplete';
 
     this._waitingForResults = false;
-    this._timeoutId = null;
+    this._timeoutId = undefined;
     this._highlightedSearchResultIndex = null;
 
     if (typeof options.api !== 'object') {
@@ -213,7 +213,7 @@ define([
       this.searchResults.on('mouseover', 'li', function() {
         self.highlightSearchResultByIndex($(this).index(), false);
       }).on('mouseout', 'li', function() {
-        $(this).removeClass('active');
+        $(this).removeClass('ls-ui-active');
       }).on('mousedown', 'li', function() {
         location = self.searchResultsData[$(this).index()];
         self.emit('location', [location]);
@@ -342,7 +342,7 @@ define([
 
     this.removeSearchResultHighlight();
     this._highlightedSearchResultIndex = index;
-    $(this.searchResults.find('li')[index]).addClass('active');
+    $(this.searchResults.find('li')[index]).addClass('ls-ui-active');
 
     if (updateInputValue) {
       this.input.val(fullName);
