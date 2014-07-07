@@ -262,7 +262,7 @@ define([
     });
   });
 
-  describe('renderSearchResults()', function() {
+  describe('render()', function() {
 
     var results = [
       { id: 12, name: 'Pontypridd' },
@@ -271,27 +271,27 @@ define([
 
     it('appends the search results to the container', function() {
       autoComplete.currentSearchTerm = 'foo';
-      autoComplete.renderSearchResults(results);
+      autoComplete.render(results);
       expect(container.find('ul li').length).toEqual(results.length);
     });
 
     it('highlights the search term for each entry', function() {
       var stub = sinon.stub(autoComplete, 'highlightTerm');
       autoComplete.currentSearchTerm = 'foo';
-      autoComplete.renderSearchResults(results);
+      autoComplete.render(results);
       expect(stub.calledTwice).toBe(true);
       stub.restore();
     });
 
     it('uses the name and container properties to render label', function() {
       autoComplete.currentSearchTerm = 'foo';
-      autoComplete.renderSearchResults(results);
+      autoComplete.render(results);
       expect(container.find('ul li:eq(1) a').text()).toEqual('Cardiff, Cardiff');
     });
 
     it('highlights the result on mouse over', function() {
       autoComplete.currentSearchTerm = 'foo';
-      autoComplete.renderSearchResults(results);
+      autoComplete.render(results);
 
       var stub = sinon.stub(autoComplete, 'highlightSearchResultByIndex');
       var li = container.find('ul li:eq(0)');

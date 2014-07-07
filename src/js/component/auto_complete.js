@@ -46,7 +46,7 @@ define([
     self.container.append(self.searchResults);
 
     self.on('results', function(results) {
-      self.renderSearchResults(results);
+      self.render(results);
     });
 
     $.on(self.eventNamespaceBase + ':component:search:start', function() {
@@ -216,7 +216,7 @@ define([
    *
    * @param {Array} results the search results
    */
-  AutoComplete.prototype.renderSearchResults = function(results) {
+  AutoComplete.prototype.render = function(results) {
 
     if (0 === results.length) {
       this.clear();
