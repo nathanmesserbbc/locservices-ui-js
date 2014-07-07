@@ -4,9 +4,9 @@ define([
   'locservices/core/geolocation'
 ], function($, Component, geolocation) {
 
-  var template = '<button type="button" class="locservices-ui-component locservices-ui-component-geolocation">';
-  template += '<span class="locservices-ui-component-geolocation-label">{text}</span>';
-  template += '<span class="locservices-ui-component-geolocation-icon"></span></button>';
+  var template = '<button type="button" class="ls-ui-comp ls-ui-comp-geolocation">';
+  template += '<span class="ls-ui-comp-geolocation-label">{text}</span>';
+  template += '<span class="ls-ui-comp-geolocation-icon"></span></button>';
 
   /**
    * Bind a context to a function.

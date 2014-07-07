@@ -7,7 +7,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   var form = $('<form />')
                 .attr('method', 'post')
                 .attr('action', '#')
-                .addClass('ls-ui-form');
+                .addClass('ls-ui-form')
+                .addClass('ls-ui-comp-search');
 
   var wrapEl = $('<div />').addClass('ls-ui-container');
 
@@ -85,8 +86,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     var inputEl  = input(translations);
     var submitEl = submit(translations);
 
-    container.addClass('ls-ui-comp-search')
-             .html(form.append(wrapEl.append(inputEl)).append(submitEl));
+    container.append(form.append(wrapEl.append(inputEl)).append(submitEl));
   };
 
   return Search;

@@ -13,7 +13,7 @@
     "template": "build/template"
   },
   "server": {
-    "host": "localhost",
+    "host": "localhost.bbc.co.uk",
     "port": "9001"
   },
   "barlesque": {

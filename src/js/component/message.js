@@ -30,7 +30,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     });
 
     $.on(self.eventNamespaceBase + ':component:search:results', function(results, metadata) {
-      self.set('Search results for: "' + metadata.search + '"');
+      if (metadata.totalResults === 0) {
+        self.set(self.translations.get('message.no_results') + '"' + metadata.search + '"');
+        return;
+      }
+      self.set(self.translations.get('message.results') + '"' + metadata.search + '"');
     });
 
     $.on(self.eventNamespaceBase + ':component:geolocation:end', function() {
@@ -51,8 +55,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   };
 
   var render = function(container) {
-    container.addClass('ls-ui-message')
-             .append($('<p />'));
+    var comp = $('<div / >').addClass('ls-ui-comp-message');
+    container.append(comp.append($('<p />')));
   };
 
   return Message;

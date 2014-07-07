@@ -1,0 +1,40 @@
+<!doctype>
+<html>
+<head>
+    <title>Autocomplete Example | BBC </title>
+    <barlesque:head>
+        <link rel="stylesheet" href="../../css/component/autocomplete.css" />
+        <link rel="stylesheet" href="../../css/example/app.css">
+</head>
+<body>
+<barlesque:bodystart>
+    <div class="header">
+        <div class="b-g-p clearfix">
+            <h1>LocServices UI: Autocomplete</h1>
+        </div>
+    </div>
+    <div class="b-g-p">
+
+        <h2>Autcomplete</h2>
+        <h3 id="selected-location"></h3>
+        <form method="post" action="#" id="autocomplete-form">
+            <input type="text" name="search-input-text" id="search-input-text"
+                   placeholder="Enter a town country ...">
+            <div class="autocomplete-container"></div>
+        </form>
+    </div>
+    <barlesque:bodylast>
+        <script>
+            require.config({
+                baseUrl: '/',
+                paths: {
+                    jquery: '/vendor/jquery/dist/jquery',
+                    'locservices/ui': '/js',
+                    'locservices/core': '/vendor/locservices-core-js/src'
+                }
+            });
+
+        </script>
+        <script src="main.js"></script>
+</body>
+</html>
