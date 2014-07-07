@@ -26,39 +26,41 @@ define([
     options = options || {};
     options.componentId = 'autocomplete';
 
-    this._waitingForResults = false;
-    this._searchSubmitted = false;
-    this._timeoutId = undefined;
-
-    this._highlightedSearchResultIndex = null;
-
     if (typeof options.api !== 'object') {
       throw new Error('AutoComplete requires an api option');
     }
-    this._api = options.api;
-
     if (!options.element instanceof $) {
       throw new Error('AutoComplete requires an element option');
     }
 
-    this.input = options.element;
-    this.input.attr('autocomplete', 'off');
-    this.searchResultsData = null;
+    self._waitingForResults = false;
+    self._searchSubmitted = false;
+    self._timeoutId = undefined;
+    self._highlightedSearchResultIndex = null;
+    self._api = options.api;
+    self.input = options.element.attr('autocomplete', 'off');
+    self.searchResultsData = null;
+    self.setComponentOptions(options);
 
-    this.setComponentOptions(options);
+    self.searchResults = $('<ul />').addClass('ls-ui-autocomplete-results');
+    self.container.append(self.searchResults);
 
-    this.on('results', function(results) {
+    self.on('results', function(results) {
       self.renderSearchResults(results);
     });
 
-    $.on(this.eventNamespaceBase + ':component:search:start', function() {
+    $.on(self.eventNamespaceBase + ':component:search:start', function() {
       self._searchSubmitted = true;
     });
 
-    this.searchResults = $('<ul />').addClass('ls-ui-autocomplete-results');
-    this.container.append(this.searchResults);
+    self.input.on('keyup', function(e) {
+      var code = e.keyCode;
+      if (code !== KEY_CODE.escape && code !== KEY_CODE.enter && code !== KEY_CODE.upArrow && code !== KEY_CODE.downArrow) {
+        self.autoComplete();
+      }
+    });
 
-    this.searchResults.on('mouseover', 'li', function() {
+    self.searchResults.on('mouseover', 'li', function() {
       self.highlightSearchResultByIndex($(this).index(), false);
     }).on('mouseout', 'li', function() {
       $(this).removeClass('active');
@@ -92,13 +94,6 @@ define([
 
         default:
           break;
-      }
-    });
-
-    this.input.on('keyup', function(e) {
-      var code = e.keyCode;
-      if (code !== KEY_CODE.escape && code !== KEY_CODE.enter && code !== KEY_CODE.upArrow && code !== KEY_CODE.downArrow) {
-        self.autoComplete();
       }
     });
   }
@@ -175,7 +170,6 @@ define([
       if (true === self._searchSubmitted) {
         return;
       }
-
       self._waitingForResults = true;
       self.currentSearchTerm = searchTerm;
 
@@ -200,7 +194,6 @@ define([
     }, inputDelay);
 
     this._searchSubmitted = false;
-
   };
 
   /**
@@ -360,7 +353,6 @@ define([
     if (updateInputValue) {
       this.input.val(this.currentSearchTerm);
     }
-
   };
 
   return AutoComplete;
