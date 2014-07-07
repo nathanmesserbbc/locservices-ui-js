@@ -219,7 +219,7 @@ function(
           id: 'CF5',
           name: 'CF5',
           isPreferred: true,
-          isPreferrable: true
+          isPreferable: true
         };
         sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
         userLocations.render();
@@ -231,7 +231,7 @@ function(
           id: 'CF5',
           name: 'CF5',
           isPreferred: true,
-          isPreferrable: true
+          isPreferable: true
         };
         sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
         userLocations.render();
@@ -302,7 +302,6 @@ function(
         stub = sinon.stub(userLocations.preferredLocation, 'isValidLocation');
         stub.returns(expectedValue);
         locations = userLocations.getLocations();
-        console.log('locations', locations);
         expect(stub.calledOnce).toEqual(true);
         expect(locations[0].isPreferable).toEqual(expectedValue);
       });
