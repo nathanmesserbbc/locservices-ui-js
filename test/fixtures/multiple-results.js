@@ -1,6 +1,7 @@
 define(function() {
   return {
     metadata:{
+      search: 'Cardiff',
       totalResults:84
     },
     results: [

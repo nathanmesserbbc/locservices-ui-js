@@ -91,6 +91,66 @@ define([
 
     });
 
+    describe('events', function() {
+
+      it('should trigger: locservices:ui:component:search-results:location for single location returned via search', function() {
+        var spy = sinon.spy($, 'emit');
+
+        new SearchResults({
+          translations: new En(),
+          container: $('#search-results'),
+          api: new API()
+        });
+
+        $.emit('locservices:ui:component:search:results', [responseWithSingleResult.results, responseWithSingleResult.metadata]);
+
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:component:search_results:location');
+
+        $.emit.restore();
+      });
+
+      it('should trigger: locservices:ui:component:search-results:location when a search result is clicked', function() {
+        var spy = sinon.spy($, 'emit');
+
+        var results = new SearchResults({
+          translations: new En(),
+          container: $('#search-results'),
+          api: new API()
+        });
+
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
+
+        results.list.find('a').trigger('click');
+        var lastCall = spy.callCount - 1;
+        expect(spy.getCall(lastCall).args[0]).toEqual('locservices:ui:component:search_results:location');
+
+        $.emit.restore();
+      });
+
+      it('should trigger: locservices:ui:component:search_results:results when displaying list of results', function() {
+        var spy = sinon.spy($, 'emit');
+
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
+
+        var lastCall = spy.callCount - 1;
+        expect(spy.getCall(lastCall).args[0]).toEqual('locservices:ui:component:search_results:results');
+
+        $.emit.restore();
+      });
+
+      it('should send results data when triggering locservices:ui:component:search_results:results', function() {
+        var spy = sinon.spy($, 'emit');
+
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
+
+        var lastCall = spy.callCount - 1;
+        expect(spy.getCall(lastCall).args[1]).toEqual({ searchTerm:'Cardiff',offset:0,totalResults:84 });
+
+        $.emit.restore();
+      });
+
+    });
+
     describe('more results', function() {
 
       it('should add new results to list', function() {
