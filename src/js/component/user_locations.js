@@ -29,8 +29,7 @@ function(
 
     location: function(translations, location) {
       var locationId = location.id;
-      var nameClass = location.isPreferred ? 'ls-ui-comp-userLocations-preferred'
-        : 'ls-ui-comp-userLocations-recent';
+
       var linkName = $('<a/>')
         .addClass('ls-ui-comp-userLocations-name')
         .attr('href', '?locationId=' + locationId)
@@ -38,18 +37,28 @@ function(
       if (location.container) {
         linkName.append(', ' + location.container);
       }
-      var linkPreferred = $('<a/>')
-        .addClass(nameClass)
+
+      var linkAction = $('<a/>')
+        .addClass('ls-ui-comp-userLocations-action')
         .attr('href', '?locationId=' + locationId)
         .text(translations.get('user_locations.recent'));
+
       var linkRemove = $('<a/>')
         .addClass('ls-ui-comp-userLocations-remove')
         .attr('href', '?locationId=' + locationId)
         .text(translations.get('user_locations.remove'));
-      return $('<li />')
-        .append(linkPreferred)
-        .append(linkName)
-        .append(linkRemove);
+
+      var li = $('<li />');
+      if (location.isPreferred) {
+        li.addClass('ls-ui-comp-userLocations-preferred');
+      }
+      if (location.isPreferable) {
+        li.addClass('ls-ui-comp-userLocations-preferable');
+        li.append(linkAction);
+      }
+      li.append(linkName).append(linkRemove);
+
+      return li;
     }
   };
 
@@ -206,6 +215,7 @@ function(
       noOfLocationsRemaining--;
       preferredLocation = this.preferredLocation.get();
       preferredLocation.isPreferred = true;
+      preferredLocation.isPreferable = true;
       locations.push(preferredLocation);
     }
 
@@ -222,6 +232,7 @@ function(
             )
           ) {
             noOfLocationsRemaining--;
+            recentLocation.isPreferable = this.preferredLocation.isValidLocation(recentLocation);
             locations.push(recentLocation);
           }
           if (0 === noOfLocationsRemaining) {

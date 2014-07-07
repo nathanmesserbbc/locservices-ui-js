@@ -20,13 +20,13 @@ function(
     var translations;
 
     var testLocations = [
-      { id: '0', name: 'Location 0' },
-      { id: '1', name: 'Location 2' },
-      { id: '2', name: 'Location 3' },
-      { id: '3', name: 'Location 4' },
-      { id: '4', name: 'Location 5' },
-      { id: '5', name: 'Location 6' },
-      { id: '6', name: 'Location 7' }
+      { id: '0', name: 'Location 0', placeType: 'settlement', country: 'GB' },
+      { id: '1', name: 'Location 2', placeType: 'settlement', country: 'GB' },
+      { id: '2', name: 'Location 3', placeType: 'settlement', country: 'GB' },
+      { id: '3', name: 'Location 4', placeType: 'settlement', country: 'GB' },
+      { id: '4', name: 'Location 5', placeType: 'settlement', country: 'GB' },
+      { id: '5', name: 'Location 6', placeType: 'settlement', country: 'GB' },
+      { id: '6', name: 'Location 7', placeType: 'settlement', country: 'GB' }
     ];
 
     beforeEach(function() {
@@ -159,12 +159,30 @@ function(
       it('renders a single location without container name', function() {
         var expectedLocation = {
           id: 'CF5',
-          name: 'CF5'
+          name: 'CF5',
+          isPreferable: true
+        };
+        var expectedHtml = '<div class="ls-ui-comp-userLocations">' +
+          '<p>Your locations (1)</p>' +
+          '<ul><li class="ls-ui-comp-userLocations-preferable">' +
+          '<a class="ls-ui-comp-userLocations-action" href="?locationId=' + expectedLocation.id + '">Prefer</a>' +
+          '<a class="ls-ui-comp-userLocations-name" href="?locationId=' + expectedLocation.id + '"><strong>' + expectedLocation.name + '</strong></a>' +
+          '<a class="ls-ui-comp-userLocations-remove" href="?locationId=' + expectedLocation.id + '">Remove</a>' +
+          '</li></ul></div>';
+        sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
+        userLocations.render();
+        expect(container.html()).toEqual(expectedHtml);
+      });
+
+      it('renders a single un-preferrable location without prefer link', function() {
+        var expectedLocation = {
+          id: 'CF5',
+          name: 'CF5',
+          isPreferrable: false
         };
         var expectedHtml = '<div class="ls-ui-comp-userLocations">' +
           '<p>Your locations (1)</p>' +
           '<ul><li>' +
-          '<a class="ls-ui-comp-userLocations-recent" href="?locationId=' + expectedLocation.id + '">Prefer</a>' +
           '<a class="ls-ui-comp-userLocations-name" href="?locationId=' + expectedLocation.id + '"><strong>' + expectedLocation.name + '</strong></a>' +
           '<a class="ls-ui-comp-userLocations-remove" href="?locationId=' + expectedLocation.id + '">Remove</a>' +
           '</li></ul></div>';
@@ -200,22 +218,24 @@ function(
         var expectedLocation = {
           id: 'CF5',
           name: 'CF5',
-          isPreferred: true
+          isPreferred: true,
+          isPreferrable: true
         };
         sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
         userLocations.render();
-        expect(container.find('a.ls-ui-comp-userLocations-preferred').length).toEqual(1);
+        expect(container.find('li.ls-ui-comp-userLocations-preferred').length).toEqual(1);
       });
 
-      it('renders a recent location with a recent class', function() {
+      it('renders a preferable location with a preferable class', function() {
         var expectedLocation = {
           id: 'CF5',
           name: 'CF5',
-          isPreferred: false
+          isPreferred: true,
+          isPreferrable: true
         };
         sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
         userLocations.render();
-        expect(container.find('a.ls-ui-comp-userLocations-recent').length).toEqual(1);
+        expect(container.find('li.ls-ui-comp-userLocations-preferable').length).toEqual(1);
       });
 
     });
@@ -255,12 +275,36 @@ function(
         expect(locations[0].isPreferred).toEqual(true);
       });
 
+      it('sets isPreferable to true for preferred location', function() {
+        var locations;
+        stubPreferredLocationIsSet.returns(true);
+        stubPreferredLocationGet.returns(testLocations[0]);
+        locations = userLocations.getLocations();
+        expect(locations[0].isPreferable).toEqual(true);
+      });
+
       it('returns at most 5 recent locations if no preferred location is set', function() {
         var locations;
         stubRecentLocationsIsSupported.returns(true);
         stubRecentLocationsAll.returns(testLocations);
         locations = userLocations.getLocations();
         expect(locations.length).toEqual(5);
+      });
+
+      it('sets a recent locations isPreferable via this.preferredLocation.isValidLocation', function() {
+        var locations;
+        var stub;
+        var expectedValue;
+        expectedValue = 'foo';
+        stubPreferredLocationIsSet.returns(false);
+        stubRecentLocationsIsSupported.returns(true);
+        stubRecentLocationsAll.returns([testLocations[0]]);
+        stub = sinon.stub(userLocations.preferredLocation, 'isValidLocation');
+        stub.returns(expectedValue);
+        locations = userLocations.getLocations();
+        console.log('locations', locations);
+        expect(stub.calledOnce).toEqual(true);
+        expect(locations[0].isPreferable).toEqual(expectedValue);
       });
 
       it('returns 1 preferred and 4 recent locations if both are set', function() {
