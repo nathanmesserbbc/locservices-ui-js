@@ -218,19 +218,17 @@ define([
    */
   AutoComplete.prototype.renderSearchResults = function(results) {
 
+    if (0 === results.length) {
+      this.clear();
+      return;
+    }
     var self;
     var html = '';
     var i;
     var fullName = '';
     var location = {};
-
     self = this;
     self.searchResultsData = results;
-
-    if (0 === results.length) {
-      this.clear();
-      return;
-    }
     self.emit('render');
 
     for (i = 0; i < results.length; i++) {
@@ -287,24 +285,23 @@ define([
     var index = this._highlightedSearchResultIndex;
 
     if (null === index) {
-      index = 0;
-    } else {
-      index++;
-      if (this.searchResultsData.length <= index) {
-        this.removeSearchResultHighlight(true);
-        return;
-      }
+      this.highlightSearchResultByIndex(0, true);
+      return;
     }
-    this.highlightSearchResultByIndex(index, true);
+    index++;
+
+    if (this.searchResultsData.length <= index) {
+      this.removeSearchResultHighlight(true);
+      return;
+    }
   };
 
   /**
    * Select the previous search result.
    */
   AutoComplete.prototype.highlightPrevSearchResult = function() {
-    var index;
 
-    index = this._highlightedSearchResultIndex;
+    var index = this._highlightedSearchResultIndex;
 
     if (null === index) {
       index = this.searchResultsData.length - 1;
