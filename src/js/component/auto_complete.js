@@ -106,56 +106,6 @@ define([
   AutoComplete.prototype.constructor = AutoComplete;
 
   /**
-   * Prepare a string for validation
-   *
-   * @param {String} searchTerm the string to prepare
-   * @return {String} the prepared string
-   */
-  AutoComplete.prototype.prepareSearchTerm = function(searchTerm) {
-    return String(searchTerm).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-  };
-
-  /**
-   * Validate a search term
-   *
-   * @param {String} searchTerm the string to validate
-   * @return {Boolean} is the search term valid
-   */
-  AutoComplete.prototype.isValidSearchTerm = function(searchTerm) {
-
-    var value;
-    var hasRequiredLength;
-
-    if ('string' !== typeof searchTerm) {
-      return false;
-    }
-
-    value = this.prepareSearchTerm(searchTerm);
-    hasRequiredLength = value.length >= minChars;
-
-    return hasRequiredLength;
-  };
-
-  /**
-   * Highlights a string by wrapping the term in <strong> tags
-   *
-   * @param {String} str the string
-   * @param {String} term the term to search for
-   * @return {String}
-   */
-  AutoComplete.prototype.highlightTerm = function(str, term) {
-
-    var re = new RegExp(term, 'i');
-    var index = str.search(re);
-
-    if (index >= 0) {
-      return str.substr(0, index) + '<strong>' + str.substr(index, (index + term.length)) + '</strong>' + str.substr((index + term.length));
-    }
-
-    return str;
-  };
-
-  /**
    * Perform an autoComplete request
    */
   AutoComplete.prototype.autoComplete = function() {
@@ -275,6 +225,56 @@ define([
       this.emit('location', [location]);
     }
     this.clear();
+  };
+
+  /**
+   * Prepare a string for validation
+   *
+   * @param {String} searchTerm the string to prepare
+   * @return {String} the prepared string
+   */
+  AutoComplete.prototype.prepareSearchTerm = function(searchTerm) {
+    return String(searchTerm).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+  };
+
+  /**
+   * Validate a search term
+   *
+   * @param {String} searchTerm the string to validate
+   * @return {Boolean} is the search term valid
+   */
+  AutoComplete.prototype.isValidSearchTerm = function(searchTerm) {
+
+    var value;
+    var hasRequiredLength;
+
+    if ('string' !== typeof searchTerm) {
+      return false;
+    }
+
+    value = this.prepareSearchTerm(searchTerm);
+    hasRequiredLength = value.length >= minChars;
+
+    return hasRequiredLength;
+  };
+
+  /**
+   * Highlights a string by wrapping the term in <strong> tags
+   *
+   * @param {String} str the string
+   * @param {String} term the term to search for
+   * @return {String}
+   */
+  AutoComplete.prototype.highlightTerm = function(str, term) {
+
+    var re = new RegExp(term, 'i');
+    var index = str.search(re);
+
+    if (index >= 0) {
+      return str.substr(0, index) + '<strong>' + str.substr(index, (index + term.length)) + '</strong>' + str.substr((index + term.length));
+    }
+
+    return str;
   };
 
   /**
