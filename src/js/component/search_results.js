@@ -83,7 +83,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     this.offset = metadata.start || 0;
     this.searchTerm = metadata.search;
-    console.log(metadata);
+    
     for (i = 0; i < results.length; i++) {
       result = results[i];
       this._data[result.id] = result;
