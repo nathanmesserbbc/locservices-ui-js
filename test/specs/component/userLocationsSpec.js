@@ -44,30 +44,44 @@ function(
         expect(userLocations.componentId).toBe('user_locations');
       });
 
+      it('calls this.selectLocationById location event when clicking on a location name', function() {
+        var stub;
+        stub = sinon.stub(userLocations, 'selectLocationById');
+
+        userLocations.element.empty();
+        userLocations.element.append(
+          '<li><a class="ls-ui-comp-user_locations-name" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="location">Location</a></li>'
+        );
+        userLocations.element.find('.ls-ui-comp-user_locations-name').trigger('click');
+
+        expect(stub.callCount).toBe(1);
+        expect(stub.calledWith(testLocations[0].id)).toBe(true);
+      });
+
       it('calls this.removeLocationById with expected ID when clicking on remove', function() {
         var stub;
-        var expectedId;
-        expectedId = '123';
         stub = sinon.stub(userLocations, 'removeLocationById');
-        container.find('div').html(
-          '<a class="ls-ui-comp-user_locations-remove" href="?locationId=' + expectedId + '">Location</a>'
+
+        userLocations.element.append(
+          '<li><a class="ls-ui-comp-user_locations-action-remove" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="remove">Location</a></li>'
         );
-        container.find('a').trigger('click');
-        expect(stub.calledOnce).toBe(true);
-        expect(stub.calledWith(expectedId)).toBe(true);
+        userLocations.element.find('.ls-ui-comp-user_locations-action-remove').trigger('click');
+
+        expect(stub.callCount).toBe(1);
+        expect(stub.calledWith(testLocations[0].id)).toBe(true);
       });
 
       it('calls this.setPreferredLocationById with expected ID when clicking on prefer', function() {
         var stub;
-        var expectedId;
-        expectedId = '123';
         stub = sinon.stub(userLocations, 'setPreferredLocationById');
-        container.find('div').html(
-          '<a class="ls-ui-comp-user_locations-recent" href="?locationId=' + expectedId + '">Location</a>'
+
+        userLocations.element.append(
+          '<li><a class="ls-ui-comp-user_locations-action-prefer" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="prefer">Location</a></li>'
         );
-        container.find('a').trigger('click');
-        expect(stub.calledOnce).toBe(true);
-        expect(stub.calledWith(expectedId)).toBe(true);
+        userLocations.element.find('.ls-ui-comp-user_locations-action-prefer').trigger('click');
+
+        expect(stub.callCount).toBe(1);
+        expect(stub.calledWith(testLocations[0].id)).toBe(true);
       });
 
       it('calls this.addRecentLocation on search_results location event', function() {
@@ -98,6 +112,28 @@ function(
         $.emit('locservices:ui:component:auto_complete:location', [expectedLocation]);
         expect(stub.calledOnce).toBe(true);
         expect(stub.calledWith(expectedLocation)).toBe(true);
+      });
+
+    });
+
+    describe('selectLocationById()', function() {
+
+      it('emits location event with expected location', function() {
+        var spy = sinon.spy($, 'emit');
+        userLocations._locations = {};
+        userLocations._locations[testLocations[0].id] = testLocations[0];
+        userLocations.selectLocationById(testLocations[0].id);
+        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:component:user_locations:location');
+        expect(spy.getCall(0).args[1][0]).toEqual(testLocations[0]);
+        $.emit.restore();
+      });
+
+      it('does not emit location event with invalid location id', function() {
+        var spy = sinon.spy($, 'emit');
+        userLocations._locations = {};
+        userLocations.selectLocationById('foo');
+        expect(spy.callCount).toEqual(0);
+        $.emit.restore();
       });
 
     });
@@ -160,6 +196,8 @@ function(
         stubGetRecentLocations = sinon.stub(userLocations, 'getRecentLocations');
       });
 
+      // @todo test that this._locations is populated correctly
+
       it('renders no preferred location if not set', function() {
         stubPreferredLocationIsSet.returns(false);
         stubGetRecentLocations.returns([]);
@@ -192,9 +230,9 @@ function(
         stubPreferredLocationGet.returns(expectedLocation);
         stubGetRecentLocations.returns([]);
         var expectedHtml = '<li class="ls-ui-comp-user_locations-location-preferred ls-ui-comp-user_locations-location-preferable">' +
-          '<a class="ls-ui-comp-user_locations-action" href="?locationId=CF5">Prefer</a>' +
-          '<a class="ls-ui-comp-user_locations-name" href="?locationId=CF5"><strong>CF5</strong></a>' +
-          '<a class="ls-ui-comp-user_locations-remove" href="?locationId=CF5">Remove</a>' +
+          '<a class="ls-ui-comp-user_locations-action" href="#CF5" data-id="CF5" data-action="none">Prefer</a>' +
+          '<a class="ls-ui-comp-user_locations-name" href="#CF5" data-id="CF5" data-action="location"><strong>CF5</strong></a>' +
+          '<a class="ls-ui-comp-user_locations-remove" href="#CF5" data-id="CF5" data-action="remove">Remove</a>' +
           '</li>';
         userLocations.render();
         expect(container.find('ul.ls-ui-comp-user_locations-preferred').html()).toEqual(expectedHtml);
