@@ -28,7 +28,8 @@ define([
 
     this._waitingForResults = false;
     this._searchSubmitted = false;
-    this._timeoutId = null;
+    this._timeoutId = undefined;
+
     this._highlightedSearchResultIndex = null;
 
     if (typeof options.api !== 'object') {
@@ -339,7 +340,7 @@ define([
 
     this.removeSearchResultHighlight();
     this._highlightedSearchResultIndex = index;
-    $(this.searchResults.find('li')[index]).addClass('active');
+    $(this.searchResults.find('li')[index]).addClass('ls-ui-active');
 
     if (updateInputValue) {
       this.input.val(fullName);
