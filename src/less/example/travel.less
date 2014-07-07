@@ -5,7 +5,79 @@
     min-height: 600px;
     background: url("@{img-root}/example/travel-background.jpg") no-repeat;
   }
-  .active & {
-    background: white;
+}
+
+.ls-ui-ctrl-primary {
+  background: #ffa500;
+  padding-top: 40px;
+
+  .ls-ui-comp-close-button {
+    top: -62px;
+  }
+  .ls-ui-comp-search {
+    .ls-ui-input, .ls-ui-submit {
+      background-color: white;
+    }
+  }
+}
+.ls-ui-ctrl-active {
+  background: white;
+
+  .ls-ui-comp-search {
+    .ls-ui-input, .ls-ui-submit {
+      background-color: @ls-ui-input-background;
+    }
+  }
+}
+
+.li-ui-ctrl-geolocation {
+  .ls-ui-comp-close-button {
+    top: -100px;
+  }
+}
+
+.site-name {
+  width: 240px;
+  position: absolute;
+  top: 50px;
+  z-index: 2;
+  margin: 0 0 20px;
+  font-family: @font-title;
+  font-size: @font48;
+  -webkit-font-smoothing: antialiased;
+  font-weight: normal;
+  color: @font-title-color;
+  text-transform: uppercase;
+}
+
+.site-name-invert {
+  color: #000;
+}
+
+@media (min-width: 600px) {
+  .site-name {
+    position: absolute;
+    top: 56px;
+  }
+  .ls-ui-ctrl-primary {
+    padding-top: 20px;
+    padding-bottom: 6px;
+
+    .ls-ui-ctrl-primary-search {
+      margin-top: 0;
+    }
+    .ls-ui-ctrl-primary-search,
+    .ls-ui-comp-message,
+    .li-ui-comp-search-results-container {
+      margin-left: 240px;
+    }
+    .ls-ui-comp-userLocations,
+    .ls-ui-comp-search-results-more {
+      margin-bottom: 18px;
+    }
+
+    .ls-ui-comp-close-button {
+      top: 0px;
+    }
   }
 }

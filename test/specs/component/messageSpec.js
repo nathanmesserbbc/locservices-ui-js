@@ -83,8 +83,15 @@ define([
 
       it('should set content on when search results are available', function() {
         message.set('');
-        $.emit('message-test:component:search:results', { search: 'Cardiff' });
-        expect(message.element.text()).toBe('Search results for: "Cardiff"');
+        $.emit('message-test:component:search:results', [[], { search: 'Cardiff', totalResults: 1 }]);
+        expect(message.element.text()).toBe('Search results for "Cardiff"');
+        expect(message.element.hasClass('ls-ui-active')).toBe(true);
+      });
+
+      it('should set content on when search results returns nothing', function() {
+        message.set('');
+        $.emit('message-test:component:search:results', [[], { search: 'Cardiff', totalResults: 0 }]);
+        expect(message.element.text()).toBe('We could not find any results for "Cardiff"');
         expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
