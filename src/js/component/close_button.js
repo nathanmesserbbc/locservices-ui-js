@@ -6,7 +6,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   var button = function(translations) {
     return $('<button />')
-              .addClass('ls-ui-comp-close-button')
+              .addClass('ls-ui-comp-close_button')
               .text(translations.get('close_button.label'));
   };
 
