@@ -2,6 +2,7 @@
 
 module.exports = function() {
   return {
-    start: ['jscs', 'jshint', 'css']
+    lint: ['jscs', 'jshint'],
+    template: ['css', 'template']
   };
 };

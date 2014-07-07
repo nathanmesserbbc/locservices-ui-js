@@ -27,8 +27,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['connect:test', 'watch']);
   grunt.registerTask('test:cli', ['karma:run']);
   grunt.registerTask('test:ci', ['karma:ci']);
-  grunt.registerTask('build', ['clean', 'concurrent', 'uglify', 'test:cli', 'template']);
-  grunt.registerTask('run', ['build', 'connect:server', 'watch']);
+  grunt.registerTask('serve', ['clean:serve', 'concurrent:template', 'connect:server', 'watch']);
+  grunt.registerTask('build', ['clean:build', 'concurrent:lint', 'uglify', 'concurrent:template', 'test:cli']);
 
-  grunt.registerTask('default', ['run']);
+  grunt.registerTask('default', ['serve']);
 };
