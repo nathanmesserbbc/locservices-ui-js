@@ -3,7 +3,8 @@ define(function() {
   'use strict';
 
   var dictionary = {
-    'user_locations.heading': 'Your locations',
+    'user_locations.main.heading': 'Main location',
+    'user_locations.recent.heading': 'Other locations',
     'user_locations.recent': 'Prefer',
     'user_locations.remove': 'Remove',
     'close_button.label': 'Close',

@@ -19,6 +19,14 @@
       list-style-type: none;
       border-bottom: 1px solid @ls-ui-input-background;
   }
+
+  li:last-child {
+      border-bottom: 0 solid @ls-ui-input-background;
+  }
+}
+
+.ls-ui-comp-user_locations-preferred-no-location {
+  margin-bottom: 16px;
 }
 
 .ls-ui-comp-user_locations-name {
@@ -35,7 +43,7 @@
 .ls-ui-comp-user_locations li {
     padding-left: 25px;
 }
-.ls-ui-comp-user_locations .ls-ui-comp-user_locations-preferable {
+.ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-preferable {
     padding-left: 0;
 }
 .ls-ui-comp-user_locations-action {
@@ -46,7 +54,7 @@
     text-indent: -10000px;
     background: url("@{asset-path}/user_locations/star_empty_sm.png") no-repeat;
 }
-.ls-ui-comp-user_locations-preferred .ls-ui-comp-userLocations-action {
+.ls-ui-comp-user_locations-location-preferred .ls-ui-comp-user_locations-action {
     background: url("@{asset-path}/user_locations/star_filled_sm.png") no-repeat;
 }
 .ls-ui-comp-user_locations-remove {

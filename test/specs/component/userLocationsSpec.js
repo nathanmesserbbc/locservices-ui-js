@@ -21,12 +21,12 @@ function(
 
     var testLocations = [
       { id: '0', name: 'Location 0', placeType: 'settlement', country: 'GB' },
-      { id: '1', name: 'Location 2', placeType: 'settlement', country: 'GB' },
-      { id: '2', name: 'Location 3', placeType: 'settlement', country: 'GB' },
-      { id: '3', name: 'Location 4', placeType: 'settlement', country: 'GB' },
-      { id: '4', name: 'Location 5', placeType: 'settlement', country: 'GB' },
-      { id: '5', name: 'Location 6', placeType: 'settlement', country: 'GB' },
-      { id: '6', name: 'Location 7', placeType: 'settlement', country: 'GB' }
+      { id: '1', name: 'Location 1', placeType: 'settlement', country: 'GB' },
+      { id: '2', name: 'Location 2', placeType: 'settlement', country: 'GB' },
+      { id: '3', name: 'Location 3', placeType: 'settlement', country: 'GB' },
+      { id: '4', name: 'Location 4', placeType: 'settlement', country: 'GB' },
+      { id: '5', name: 'Location 5', placeType: 'settlement', country: 'GB' },
+      { id: '6', name: 'Location 6', placeType: 'settlement', country: 'GB' }
     ];
 
     beforeEach(function() {
@@ -107,7 +107,7 @@ function(
       it('calls this.preferredLocation.set() with the expected location object', function() {
         var stub;
         stub = sinon.stub(userLocations.preferredLocation, 'set');
-        sinon.stub(userLocations, 'getLocations').returns(testLocations);
+        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
         sinon.stub(userLocations, 'render');
         userLocations.setPreferredLocationById(testLocations[0].id);
         expect(stub.calledOnce).toEqual(true);
@@ -117,7 +117,7 @@ function(
       it('calls this.render()', function() {
         var stub;
         sinon.stub(userLocations.preferredLocation, 'set');
-        sinon.stub(userLocations, 'getLocations').returns(testLocations);
+        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
         stub = sinon.stub(userLocations, 'render');
         userLocations.setPreferredLocationById(testLocations[0].id);
         expect(stub.calledOnce).toEqual(true);
@@ -150,97 +150,109 @@ function(
 
     describe('render()', function() {
 
-      it('renders empty this.element if no locations', function() {
-        sinon.stub(userLocations, 'getLocations').returns([]);
-        userLocations.render();
-        expect(container.find('li').length).toEqual(0);
+      var stubPreferredLocationIsSet;
+      var stubPreferredLocationGet;
+      var stubGetRecentLocations;
+
+      beforeEach(function() {
+        stubPreferredLocationIsSet = sinon.stub(userLocations.preferredLocation, 'isSet');
+        stubPreferredLocationGet = sinon.stub(userLocations.preferredLocation, 'get');
+        stubGetRecentLocations = sinon.stub(userLocations, 'getRecentLocations');
       });
 
-      it('renders a single location without container name', function() {
+      it('renders no preferred location if not set', function() {
+        stubPreferredLocationIsSet.returns(false);
+        stubGetRecentLocations.returns([]);
+        userLocations.render();
+        expect(container.find('ul.ls-ui-comp-user_locations-preferred li').length).toEqual(0);
+      });
+
+      it('adds a no-location class to preferred location ul if no preferred location if set', function() {
         var expectedLocation = {
           id: 'CF5',
           name: 'CF5',
           isPreferable: true
         };
-        var expectedHtml = '<div class="ls-ui-comp-user_locations">' +
-          '<p>Your locations (1)</p>' +
-          '<ul><li class="ls-ui-comp-user_locations-preferable">' +
-          '<a class="ls-ui-comp-user_locations-action" href="?locationId=' + expectedLocation.id + '">Prefer</a>' +
-          '<a class="ls-ui-comp-user_locations-name" href="?locationId=' + expectedLocation.id + '"><strong>' + expectedLocation.name + '</strong></a>' +
-          '<a class="ls-ui-comp-user_locations-remove" href="?locationId=' + expectedLocation.id + '">Remove</a>' +
-          '</li></ul></div>';
-        sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
+
+        stubPreferredLocationIsSet.returns(true);
+        stubPreferredLocationGet.returns(expectedLocation);
+        stubGetRecentLocations.returns([]);
         userLocations.render();
-        expect(container.html()).toEqual(expectedHtml);
+        expect(container.find('ul.ls-ui-comp-user_locations-preferred-no-location').length).toEqual(1);
       });
 
-      it('renders a single un-preferrable location without prefer link', function() {
+      it('renders a single preferred location if set', function() {
         var expectedLocation = {
           id: 'CF5',
           name: 'CF5',
-          isPreferrable: false
+          isPreferable: true
         };
-        var expectedHtml = '<div class="ls-ui-comp-user_locations">' +
-          '<p>Your locations (1)</p>' +
-          '<ul><li>' +
-          '<a class="ls-ui-comp-user_locations-name" href="?locationId=' + expectedLocation.id + '"><strong>' + expectedLocation.name + '</strong></a>' +
-          '<a class="ls-ui-comp-user_locations-remove" href="?locationId=' + expectedLocation.id + '">Remove</a>' +
-          '</li></ul></div>';
-        sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
+
+        stubPreferredLocationIsSet.returns(true);
+        stubPreferredLocationGet.returns(expectedLocation);
+        stubGetRecentLocations.returns([]);
+        var expectedHtml = '<li class="ls-ui-comp-user_locations-location-preferred ls-ui-comp-user_locations-location-preferable">' +
+          '<a class="ls-ui-comp-user_locations-action" href="?locationId=CF5">Prefer</a>' +
+          '<a class="ls-ui-comp-user_locations-name" href="?locationId=CF5"><strong>CF5</strong></a>' +
+          '<a class="ls-ui-comp-user_locations-remove" href="?locationId=CF5">Remove</a>' +
+          '</li>';
         userLocations.render();
-        expect(container.html()).toEqual(expectedHtml);
+        expect(container.find('ul.ls-ui-comp-user_locations-preferred').html()).toEqual(expectedHtml);
       });
 
-      it('renders a single location with container', function() {
+      it('renders the expected number of recents locations', function() {
+        stubPreferredLocationIsSet.returns(false);
+        stubGetRecentLocations.returns([testLocations[0], testLocations[1]]);
+        userLocations.render();
+        expect(container.find('ul.ls-ui-comp-user_locations-recent li').length).toEqual(2);
+      });
+
+      it('renders a recent location with container', function() {
         var expectedLocation = {
           id: '1234',
           name: 'Llandaff',
           container: 'Cardiff'
         };
+        stubPreferredLocationIsSet.returns(false);
+        stubGetRecentLocations.returns([expectedLocation]);
         var expectedHtml = '<strong>' + expectedLocation.name + '</strong>, ' +
-        expectedLocation.container;
-        sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
+          expectedLocation.container;
         userLocations.render();
         expect(container.find('.ls-ui-comp-user_locations-name').html()).toEqual(expectedHtml);
       });
 
-      it('renders multiple locations', function() {
+      it('renders a recent location without container', function() {
         var expectedLocation = {
-          id: 'CF5',
-          name: 'CF5'
+          id: '1234',
+          name: 'Llandaff'
         };
-        sinon.stub(userLocations, 'getLocations').returns([expectedLocation, expectedLocation, expectedLocation]);
+        stubPreferredLocationIsSet.returns(false);
+        stubGetRecentLocations.returns([expectedLocation]);
+        var expectedHtml = '<strong>' + expectedLocation.name + '</strong>';
         userLocations.render();
-        expect(container.find('li').length).toEqual(3);
+        expect(container.find('.ls-ui-comp-user_locations-name').html()).toEqual(expectedHtml);
       });
 
-      it('renders a preferred location with a preferred class', function() {
+      it('renders a preferable location with expected class and link', function() {
         var expectedLocation = {
-          id: 'CF5',
-          name: 'CF5',
-          isPreferred: true,
+          id: '1234',
+          name: 'Llandaff',
           isPreferable: true
         };
-        sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
+        stubPreferredLocationIsSet.returns(false);
+        stubGetRecentLocations.returns([expectedLocation]);
         userLocations.render();
-        expect(container.find('li.ls-ui-comp-user_locations-preferred').length).toEqual(1);
-      });
-
-      it('renders a preferable location with a preferable class', function() {
-        var expectedLocation = {
-          id: 'CF5',
-          name: 'CF5',
-          isPreferred: true,
-          isPreferable: true
-        };
-        sinon.stub(userLocations, 'getLocations').returns([expectedLocation]);
-        userLocations.render();
-        expect(container.find('li.ls-ui-comp-user_locations-preferable').length).toEqual(1);
+        expect(
+          container.find('ul.ls-ui-comp-user_locations-recent li.ls-ui-comp-user_locations-location-preferable').length
+        ).toEqual(1);
+        expect(
+          container.find('ul.ls-ui-comp-user_locations-recent li.ls-ui-comp-user_locations-location-preferable a.ls-ui-comp-user_locations-action').length
+        ).toEqual(1);
       });
 
     });
 
-    describe('getLocations()', function() {
+    describe('getRecentLocations()', function() {
 
       var stubPreferredLocationIsSet;
       var stubPreferredLocationGet;
@@ -255,39 +267,23 @@ function(
       });
 
       it('returns an empty array if no locations are available', function() {
-        expect(userLocations.getLocations()).toEqual([]);
+        expect(userLocations.getRecentLocations()).toEqual([]);
       });
 
-      it('returns a single preferred location if no recents are set', function() {
+      it('returns at most 4 recent locations if a preferred location is set', function() {
         var locations;
         stubPreferredLocationIsSet.returns(true);
-        stubPreferredLocationGet.returns(testLocations[0]);
-        locations = userLocations.getLocations();
-        expect(locations.length).toEqual(1);
-        expect(locations[0]).toEqual(testLocations[0]);
-      });
-
-      it('sets isPreferred to true for preferred location', function() {
-        var locations;
-        stubPreferredLocationIsSet.returns(true);
-        stubPreferredLocationGet.returns(testLocations[0]);
-        locations = userLocations.getLocations();
-        expect(locations[0].isPreferred).toEqual(true);
-      });
-
-      it('sets isPreferable to true for preferred location', function() {
-        var locations;
-        stubPreferredLocationIsSet.returns(true);
-        stubPreferredLocationGet.returns(testLocations[0]);
-        locations = userLocations.getLocations();
-        expect(locations[0].isPreferable).toEqual(true);
+        stubRecentLocationsIsSupported.returns(true);
+        stubRecentLocationsAll.returns(testLocations);
+        locations = userLocations.getRecentLocations();
+        expect(locations.length).toEqual(4);
       });
 
       it('returns at most 5 recent locations if no preferred location is set', function() {
         var locations;
         stubRecentLocationsIsSupported.returns(true);
         stubRecentLocationsAll.returns(testLocations);
-        locations = userLocations.getLocations();
+        locations = userLocations.getRecentLocations();
         expect(locations.length).toEqual(5);
       });
 
@@ -301,25 +297,9 @@ function(
         stubRecentLocationsAll.returns([testLocations[0]]);
         stub = sinon.stub(userLocations.preferredLocation, 'isValidLocation');
         stub.returns(expectedValue);
-        locations = userLocations.getLocations();
+        locations = userLocations.getRecentLocations();
         expect(stub.calledOnce).toEqual(true);
         expect(locations[0].isPreferable).toEqual(expectedValue);
-      });
-
-      it('returns 1 preferred and 4 recent locations if both are set', function() {
-        var locations;
-        var preferredLocation = { id: 'CF5', name: 'Preferred' };
-        stubPreferredLocationIsSet.returns(true);
-        stubPreferredLocationGet.returns(preferredLocation);
-        stubRecentLocationsIsSupported.returns(true);
-        stubRecentLocationsAll.returns(testLocations);
-        locations = userLocations.getLocations();
-        expect(locations.length).toEqual(5);
-        expect(locations[0]).toEqual(preferredLocation);
-        expect(locations[1]).toEqual(testLocations[0]);
-        expect(locations[2]).toEqual(testLocations[1]);
-        expect(locations[3]).toEqual(testLocations[2]);
-        expect(locations[4]).toEqual(testLocations[3]);
       });
 
       it('does not include recent if same id as preferred', function() {
@@ -329,13 +309,12 @@ function(
         stubPreferredLocationGet.returns(preferredLocation);
         stubRecentLocationsIsSupported.returns(true);
         stubRecentLocationsAll.returns(testLocations);
-        locations = userLocations.getLocations();
-        expect(locations.length).toEqual(5);
-        expect(locations[0]).toEqual(preferredLocation);
-        expect(locations[1]).toEqual(testLocations[0]);
-        expect(locations[2]).toEqual(testLocations[1]);
-        expect(locations[3]).toEqual(testLocations[3]);
-        expect(locations[4]).toEqual(testLocations[4]);
+        locations = userLocations.getRecentLocations();
+        expect(locations.length).toEqual(4);
+        expect(locations[0]).toEqual(testLocations[0]);
+        expect(locations[1]).toEqual(testLocations[1]);
+        expect(locations[2]).toEqual(testLocations[3]);
+        expect(locations[3]).toEqual(testLocations[4]);
       });
 
     });

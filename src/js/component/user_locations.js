@@ -19,13 +19,21 @@ function(
 
     element: $('<div />').addClass('ls-ui-comp-user_locations'),
 
-    heading: function(translations, noOfLocations) {
+    preferredLocationList: $('<ul/>').addClass('ls-ui-comp-user_locations-preferred'),
+
+    preferredLocationHeading: function(translations) {
       return $('<p />').text(
-        translations.get('user_locations.heading') + ' (' + noOfLocations + ')'
+        translations.get('user_locations.main.heading')
       );
     },
 
-    list: $('<ul/>'),
+    recentLocationsList: $('<ul/>').addClass('ls-ui-comp-user_locations-recent'),
+
+    recentLocationsHeading: function(translations, noOfLocations) {
+      return $('<p />').text(
+        translations.get('user_locations.recent.heading') + ' (' + noOfLocations + ')'
+      );
+    },
 
     location: function(translations, location) {
       var locationId = location.id;
@@ -50,10 +58,10 @@ function(
 
       var li = $('<li />');
       if (location.isPreferred) {
-        li.addClass('ls-ui-comp-user_locations-preferred');
+        li.addClass('ls-ui-comp-user_locations-location-preferred');
       }
       if (location.isPreferable) {
-        li.addClass('ls-ui-comp-user_locations-preferable');
+        li.addClass('ls-ui-comp-user_locations-location-preferable');
         li.append(linkAction);
       }
       li.append(linkName).append(linkRemove);
@@ -122,7 +130,7 @@ function(
     var locations;
     var locationIndex;
     var noOfLocations;
-    locations = this.getLocations();
+    locations = this.getRecentLocations();
     noOfLocations = locations.length;
     for (locationIndex = 0; locationIndex < noOfLocations; locationIndex++) {
       if (locationId === locations[locationIndex].id) {
@@ -176,23 +184,45 @@ function(
    * Render a list of locations
    */
   UserLocations.prototype.render = function() {
+    var preferredLocation;
     var locations;
     var noOfLocations;
     var locationIndex;
 
     templates.element.empty();
-    templates.list.empty();
+    templates.preferredLocationList.empty();
+    templates.recentLocationsList.empty();
 
-    locations = this.getLocations();
+    /* Preferred Location */
+
+    templates.element.append(templates.preferredLocationHeading(this.translations));
+
+    if (this.preferredLocation.isSet()) {
+      preferredLocation = this.preferredLocation.get();
+      preferredLocation.isPreferred = true;
+      preferredLocation.isPreferable = true;
+      templates.preferredLocationList.append(
+        templates.location(this.translations, preferredLocation)
+      );
+    } else {
+      templates.preferredLocationList.addClass('ls-ui-comp-user_locations-preferred-no-location');
+    }
+    templates.element.append(templates.preferredLocationList);
+
+    /* Recent Locations */
+
+    locations = this.getRecentLocations();
     noOfLocations = locations.length;
 
-    templates.element.append(templates.heading(this.translations, noOfLocations));
+    templates.element.append(templates.recentLocationsHeading(this.translations, noOfLocations));
 
     if (0 < noOfLocations) {
       for (locationIndex = 0; locationIndex < noOfLocations; locationIndex++) {
-        templates.list.append(templates.location(this.translations, locations[locationIndex]));
+        templates.recentLocationsList.append(
+          templates.location(this.translations, locations[locationIndex])
+        );
       }
-      templates.element.append(templates.list);
+      templates.element.append(templates.recentLocationsList);
     }
   };
 
@@ -202,7 +232,7 @@ function(
    *
    * @return {Array} The array of 0 to 5 locations
    */
-  UserLocations.prototype.getLocations = function() {
+  UserLocations.prototype.getRecentLocations = function() {
     var locations = [];
     var noOfLocationsRemaining = 5;
     var preferredLocation;
@@ -214,9 +244,6 @@ function(
     if (this.preferredLocation.isSet()) {
       noOfLocationsRemaining--;
       preferredLocation = this.preferredLocation.get();
-      preferredLocation.isPreferred = true;
-      preferredLocation.isPreferable = true;
-      locations.push(preferredLocation);
     }
 
     if (this.recentLocations.isSupported()) {
