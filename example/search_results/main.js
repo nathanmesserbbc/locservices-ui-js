@@ -4,10 +4,10 @@ require.config({
   baseUrl: '/',
 
   paths: {
-    'jquery' : 'vendor/jquery/dist/jquery',
-    'pubsub': 'vendor/events/pubsub',
-    'locservices/ui' : 'js',
-    'locservices/core': 'vendor/locservices-core-js/src'
+    'jquery' : './vendor/jquery/dist/jquery',
+    'pubsub': './vendor/events/pubsub',
+    'locservices/ui' : './js',
+    'locservices/core': './vendor/locservices-core-js/src'
   }
 });
 
