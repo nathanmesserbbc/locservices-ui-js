@@ -17,7 +17,9 @@ function(
 
   var templates = {
 
-    element: $('<div />').addClass('ls-ui-comp-user_locations'),
+    element: function() {
+      return $('<div />').addClass('ls-ui-comp-user_locations');
+    },
 
     preferredLocationList: $('<ul/>').addClass('ls-ui-comp-user_locations-preferred'),
 
@@ -42,7 +44,9 @@ function(
 
       var linkName = $('<a/>')
         .addClass('ls-ui-comp-user_locations-name')
-        .attr('href', '?locationId=' + locationId)
+        .attr('href', '#' + locationId)
+        .attr('data-id', locationId)
+        .attr('data-action', 'location')
         .html($('<strong/>').text(location.name));
       if (location.container) {
         linkName.append(', ' + location.container);
@@ -50,12 +54,16 @@ function(
 
       var linkAction = $('<a/>')
         .addClass('ls-ui-comp-user_locations-action')
-        .attr('href', '?locationId=' + locationId)
+        .attr('href', '#' + locationId)
+        .attr('data-id', locationId)
+        .attr('data-action', location.isPreferred ? 'none' : 'prefer')
         .text(translations.get('user_locations.action.recent'));
 
       var linkRemove = $('<a/>')
         .addClass('ls-ui-comp-user_locations-remove')
-        .attr('href', '?locationId=' + locationId)
+        .attr('href', '#' + locationId)
+        .attr('data-id', locationId)
+        .attr('data-action', 'remove')
         .text(translations.get('user_locations.action.remove'));
 
       var li = $('<li />');
@@ -94,25 +102,31 @@ function(
     this.preferredLocation = new PreferredLocation();
     this.recentLocations = new RecentLocations();
 
-    templates.element.on('click', function(e) {
+    this.element = templates.element();
+    this.container.append(this.element);
+    this.render();
+
+    this.element.on('click', function(e) {
       var target;
       var locationId;
+      var action;
       e.preventDefault();
       e.stopPropagation();
       target = $(e.target);
-      if (target.hasClass('ls-ui-comp-user_locations-recent')) {
-        locationId = target.attr('href').split('=')[1];
+
+      // convert back to a string as strings that look like a 
+      // number eg 1243 get converted to type number
+      locationId = String(target.data('id'));
+
+      action = target.data('action');
+      if ('location' === action) {
+        self.selectLocationById(locationId);
+      } else if ('prefer' === action) {
         self.setPreferredLocationById(locationId);
-      } else if (target.hasClass('ls-ui-comp-user_locations-remove')) {
-        locationId = target.attr('href').split('=')[1];
+      } else if ('remove' === action) {
         self.removeLocationById(locationId);
       }
-
     });
-
-    // @todo test both lines
-    this.container.append(templates.element);
-    this.render();
 
     $.on(this.eventNamespaceBase + ':component:search_results:location', function(location) {
       self.addRecentLocation(location);
@@ -129,6 +143,19 @@ function(
 
   UserLocations.prototype = new Component();
   UserLocations.prototype.constructor = UserLocations;
+
+  /**
+   * Select a location by it's id
+   *
+   * @param {String} locationId
+   */
+  UserLocations.prototype.selectLocationById = function(locationId) {
+    var location;
+    location = this._locations[locationId];
+    if (location) {
+      $.emit(this.eventNamespace + ':location', [location]);
+    }
+  };
 
   /**
    * Set the preferred location by location id
@@ -196,20 +223,24 @@ function(
   UserLocations.prototype.render = function() {
     var preferredLocation;
     var recentLocations;
+    var recentLocation;
     var hasRecentLocations;
     var noOfRecentLocations;
     var locationIndex;
 
-    templates.element.empty();
+    this._locations = {};
+
+    this.element.empty();
     templates.preferredLocationList.empty();
     templates.recentLocationsList.empty();
 
     /* Preferred Location */
 
-    templates.element.append(templates.preferredLocationHeading(this.translations));
+    this.element.append(templates.preferredLocationHeading(this.translations));
 
     if (this.preferredLocation.isSet()) {
       preferredLocation = this.preferredLocation.get();
+      this._locations[preferredLocation.id] = preferredLocation;
       preferredLocation.isPreferred = true;
       preferredLocation.isPreferable = true;
       templates.preferredLocationList.append(
@@ -218,7 +249,7 @@ function(
     } else {
       templates.preferredLocationList.addClass('ls-ui-comp-user_locations-preferred-no-location');
     }
-    templates.element.append(templates.preferredLocationList);
+    this.element.append(templates.preferredLocationList);
 
     /* Recent Locations */
 
@@ -226,22 +257,24 @@ function(
     noOfRecentLocations = recentLocations.length;
     hasRecentLocations = 0 < noOfRecentLocations;
 
-    templates.element.append(
+    this.element.append(
       templates.recentLocationsHeading(this.translations, noOfRecentLocations)
     );
 
     if (hasRecentLocations) {
       for (locationIndex = 0; locationIndex < noOfRecentLocations; locationIndex++) {
+        recentLocation = recentLocations[locationIndex];
+        this._locations[recentLocation.id] = recentLocation;
         templates.recentLocationsList.append(
-          templates.location(this.translations, recentLocations[locationIndex])
+          templates.location(this.translations, recentLocation)
         );
       }
-      templates.element.append(templates.recentLocationsList);
+      this.element.append(templates.recentLocationsList);
     }
 
     /* Message */
 
-    templates.element.append(
+    this.element.append(
       templates.message(this.translations, hasRecentLocations)
     );
   };
