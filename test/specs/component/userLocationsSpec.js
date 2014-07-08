@@ -17,6 +17,7 @@ function(
 
     var container;
     var userLocations;
+    var api;
     var translations;
 
     var testLocations = [
@@ -31,8 +32,10 @@ function(
 
     beforeEach(function() {
       container = $('<div/>');
+      api = {};
       translations = new En();
       userLocations = new UserLocations({
+        api: api,
         translations: translations,
         container: container
       });
@@ -42,6 +45,17 @@ function(
 
       it('should set this.componentId to "user_locations"', function() {
         expect(userLocations.componentId).toBe('user_locations');
+      });
+
+      it('throws an error when an api is not present in options', function() {
+        var fn = function() {
+          userLocations = new UserLocations({
+            container: container,
+            translations: translations
+          });
+        };
+
+        expect(fn).toThrow();
       });
 
       it('calls this.selectLocationById location event when clicking on a location name', function() {
@@ -140,45 +154,140 @@ function(
 
     describe('setPreferredLocationById()', function() {
 
-      it('calls this.preferredLocation.set() with the expected location object', function() {
+      var expectedLocation;
+
+      beforeEach(function() {
+        expectedLocation = {
+          id: '1234',
+          placeType: 'settlement',
+          country: 'GB'
+        };
+        userLocations._locations[expectedLocation.id] = expectedLocation;
+        userLocations._locations[testLocations[0].id] = testLocations[0];
+      });
+
+      it('calls this.preferredLocation.set() with the expected location id', function() {
         var stub;
         stub = sinon.stub(userLocations.preferredLocation, 'set');
-        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
+        sinon.stub(userLocations, 'render');
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(stub.calledOnce).toEqual(true);
+        expect(stub.args[0][0]).toEqual(expectedLocation.id);
+      });
+
+      it('does not call this.preferredLocation.set() if the location is not preferrable', function() {
+        var stub;
+        stub = sinon.stub(userLocations.preferredLocation, 'set');
+        sinon.stub(userLocations.preferredLocation, 'isValidLocation').returns(false);
+        sinon.stub(userLocations, 'render');
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(stub.callCount).toEqual(0);
+      });
+
+      // ensure that the locaiton is preferrable
+
+      it('adds the current preferredLocation to the recent locations list', function() {
+        var stub;
+        stub = sinon.stub(userLocations.recentLocations, 'add');
+        sinon.stub(userLocations.preferredLocation, 'set');
+        sinon.stub(userLocations.preferredLocation, 'isSet').returns(true);
+        sinon.stub(userLocations.preferredLocation, 'get').returns(expectedLocation);
         sinon.stub(userLocations, 'render');
         userLocations.setPreferredLocationById(testLocations[0].id);
         expect(stub.calledOnce).toEqual(true);
-        expect(stub.calledWith(testLocations[0])).toEqual(true);
+        expect(stub.args[0][0]).toEqual(expectedLocation);
       });
 
-      it('calls this.render()', function() {
+      it('calls this.render() if location is valid', function() {
         var stub;
         sinon.stub(userLocations.preferredLocation, 'set');
         sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
         stub = sinon.stub(userLocations, 'render');
-        userLocations.setPreferredLocationById(testLocations[0].id);
+        userLocations.setPreferredLocationById(expectedLocation.id);
         expect(stub.calledOnce).toEqual(true);
+      });
+
+      it('does not call this.render() if location is invalid', function() {
+        var stub;
+        sinon.stub(userLocations.preferredLocation, 'set');
+        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
+        stub = sinon.stub(userLocations, 'render');
+        userLocations.setPreferredLocationById('foo');
+        expect(stub.callCount).toEqual(0);
+      });
+
+    });
+
+    describe('addRecentLocation()', function() {
+
+      var expectedLocation;
+
+      beforeEach(function() {
+        expectedLocation = {
+          id: '1234'
+        };
+      });
+
+      it('calls this.recentLocations.add()', function() {
+        var stub;
+        stub = sinon.stub(userLocations.recentLocations, 'add');
+
+        userLocations.addRecentLocation(expectedLocation);
+        expect(stub.args[0][0]).toEqual(expectedLocation);
+      });
+
+      it('returns true if location is added to recents', function() {
+        var result;
+        sinon.stub(userLocations.recentLocations, 'add');
+
+        result = userLocations.addRecentLocation(expectedLocation);
+        expect(result).toBe(true);
+      });
+
+      it('returns false if location is not added to recents', function() {
+        var result;
+        result = userLocations.addRecentLocation(expectedLocation);
+        expect(result).toBe(false);
       });
 
     });
 
     describe('removeLocationById()', function() {
 
-      it('calls this.recentLocations.remove() with locationId', function() {
-        var locationId = '999';
+      var expectedLocation;
+
+      beforeEach(function() {
+        expectedLocation = {
+          id: '1234'
+        };
+        userLocations._locations[expectedLocation.id] = expectedLocation;
+      });
+
+      it('calls this.preferredLocation.unset() if location is preferred', function() {
+        var stub;
+        stub = sinon.stub(userLocations.preferredLocation, 'unset');
+        sinon.stub(userLocations, 'render');
+
+        expectedLocation.isPreferred = true;
+        
+        userLocations.removeLocationById(expectedLocation.id);
+        expect(stub.calledOnce).toEqual(true);
+      });
+
+      it('calls this.recentLocations.remove() with locationId if location is recent', function() {
         var stub;
         stub = sinon.stub(userLocations.recentLocations, 'remove');
         sinon.stub(userLocations, 'render');
-        userLocations.removeLocationById(locationId);
+        userLocations.removeLocationById(expectedLocation.id);
         expect(stub.calledOnce).toEqual(true);
-        expect(stub.calledWith(locationId)).toEqual(true);
+        expect(stub.calledWith(expectedLocation.id)).toEqual(true);
       });
 
-      it('calls this.render()', function() {
-        var locationId = '999';
+      it('calls this.render() if locationId is valid', function() {
         var stub;
         sinon.stub(userLocations.recentLocations, 'remove');
         stub = sinon.stub(userLocations, 'render');
-        userLocations.removeLocationById(locationId);
+        userLocations.removeLocationById(expectedLocation.id);
         expect(stub.calledOnce).toEqual(true);
       });
 

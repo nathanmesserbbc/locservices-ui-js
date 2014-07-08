@@ -95,11 +95,21 @@ function(
    */
   function UserLocations(options) {
     var self = this;
+    var api;
     options = options || {};
     options.componentId = 'user_locations';
+
+    if (undefined === options.api) {
+      throw new Error('User locations requires api parameter');
+    } else {
+      api = options.api;
+    }
+
     this.setComponentOptions(options);
 
-    this.preferredLocation = new PreferredLocation();
+    this._locations = [];
+
+    this.preferredLocation = new PreferredLocation(api);
     this.recentLocations = new RecentLocations();
 
     this.element = templates.element();
@@ -128,16 +138,22 @@ function(
       }
     });
 
+    var handleLocationEvent = function(location) {
+      if (self.addRecentLocation(location)) {
+        self.render();
+      }
+    };
+
     $.on(this.eventNamespaceBase + ':component:search_results:location', function(location) {
-      self.addRecentLocation(location);
+      handleLocationEvent(location);
     });
 
     $.on(this.eventNamespaceBase + ':component:geolocation:location', function(location) {
-      self.addRecentLocation(location);
+      handleLocationEvent(location);
     });
 
     $.on(this.eventNamespaceBase + ':component:auto_complete:location', function(location) {
-      self.addRecentLocation(location);
+      handleLocationEvent(location);
     });
   }
 
@@ -164,22 +180,16 @@ function(
    */
   UserLocations.prototype.setPreferredLocationById = function(locationId) {
     var location;
-    var locations;
-    var locationIndex;
-    var noOfLocations;
-    locations = this.getRecentLocations();
-    noOfLocations = locations.length;
-    for (locationIndex = 0; locationIndex < noOfLocations; locationIndex++) {
-      if (locationId === locations[locationIndex].id) {
-        location = locations[locationIndex];
+    var preferredLocation;
+    location = this._locations[locationId];
+    if (location && this.preferredLocation.isValidLocation(location)) {
+
+      if (this.preferredLocation.isSet()) {
+        preferredLocation = this.preferredLocation.get();
+        this.addRecentLocation(preferredLocation);
       }
-    }
 
-    // @todo push the previous preferred location to the top
-    // of recents ???
-
-    if (location) {
-      this.preferredLocation.set(location);
+      this.preferredLocation.set(location.id);
       this.render();
     }
   };
@@ -188,19 +198,20 @@ function(
    * Add a location to the list of recents
    *
    * @param {Object} location
+   * @return {Boolean} was the location added
    */
   UserLocations.prototype.addRecentLocation = function(location) {
 
-    //@todo test this method
-
+    // @todo MYLOC-98
     // should not have to do this try/catch
     // core/recents should return false instead
     try {
       this.recentLocations.add(location);
     } catch (e) {
-      return;
+      return false;
     }
-    this.render();
+
+    return true;
   };
 
   /**
@@ -209,12 +220,19 @@ function(
    * @param {String} locationId
    */
   UserLocations.prototype.removeLocationById = function(locationId) {
-    this.recentLocations.remove(locationId);
 
-    // @todo what happens if the removed location is also the
-    // preferred location ???
+    var location;
+    location = this._locations[locationId];
 
-    this.render();
+    if (location) {
+      if (location.isPreferred) {
+        this.preferredLocation.unset();
+      } else {
+        this.recentLocations.remove(locationId);
+      }
+      this.render();
+    }
+
   };
 
   /**
@@ -222,6 +240,7 @@ function(
    */
   UserLocations.prototype.render = function() {
     var preferredLocation;
+    var hasPreferredLocation;
     var recentLocations;
     var recentLocation;
     var hasRecentLocations;
@@ -240,6 +259,7 @@ function(
 
     if (this.preferredLocation.isSet()) {
       preferredLocation = this.preferredLocation.get();
+      hasPreferredLocation = true;
       this._locations[preferredLocation.id] = preferredLocation;
       preferredLocation.isPreferred = true;
       preferredLocation.isPreferable = true;
@@ -257,11 +277,12 @@ function(
     noOfRecentLocations = recentLocations.length;
     hasRecentLocations = 0 < noOfRecentLocations;
 
-    this.element.append(
-      templates.recentLocationsHeading(this.translations, noOfRecentLocations)
-    );
-
     if (hasRecentLocations) {
+
+      this.element.append(
+        templates.recentLocationsHeading(this.translations, noOfRecentLocations)
+      );
+
       for (locationIndex = 0; locationIndex < noOfRecentLocations; locationIndex++) {
         recentLocation = recentLocations[locationIndex];
         this._locations[recentLocation.id] = recentLocation;
@@ -308,7 +329,7 @@ function(
           if (0 < noOfLocationsRemaining &&
             (
               !preferredLocation ||
-              (preferredLocation && preferredLocation.id !== recentLocation.id)
+              (preferredLocation.id !== recentLocation.id)
             )
           ) {
             noOfLocationsRemaining--;
