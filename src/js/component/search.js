@@ -66,7 +66,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     var self = this;
 
-    searchTerm = (searchTerm || '').trim();
+    searchTerm = (searchTerm || '').replace(/^\s+|\s+$/g, ''); 
 
     if (!searchTerm || true === self.isSearching) {
       return;
