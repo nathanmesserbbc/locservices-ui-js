@@ -84,6 +84,12 @@ define([
         submitSearch('');
         mock.verify();
       });
+
+      it('should not search if the search term consists of spaces', function() {
+        mock.expects('search').never();
+        submitSearch('  ');
+        mock.verify();
+      });
     });
 
     describe('events', function() {
