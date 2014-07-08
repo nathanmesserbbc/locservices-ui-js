@@ -17,7 +17,7 @@ define([
 
     var submitSearch = function(term) {
       search.input.attr('value', term);
-      container.trigger('submit');
+      search.form.trigger('submit');
     };
 
     describe('constructor', function() {
