@@ -8,6 +8,11 @@ module.exports = function() {
       src: ['**/*.css', '!*.min.css'],
       dest: 'dist/',
       ext: '.min.css'
+    },
+    all: {
+      files: {
+        'dist/all.min.css' : 'dist/**/*.css'
+      }
     }
   };
 };
