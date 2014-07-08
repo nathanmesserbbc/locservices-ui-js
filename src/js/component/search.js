@@ -65,7 +65,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.emit('start', [searchTerm]);
     self.isSearching = true;
 
-    self.api.search(searchTerm, {
+    self.api.search(searchTerm.trim(), {
       success: function(data) {
         self.emit('end');
         self.isSearching = false;
