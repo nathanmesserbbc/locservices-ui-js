@@ -123,6 +123,7 @@ define([
     });
 
     self.userLocations = new UserLocations({
+      api: this.api,
       translations: options.translations,
       eventNamespace: self.namespace,
       container: outside
