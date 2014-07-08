@@ -179,8 +179,10 @@ function(
    * @param {String} locationId
    */
   UserLocations.prototype.setPreferredLocationById = function(locationId) {
+    var self;
     var location;
     var preferredLocation;
+    self = this;
     location = this._locations[locationId];
     if (location && this.preferredLocation.isValidLocation(location)) {
 
@@ -189,8 +191,17 @@ function(
         this.addRecentLocation(preferredLocation);
       }
 
-      this.preferredLocation.set(location.id);
-      this.render();
+      // @todo test success and error
+
+      this.preferredLocation.set(location.id, {
+        success: function() {
+          self.render();
+        },
+        error: function() {
+          // @todo emit error event
+        }
+      });
+
     }
   };
 

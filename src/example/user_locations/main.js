@@ -16,10 +16,13 @@ require([
   'locservices/ui/translations/en',
   'locservices/ui/component/user_locations',
   'pubsub'
-], function($, API, En, UserLocations) {
+], function($, Api, En, UserLocations) {
 
   var userLocations = new UserLocations({
-    api: new Api(),
+    api: new Api({
+      env: 'int',
+      'place-types': ['road', 'settlement', 'airport']
+    }),
     translations: new En(),
     container: $('.locservices-ui-container')
   });

@@ -200,7 +200,9 @@ function(
 
       it('calls this.render() if location is valid', function() {
         var stub;
-        sinon.stub(userLocations.preferredLocation, 'set');
+        userLocations.preferredLocation.set = function(id, options) {
+          options.success({});
+        };
         sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
         stub = sinon.stub(userLocations, 'render');
         userLocations.setPreferredLocationById(expectedLocation.id);
