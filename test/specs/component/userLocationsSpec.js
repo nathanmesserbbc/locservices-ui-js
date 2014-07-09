@@ -98,31 +98,31 @@ function(
         expect(stub.calledWith(testLocations[0].id)).toBe(true);
       });
 
-      it('calls this.addRecentLocation on search_results location event', function() {
+      it('calls this.recentLocations.add on search_results location event', function() {
         var stub;
         var expectedLocation;
         expectedLocation = 'foo';
-        stub = sinon.stub(userLocations, 'addRecentLocation');
+        stub = sinon.stub(userLocations.recentLocations, 'add');
         $.emit('locservices:ui:component:search_results:location', [expectedLocation]);
         expect(stub.calledOnce).toBe(true);
         expect(stub.calledWith(expectedLocation)).toBe(true);
       });
 
-      it('calls this.addRecentLocation on geolocation location event', function() {
+      it('calls this.recentLocations.add on geolocation location event', function() {
         var stub;
         var expectedLocation;
         expectedLocation = 'foo';
-        stub = sinon.stub(userLocations, 'addRecentLocation');
+        stub = sinon.stub(userLocations.recentLocations, 'add');
         $.emit('locservices:ui:component:geolocation:location', [expectedLocation]);
         expect(stub.calledOnce).toBe(true);
         expect(stub.calledWith(expectedLocation)).toBe(true);
       });
 
-      it('calls this.addRecentLocation on auto_complete location event', function() {
+      it('calls this.recentLocations.add on auto_complete location event', function() {
         var stub;
         var expectedLocation;
         expectedLocation = 'foo';
-        stub = sinon.stub(userLocations, 'addRecentLocation');
+        stub = sinon.stub(userLocations.recentLocations, 'add');
         $.emit('locservices:ui:component:auto_complete:location', [expectedLocation]);
         expect(stub.calledOnce).toBe(true);
         expect(stub.calledWith(expectedLocation)).toBe(true);
@@ -216,40 +216,6 @@ function(
         stub = sinon.stub(userLocations, 'render');
         userLocations.setPreferredLocationById('foo');
         expect(stub.callCount).toEqual(0);
-      });
-
-    });
-
-    describe('addRecentLocation()', function() {
-
-      var expectedLocation;
-
-      beforeEach(function() {
-        expectedLocation = {
-          id: '1234'
-        };
-      });
-
-      it('calls this.recentLocations.add()', function() {
-        var stub;
-        stub = sinon.stub(userLocations.recentLocations, 'add');
-
-        userLocations.addRecentLocation(expectedLocation);
-        expect(stub.args[0][0]).toEqual(expectedLocation);
-      });
-
-      it('returns true if location is added to recents', function() {
-        var result;
-        sinon.stub(userLocations.recentLocations, 'add');
-
-        result = userLocations.addRecentLocation(expectedLocation);
-        expect(result).toBe(true);
-      });
-
-      it('returns false if location is not added to recents', function() {
-        var result;
-        result = userLocations.addRecentLocation(expectedLocation);
-        expect(result).toBe(false);
       });
 
     });
