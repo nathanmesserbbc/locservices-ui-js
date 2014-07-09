@@ -3,6 +3,7 @@ define(function() {
   'use strict';
 
   var dictionary = {
+    'auto_complete.error.search': 'Sorry, we are experiencing technical problems.',
     'user_locations.heading.preferred': 'Main location',
     'user_locations.heading.recent': 'Other locations',
     'user_locations.action.recent': 'Prefer',
