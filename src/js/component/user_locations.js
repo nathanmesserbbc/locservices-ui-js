@@ -139,7 +139,7 @@ function(
     });
 
     var handleLocationEvent = function(location) {
-      if (self.addRecentLocation(location)) {
+      if (self.recentLocations.add(location)) {
         self.render();
       }
     };
@@ -188,7 +188,9 @@ function(
 
       if (this.preferredLocation.isSet()) {
         preferredLocation = this.preferredLocation.get();
-        this.addRecentLocation(preferredLocation);
+
+        // @todo what if this returns false?
+        this.recentLocations.add(preferredLocation);
       }
 
       // @todo test success and error
@@ -203,26 +205,6 @@ function(
       });
 
     }
-  };
-
-  /**
-   * Add a location to the list of recents
-   *
-   * @param {Object} location
-   * @return {Boolean} was the location added
-   */
-  UserLocations.prototype.addRecentLocation = function(location) {
-
-    // @todo MYLOC-98
-    // should not have to do this try/catch
-    // core/recents should return false instead
-    try {
-      this.recentLocations.add(location);
-    } catch (e) {
-      return false;
-    }
-
-    return true;
   };
 
   /**
