@@ -84,7 +84,9 @@ function(
       if (hasRecentLocations) {
         value += ' ' + translations.get('user_locations.message.change_preferred');
       }
-      return $('<p/>').text(value);
+      return $('<p/>')
+        .addClass('ls-ui-comp-user_locations-message')
+        .text(value);
     }
   };
 
@@ -232,6 +234,7 @@ function(
    * Render a list of locations
    */
   UserLocations.prototype.render = function() {
+    var hasLocations;
     var preferredLocation;
     var hasPreferredLocation;
     var recentLocations;
@@ -239,6 +242,12 @@ function(
     var hasRecentLocations;
     var noOfRecentLocations;
     var locationIndex;
+
+    hasPreferredLocation = this.preferredLocation.isSet();
+    recentLocations = this.getRecentLocations();
+    noOfRecentLocations = recentLocations.length;
+    hasRecentLocations = 0 < noOfRecentLocations;
+    hasLocations = hasPreferredLocation || hasRecentLocations;
 
     this._locations = {};
 
@@ -248,11 +257,12 @@ function(
 
     /* Preferred Location */
 
-    this.element.append(templates.preferredLocationHeading(this.translations));
+    if (hasLocations) {
+      this.element.append(templates.preferredLocationHeading(this.translations));
+    }
 
-    if (this.preferredLocation.isSet()) {
+    if (hasPreferredLocation) {
       preferredLocation = this.preferredLocation.get();
-      hasPreferredLocation = true;
       this._locations[preferredLocation.id] = preferredLocation;
       preferredLocation.isPreferred = true;
       preferredLocation.isPreferable = true;
@@ -262,13 +272,12 @@ function(
     } else {
       templates.preferredLocationList.addClass('ls-ui-comp-user_locations-preferred-no-location');
     }
-    this.element.append(templates.preferredLocationList);
+
+    if (hasLocations) {
+      this.element.append(templates.preferredLocationList);
+    }
 
     /* Recent Locations */
-
-    recentLocations = this.getRecentLocations();
-    noOfRecentLocations = recentLocations.length;
-    hasRecentLocations = 0 < noOfRecentLocations;
 
     if (hasRecentLocations) {
 
@@ -288,9 +297,11 @@ function(
 
     /* Message */
 
-    this.element.append(
-      templates.message(this.translations, hasRecentLocations)
-    );
+    if (hasLocations) {
+      this.element.append(
+        templates.message(this.translations, hasRecentLocations)
+      );
+    }
   };
 
   /**
