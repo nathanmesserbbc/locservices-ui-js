@@ -4,13 +4,15 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   'use strict';
 
-  var form = $('<form />')
-                .attr('method', 'post')
-                .attr('action', '#')
-                .addClass('ls-ui-form')
-                .addClass('ls-ui-comp-search');
-
   var wrapEl = $('<div />').addClass('ls-ui-container');
+
+  var form = function() {
+    return $('<form />')
+              .attr('method', 'post')
+              .attr('action', '#')
+              .addClass('ls-ui-form')
+              .addClass('ls-ui-comp-search');
+  };
 
   var input = function(translations) {
     return $('<input />')
@@ -42,11 +44,18 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     render(self.translations, self.container);
 
     self.input = self.container.find('input[type=text]');
-    self.container.on('submit', function(e) {
+    self.form  = self.container.find('form');
+
+    self.form.on('submit', function(e) {
       e.preventDefault();
       self.search(self.input.val());
     });
     self.input.on('focus', function() {
+      self.emit('focus');
+    });
+
+    self.container.find('input[type=submit]').on('click', function() {
+      self.form.trigger('submit');
       self.emit('focus');
     });
   }
@@ -57,9 +66,9 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     var self = this;
 
-    if (undefined === searchTerm ||
-          0 === searchTerm.length ||
-          true === self.isSearching) {
+    searchTerm = (searchTerm || '').replace(/^\s+|\s+$/g, ''); 
+
+    if (!searchTerm || true === self.isSearching) {
       return;
     }
     self.emit('start', [searchTerm]);
@@ -86,7 +95,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     var inputEl  = input(translations);
     var submitEl = submit(translations);
 
-    container.append(form.append(wrapEl.append(inputEl)).append(submitEl));
+    container.append(form().append(wrapEl.append(inputEl)).append(submitEl));
   };
 
   return Search;

@@ -102,13 +102,6 @@ define([
       container: outside
     });
 
-    self.geolocation = new Geolocation({
-      api: this.api,
-      translations: options.translations,
-      eventNamespace: self.namespace,
-      container: outside
-    });
-
     self.message = new Message({
       translations: options.translations,
       eventNamespace: self.namespace,
@@ -116,6 +109,13 @@ define([
     });
 
     self.results = new SearchResults({
+      api: this.api,
+      translations: options.translations,
+      eventNamespace: self.namespace,
+      container: outside
+    });
+
+    self.geolocation = new Geolocation({
       api: this.api,
       translations: options.translations,
       eventNamespace: self.namespace,
