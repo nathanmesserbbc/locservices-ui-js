@@ -275,6 +275,50 @@ function(
 
       // @todo test that this._locations is populated correctly
 
+      it('does not render preferredLocation heading when user has no preferred or recent locations', function() {
+        stubPreferredLocationIsSet.returns(false);
+        stubGetRecentLocations.returns([]);
+        userLocations.render();
+        expect(container.find('ul.ls-ui-comp-user_locations-preferred').length).toEqual(0);
+      });
+
+      it('renders preferredLocation heading when user has a preferred location', function() {
+        stubPreferredLocationIsSet.returns(true);
+        stubPreferredLocationGet.returns(testLocations[0]);
+        stubGetRecentLocations.returns([]);
+        userLocations.render();
+        expect(container.find('ul.ls-ui-comp-user_locations-preferred').length).toEqual(1);
+      });
+
+      it('renders preferredLocation heading when user has a recent location', function() {
+        stubPreferredLocationIsSet.returns(false);
+        stubGetRecentLocations.returns([testLocations[0]]);
+        userLocations.render();
+        expect(container.find('ul.ls-ui-comp-user_locations-preferred').length).toEqual(1);
+      });
+
+      it('does not render message when user has no preferred or recent locations', function() {
+        stubPreferredLocationIsSet.returns(false);
+        stubGetRecentLocations.returns([]);
+        userLocations.render();
+        expect(container.find('p.ls-ui-comp-user_locations-message').length).toEqual(0);
+      });
+
+      it('renders message when user has a preferred location', function() {
+        stubPreferredLocationIsSet.returns(true);
+        stubPreferredLocationGet.returns(testLocations[0]);
+        stubGetRecentLocations.returns([]);
+        userLocations.render();
+        expect(container.find('p.ls-ui-comp-user_locations-message').length).toEqual(1);
+      });
+
+      it('renders message when user has a recent location', function() {
+        stubPreferredLocationIsSet.returns(false);
+        stubGetRecentLocations.returns([testLocations[0]]);
+        userLocations.render();
+        expect(container.find('p.ls-ui-comp-user_locations-message').length).toEqual(1);
+      });
+
       it('renders no preferred location if not set', function() {
         stubPreferredLocationIsSet.returns(false);
         stubGetRecentLocations.returns([]);
