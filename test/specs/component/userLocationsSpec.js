@@ -58,6 +58,24 @@ function(
         expect(fn).toThrow();
       });
 
+      it('does not render is personalisation if disabled in bbccookies', function() {
+        container = $('<div/>');
+        window.bbccookies = {
+          readPolicy: function() {
+            return {
+              personalisation: false
+            };
+          }
+        };
+        userLocations = new UserLocations({
+          api: api,
+          translations: translations,
+          container: container
+        });
+        expect(container.html()).toEqual('');
+        window.bbccookies = undefined;
+      });
+
       it('calls this.selectLocationById location event when clicking on a location name', function() {
         var stub;
         stub = sinon.stub(userLocations, 'selectLocationById');
