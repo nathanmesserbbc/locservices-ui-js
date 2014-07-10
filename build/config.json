@@ -10,10 +10,11 @@
     "minjs": "dist/js/",
     "css": "src/css/",
     "test": "test/",
-    "template": "build/template"
+    "template": "build/template",
+    "dist": "dist/"
   },
   "server": {
-    "host": "localhost",
+    "host": "localhost.bbc.co.uk",
     "port": "9001"
   },
   "barlesque": {

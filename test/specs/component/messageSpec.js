@@ -60,6 +60,22 @@ define([
 
     });
 
+    describe('set', function() {
+
+      it('should return false if the message is not a string', function() {
+        var result;
+        result = message.set(false);
+        expect(result).toBe(false);
+      });
+
+      it('should return true if the message is set', function() {
+        var result;
+        result = message.set('foo');
+        expect(result).toBe(true);
+      });
+
+    });
+
     describe('events', function() {
 
       var container;
@@ -83,8 +99,15 @@ define([
 
       it('should set content on when search results are available', function() {
         message.set('');
-        $.emit('message-test:component:search:results', { search: 'Cardiff' });
-        expect(message.element.text()).toBe('Search results for: "Cardiff"');
+        $.emit('message-test:component:search:results', [[], { search: 'Cardiff', totalResults: 1 }]);
+        expect(message.element.text()).toBe('Search results for "Cardiff"');
+        expect(message.element.hasClass('ls-ui-active')).toBe(true);
+      });
+
+      it('should set content on when search results returns nothing', function() {
+        message.set('');
+        $.emit('message-test:component:search:results', [[], { search: 'Cardiff', totalResults: 0 }]);
+        expect(message.element.text()).toBe('We could not find any results for "Cardiff"');
         expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
@@ -98,6 +121,13 @@ define([
       it('should remove content on geolocation end', function() {
         message.set('');
         $.emit('message-test:component:search:end');
+        expect(message.element.text()).toBe('');
+        expect(message.element.hasClass('ls-ui-active')).toBe(false);
+      });
+
+      it('should remove content on auto complete rendering results', function() {
+        message.set('Detecting your location');
+        $.emit('message-test:component:auto_complete:render');
         expect(message.element.text()).toBe('');
         expect(message.element.hasClass('ls-ui-active')).toBe(false);
       });

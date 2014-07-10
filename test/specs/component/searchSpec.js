@@ -17,7 +17,7 @@ define([
 
     var submitSearch = function(term) {
       search.input.attr('value', term);
-      container.trigger('submit');
+      search.form.trigger('submit');
     };
 
     describe('constructor', function() {
@@ -46,7 +46,7 @@ define([
             container: null
           });
         };
-        expect(failure).toThrow();
+        expect(failure).toThrow(new Error('Search requires api parameter'));
       });
     });
 
@@ -82,6 +82,12 @@ define([
       it('should not search if the search term is empty', function() {
         mock.expects('search').never();
         submitSearch('');
+        mock.verify();
+      });
+
+      it('should not search if the search term consists of spaces', function() {
+        mock.expects('search').never();
+        submitSearch('  ');
         mock.verify();
       });
     });
@@ -145,14 +151,13 @@ define([
         stub.restore();
       });
 
-      // it('should emit an event when a search has focus', function() {
-      //   var stub = sinon.stub($, 'emit');
-      //   var eventName = 'locservices:ui:component:search:focus';
-      //
-      //   search.input.trigger('focus');
-      //   expect(stub.calledWith(eventName)).toBe(true);
-      //   stub.restore();
-      // });
+      it('should emit an event when a search has focus', function() {
+        var spy = sinon.spy($, 'emit');
+        search.input.triggerHandler('focus');
+
+        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:component:search:focus');
+        $.emit.restore();
+      });
 
     });
 

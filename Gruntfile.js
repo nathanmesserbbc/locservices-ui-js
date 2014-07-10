@@ -18,7 +18,10 @@ module.exports = function(grunt) {
     concurrent: require('./build/concurrent')(grunt),
     uglify: require('./build/uglify')(grunt),
     clean: require('./build/clean')(grunt),
-    jscs: require('./build/jscs')(grunt)
+    jscs: require('./build/jscs')(grunt),
+    copy: require('./build/copy')(grunt),
+    cssmin: require('./build/cssmin')(grunt),
+    requirejs: require('./build/require')(grunt)
   });
 
   grunt.registerTask('barlesque', 'Downloads Barlesque templates from API', require('./build/barlesque')(grunt));
@@ -27,8 +30,10 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['connect:test', 'watch']);
   grunt.registerTask('test:cli', ['karma:run']);
   grunt.registerTask('test:ci', ['karma:ci']);
-  grunt.registerTask('build', ['clean', 'concurrent', 'uglify', 'test:cli', 'template']);
-  grunt.registerTask('run', ['build', 'connect:server', 'watch']);
+  grunt.registerTask('serve', ['clean:serve', 'concurrent:template', 'connect:server', 'watch']);
+  grunt.registerTask('build', ['clean:serve', 'concurrent:lint', 'concurrent:template', 'test:cli']);
+  grunt.registerTask('dist', ['build', 'clean:dist', 'copy:js', 'copy:css', 'cssmin', 'uglify', 'requirejs']);
 
-  grunt.registerTask('default', ['run']);
+
+  grunt.registerTask('default', ['serve']);
 };

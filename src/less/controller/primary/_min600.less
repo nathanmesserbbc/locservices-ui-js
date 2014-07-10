@@ -1,47 +1,67 @@
 .ls-ui-ctrl-primary {
-  padding: 20px 10px;
 
-  .ls-ui-wrap {
-    margin: 5px 0 0 240px;
+  .ls-ui-ctrl-primary-search {
+    margin: 5px 0 0 0;
   }
 
-  .ls-ui-message {
-    margin: 0 0 0 240px;
-  }
-  .ls-ui-search-results {
-    margin: 0 0 0 240px;
-  }
-}
-
-.li-ui-ctrl-geolocation {
-  .ls-ui-wrap {
-    margin-right: 41px;
-  }
-  .locservices-ui-component-geolocation {
-    top: 25px;
-    right: 10px;
-  }
-
-  &.ls-ui-ctrl-active {
-    .ls-ui-wrap {
-      margin-right: 82px;
-    }
-
-    .locservices-ui-component-geolocation {
-      position: absolute;
-      top: 25px;
-      right: 51px;
-    }
-
-    .ls-ui-close {
-      right: 10px;
-    }
+  .ls-ui-comp-close_button {
+    top: 0;
+    right: 0;
   }
 }
 
 .ls-ui-ctrl-active {
+
+  .ls-ui-ctrl-primary-search {
+    margin-right: 41px;
+  }
 }
 
-.site-name {
-  position: absolute;
+.ls-ui-ctrl-open {
+  .ls-ui-ctrl-primary-search {
+    margin-right: 0;
+  }
+}
+
+
+.li-ui-ctrl-geolocation {
+  .ls-ui-ctrl-primary-search,
+  .li-ui-comp-search_results,
+  .ls-ui-comp-message,
+  .ls-ui-comp-auto_complete {
+    margin-right: 41px;
+  }
+
+  .ls-ui-comp-geolocation {
+    top: 0;
+    right: 0;
+  }
+
+  &.ls-ui-ctrl-active {
+    .ls-ui-ctrl-primary-search,
+    .li-ui-comp-search_results,
+    .ls-ui-comp-message,
+    .ls-ui-comp-auto_complete {
+      margin-right: 82px;
+    }
+
+    .ls-ui-comp-geolocation {
+      position: absolute;
+      top: 0;
+      right: 41px;
+    }
+  }
+
+  &.ls-ui-ctrl-open {
+    .ls-ui-ctrl-primary-search,
+    .li-ui-comp-search_results,
+    .ls-ui-comp-message,
+    .ls-ui-comp-auto_complete {
+      margin-right: 41px;
+    }
+
+    .ls-ui-comp-geolocation {
+      right: 0;
+    }
+  }
 }

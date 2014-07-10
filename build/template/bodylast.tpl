@@ -38,7 +38,7 @@
     </script>
 </div>
 <!-- BBCDOTCOM Body Last -->
- <script type="text/javascript"> document.write('<' + 'script id="orb-js-script" data-assetpath="http://static.bbci.co.uk/frameworks/barlesque/2.63.2/orb/4/" src="http://static.bbci.co.uk/frameworks/barlesque/2.63.2/orb/4/script' + (( document.cookie.indexOf('ckns_debugorbjs') > -1 )? '-debug' : '') + '/orb.js"><' + '/script>'); </script>  <script type="text/javascript"> (function() {
+ <script type="text/javascript"> document.write('<' + 'script id="orb-js-script" data-assetpath="http://static.bbci.co.uk/frameworks/barlesque/2.64.0/orb/4/" src="http://static.bbci.co.uk/frameworks/barlesque/2.64.0/orb/4/script' + (( document.cookie.indexOf('ckns_debugorbjs') > -1 )? '-debug' : '') + '/orb.js"><' + '/script>'); </script>  <script type="text/javascript"> (function() {
     'use strict';
 
     var promoManager = {

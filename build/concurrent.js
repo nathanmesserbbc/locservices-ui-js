@@ -2,6 +2,9 @@
 
 module.exports = function() {
   return {
-    start: ['jscs', 'jshint', 'css']
+    lint: ['jscs', 'jshint'],
+    template: ['css', 'template'],
+    copy: ['copy:js', 'copy:css'],
+    minify: ['cssmin', 'uglify']
   };
 };

@@ -10,11 +10,10 @@ module.exports = function() {
       files: [
         {
           expand: true,
-          cwd: '<%= config.paths.js %>',
-          src: ['**/*.js', '!app.js', '!examples/**/*'],
-          dest: '<%= config.paths.minjs %>',
-          ext: '.min.js',
-          extDot: 'first'
+          cwd: 'dist/',
+          src: ['**/*.js', '!*.min.js'],
+          dest: 'dist/',
+          ext: '.min.js'
         }
       ]
     }

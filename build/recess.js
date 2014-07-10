@@ -5,6 +5,7 @@ module.exports = function() {
     options: {
       compile: false,
       noIDs: false,
+      noUnderscores: false,
       noUniversalSelectors: false,
       strictPropertyOrder: false
     },

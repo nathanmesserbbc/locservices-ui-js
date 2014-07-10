@@ -4,6 +4,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   'use strict';
 
+  /**
+   * Message constructor
+   *
+   * @param {Object} options
+   */
   function Message(options) {
     var self = this;
     options = options || {};
@@ -29,30 +34,56 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.clear();
     });
 
-    $.on(self.eventNamespaceBase + ':component:search:results', function(metadata) {
-      self.set('Search results for: "' + metadata.search + '"');
+    $.on(self.eventNamespaceBase + ':component:search:results', function(results, metadata) {
+      if (metadata.totalResults === 0) {
+        self.set(self.translations.get('message.no_results') + '"' + metadata.search + '"');
+        return;
+      }
+      self.set(self.translations.get('message.results') + '"' + metadata.search + '"');
     });
 
     $.on(self.eventNamespaceBase + ':component:geolocation:end', function() {
+      self.clear();
+    });
+
+    $.on(this.eventNamespaceBase + ':component:auto_complete:render', function() {
       self.clear();
     });
   }
   Message.prototype = new Component();
   Message.prototype.constructor = Message;
 
+  /**
+   * Clear the message element
+   */
   Message.prototype.clear = function() {
     this.element.removeClass('ls-ui-active');
     this.element.text('');
   };
 
+  /**
+   * Set the displayed message
+   *
+   * @param {String} value
+   * @return {Boolean} was the message set
+   */
   Message.prototype.set = function(value) {
-    this.element.addClass('ls-ui-active');
-    this.element.text(value);
+    if ('string' === typeof value) {
+      this.element.addClass('ls-ui-active');
+      this.element.text(value);
+      return true;
+    }
+    return false;
   };
 
+  /**
+   * Render message element into a container
+   *
+   * @param {Object} container
+   */
   var render = function(container) {
-    container.addClass('ls-ui-message')
-             .append($('<p />'));
+    var comp = $('<div / >').addClass('ls-ui-comp-message');
+    container.append(comp.append($('<p />')));
   };
 
   return Message;
