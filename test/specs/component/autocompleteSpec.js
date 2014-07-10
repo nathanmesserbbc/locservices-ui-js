@@ -199,6 +199,22 @@ define([
         stub.restore();
       });
 
+      it('should not be called unless input value changes', function() {
+        var stub = sinon.stub(autoComplete._api, 'autoComplete');
+        inputElement.val('card');
+        
+        autoComplete.autoComplete();
+        clock.tick(autoCompleteDelay);
+        autoComplete._waitingForResults = false;
+
+        autoComplete.autoComplete();
+        clock.tick(autoCompleteDelay);
+
+        expect(stub.calledOnce).toBe(true);
+
+        stub.restore();
+      });
+
       it('emits the results on autoComplete success', function() {
         var results = { results: true };
         var metadata = { metadata: true };
