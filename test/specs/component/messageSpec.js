@@ -60,6 +60,22 @@ define([
 
     });
 
+    describe('set', function() {
+
+      it('should return false if the message is not a string', function() {
+        var result;
+        result = message.set(false);
+        expect(result).toBe(false);
+      });
+
+      it('should return true if the message is set', function() {
+        var result;
+        result = message.set('foo');
+        expect(result).toBe(true);
+      });
+
+    });
+
     describe('events', function() {
 
       var container;
