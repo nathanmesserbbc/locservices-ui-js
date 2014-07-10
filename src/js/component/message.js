@@ -4,6 +4,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   'use strict';
 
+  /**
+   * Message constructor
+   *
+   * @param {Object} options
+   */
   function Message(options) {
     var self = this;
     options = options || {};
@@ -48,16 +53,34 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   Message.prototype = new Component();
   Message.prototype.constructor = Message;
 
+  /**
+   * Clear the message element
+   */
   Message.prototype.clear = function() {
     this.element.removeClass('ls-ui-active');
     this.element.text('');
   };
 
+  /**
+   * Set the displayed message
+   *
+   * @param {String} value
+   * @return {Boolean} was the message set
+   */
   Message.prototype.set = function(value) {
-    this.element.addClass('ls-ui-active');
-    this.element.text(value);
+    if ('string' === typeof value) {
+      this.element.addClass('ls-ui-active');
+      this.element.text(value);
+      return true;
+    }
+    return false;
   };
 
+  /**
+   * Render message element into a container
+   *
+   * @param {Object} container
+   */
   var render = function(container) {
     var comp = $('<div / >').addClass('ls-ui-comp-message');
     container.append(comp.append($('<p />')));
