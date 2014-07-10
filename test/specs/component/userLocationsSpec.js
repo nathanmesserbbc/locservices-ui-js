@@ -184,13 +184,15 @@ function(
         userLocations._locations[testLocations[0].id] = testLocations[0];
       });
 
-      it('calls this.preferredLocation.set() with the expected location id', function() {
+      // ensure location is preferable
+
+      it('does not call this.preferredLocation.get() if the location is not preferrable', function() {
         var stub;
-        stub = sinon.stub(userLocations.preferredLocation, 'set');
+        stub = sinon.stub(userLocations.preferredLocation, 'get');
+        sinon.stub(userLocations.preferredLocation, 'isValidLocation').returns(false);
         sinon.stub(userLocations, 'render');
         userLocations.setPreferredLocationById(expectedLocation.id);
-        expect(stub.calledOnce).toEqual(true);
-        expect(stub.args[0][0]).toEqual(expectedLocation.id);
+        expect(stub.callCount).toEqual(0);
       });
 
       it('does not call this.preferredLocation.set() if the location is not preferrable', function() {
@@ -202,7 +204,21 @@ function(
         expect(stub.callCount).toEqual(0);
       });
 
-      // ensure that the locaiton is preferrable
+      // removes the location being preferred from the list of recents
+
+      it('removes the location being preferred from the list of recents', function() {
+        var stub;
+        stub = sinon.stub(userLocations.recentLocations, 'remove');
+        sinon.stub(userLocations.preferredLocation, 'set');
+        sinon.stub(userLocations.preferredLocation, 'isSet').returns(true);
+        sinon.stub(userLocations.preferredLocation, 'get').returns(expectedLocation);
+        sinon.stub(userLocations, 'render');
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(stub.calledOnce).toEqual(true);
+        expect(stub.args[0][0]).toEqual(expectedLocation.id);
+      });
+
+      // remove the existing preferred location and adding to recents
 
       it('adds the current preferredLocation to the recent locations list', function() {
         var stub;
@@ -216,6 +232,17 @@ function(
         expect(stub.args[0][0]).toEqual(expectedLocation);
       });
 
+      // set a new preferred location
+
+      it('calls this.preferredLocation.set() with the expected location id', function() {
+        var stub;
+        stub = sinon.stub(userLocations.preferredLocation, 'set');
+        sinon.stub(userLocations, 'render');
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(stub.calledOnce).toEqual(true);
+        expect(stub.args[0][0]).toEqual(expectedLocation.id);
+      });
+
       it('calls this.render() if location is valid', function() {
         var stub;
         userLocations.preferredLocation.set = function(id, options) {
@@ -227,13 +254,29 @@ function(
         expect(stub.calledOnce).toEqual(true);
       });
 
-      it('does not call this.render() if location is invalid', function() {
+      // setting preferred errors
+
+      it('does not call this.render() if setting preferred fails', function() {
         var stub;
-        sinon.stub(userLocations.preferredLocation, 'set');
-        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
         stub = sinon.stub(userLocations, 'render');
-        userLocations.setPreferredLocationById('foo');
+        sinon.stub(userLocations.preferredLocation, 'set', function(id, options) {
+          options.error();
+        });
+        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
+        userLocations.setPreferredLocationById(expectedLocation.id);
         expect(stub.callCount).toEqual(0);
+      });
+
+      it('emits an error if setting preferred fails', function() {
+        var stub;
+        stub = sinon.stub(userLocations, 'emit');
+        sinon.stub(userLocations.preferredLocation, 'set', function(id, options) {
+          options.error();
+        });
+        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(stub.args[0][0]).toEqual('error');
+        expect(stub.args[0][1][0].code).toEqual('user_locations.error.preferred_location');
       });
 
     });
@@ -447,21 +490,22 @@ function(
         expect(userLocations.getRecentLocations()).toEqual([]);
       });
 
-      it('returns at most 4 recent locations if a preferred location is set', function() {
+      it('returns at most 3 recent locations if recents contains the preferred location', function() {
         var locations;
         stubPreferredLocationIsSet.returns(true);
+        stubPreferredLocationGet.returns(testLocations[0]);
+        stubRecentLocationsIsSupported.returns(true);
+        stubRecentLocationsAll.returns(testLocations);
+        locations = userLocations.getRecentLocations();
+        expect(locations.length).toEqual(3);
+      });
+
+      it('returns at most 4 recent locations if no preferred location is set', function() {
+        var locations;
         stubRecentLocationsIsSupported.returns(true);
         stubRecentLocationsAll.returns(testLocations);
         locations = userLocations.getRecentLocations();
         expect(locations.length).toEqual(4);
-      });
-
-      it('returns at most 5 recent locations if no preferred location is set', function() {
-        var locations;
-        stubRecentLocationsIsSupported.returns(true);
-        stubRecentLocationsAll.returns(testLocations);
-        locations = userLocations.getRecentLocations();
-        expect(locations.length).toEqual(5);
       });
 
       it('sets a recent locations isPreferable via this.preferredLocation.isValidLocation', function() {
@@ -487,11 +531,10 @@ function(
         stubRecentLocationsIsSupported.returns(true);
         stubRecentLocationsAll.returns(testLocations);
         locations = userLocations.getRecentLocations();
-        expect(locations.length).toEqual(4);
+        expect(locations.length).toEqual(3);
         expect(locations[0]).toEqual(testLocations[0]);
         expect(locations[1]).toEqual(testLocations[1]);
         expect(locations[2]).toEqual(testLocations[3]);
-        expect(locations[3]).toEqual(testLocations[4]);
       });
 
     });
