@@ -3,12 +3,14 @@
 define([
   'jquery',
   'locservices/ui/component/component',
+  'locservices/core/bbc_cookies',
   'locservices/core/recent_locations',
   'locservices/core/preferred_location'
 ],
 function(
   $,
   Component,
+  BBCCookies,
   RecentLocations,
   PreferredLocation
 ) {
@@ -98,6 +100,8 @@ function(
   function UserLocations(options) {
     var self = this;
     var api;
+    var bbcCookies;
+
     options = options || {};
     options.componentId = 'user_locations';
 
@@ -108,6 +112,11 @@ function(
     }
 
     this.setComponentOptions(options);
+
+    bbcCookies = new BBCCookies();
+    if (bbcCookies.isPersonalisationDisabled()) {
+      return;
+    }
 
     this._locations = [];
 

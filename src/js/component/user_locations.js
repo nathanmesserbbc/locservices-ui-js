@@ -3,12 +3,14 @@
 define([
   'jquery',
   'locservices/ui/component/component',
+  'locservices/core/bbc_cookies',
   'locservices/core/recent_locations',
   'locservices/core/preferred_location'
 ],
 function(
   $,
   Component,
+  BBCCookies,
   RecentLocations,
   PreferredLocation
 ) {
@@ -98,6 +100,8 @@ function(
   function UserLocations(options) {
     var self = this;
     var api;
+    var bbcCookies;
+
     options = options || {};
     options.componentId = 'user_locations';
 
@@ -108,6 +112,11 @@ function(
     }
 
     this.setComponentOptions(options);
+
+    bbcCookies = new BBCCookies();
+    if (bbcCookies.isPersonalisationDisabled()) {
+      return;
+    }
 
     this._locations = [];
 
@@ -126,8 +135,8 @@ function(
       e.stopPropagation();
       target = $(e.target);
 
-      // convert back to a string as strings that look like a 
-      // number eg 1243 get converted to type number
+      // convert data-id back to a string as strings that
+      // look like a number eg "1243" get converted to type number
       locationId = String(target.data('id'));
 
       action = target.data('action');
@@ -171,7 +180,7 @@ function(
     var location;
     location = this._locations[locationId];
     if (location) {
-      $.emit(this.eventNamespace + ':location', [location]);
+      this.emit('location', [location]);
     }
   };
 
@@ -188,6 +197,8 @@ function(
     location = this._locations[locationId];
     if (location && this.preferredLocation.isValidLocation(location)) {
 
+      this.recentLocations.remove(locationId);
+
       if (this.preferredLocation.isSet()) {
         preferredLocation = this.preferredLocation.get();
 
@@ -195,14 +206,15 @@ function(
         this.recentLocations.add(preferredLocation);
       }
 
-      // @todo test success and error
-
       this.preferredLocation.set(location.id, {
         success: function() {
           self.render();
         },
         error: function() {
-          // @todo emit error event
+          self.emit('error', [{
+            code: 'user_locations.error.preferred_location',
+            message: 'There was an error setting preferred location to ' + location.id
+          }]);
         }
       });
 
@@ -312,7 +324,6 @@ function(
    */
   UserLocations.prototype.getRecentLocations = function() {
     var locations = [];
-    var noOfLocationsRemaining = 5;
     var preferredLocation;
     var recentLocations;
     var noOfRecentLocations;
@@ -320,7 +331,6 @@ function(
     var recentLocationIndex;
 
     if (this.preferredLocation.isSet()) {
-      noOfLocationsRemaining--;
       preferredLocation = this.preferredLocation.get();
     }
 
@@ -328,20 +338,18 @@ function(
       recentLocations = this.recentLocations.all();
       noOfRecentLocations = recentLocations.length;
       if (0 < noOfRecentLocations) {
+        if (4 < noOfRecentLocations) {
+          recentLocations = recentLocations.slice(0, 4);
+          noOfRecentLocations = 4;
+        }
         for (recentLocationIndex = 0; recentLocationIndex < noOfRecentLocations; recentLocationIndex++) {
           recentLocation = recentLocations[recentLocationIndex];
-          if (0 < noOfLocationsRemaining &&
-            (
-              !preferredLocation ||
-              (preferredLocation.id !== recentLocation.id)
-            )
+          if (
+            !preferredLocation ||
+            (preferredLocation.id !== recentLocation.id)
           ) {
-            noOfLocationsRemaining--;
             recentLocation.isPreferable = this.preferredLocation.isValidLocation(recentLocation);
             locations.push(recentLocation);
-          }
-          if (0 === noOfLocationsRemaining) {
-            break;
           }
         }
       }

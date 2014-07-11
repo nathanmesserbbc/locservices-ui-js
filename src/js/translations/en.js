@@ -10,6 +10,7 @@ define(function() {
     'user_locations.action.remove': 'Remove',
     'user_locations.message.preferred': 'We\'ll use your main location to give you relevant local info across the BBC.',
     'user_locations.message.change_preferred': 'You can change this to another location by hitting the star next to it.',
+    'user_locations.error.preferred_location': 'Sorry, we are experiencing technical problems.',
     'close_button.label': 'Close',
     'search.placeholder': 'Enter a town, city or UK postcode',
     'search.submit': 'Search',
