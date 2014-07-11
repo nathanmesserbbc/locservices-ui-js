@@ -288,6 +288,10 @@ function(
 
       this.recentLocations.remove(locationId);
 
+      // @todo test this ?
+      this.element.find('.ls-ui-comp-user_locations-location-preferred').removeClass('ls-ui-comp-user_locations-location-preferred');
+      this.element.find('a[data-id="' +locationId + '"]').parent().addClass('ls-ui-comp-user_locations-location-preferred');
+
       if (this.preferredLocation.isSet()) {
         preferredLocation = this.preferredLocation.get();
 
