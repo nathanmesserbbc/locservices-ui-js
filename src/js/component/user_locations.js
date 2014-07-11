@@ -96,19 +96,19 @@ function(
         .text(value);
     },
 
-    confirmDialogue: function(translations, message) {
+    dialog: function(translations, messageText) {
       var div = $('<div/>')
         .addClass('ls-ui-comp-user_locations-dialog');
-      var message = $('<p/>').text(message);
+      var message = $('<p/>').text(messageText);
       var confirm = $('<button/>')
         .addClass('ls-ui-comp-user_locations-dialog-confirm')
         .text(
-          translations.get('user_locations.confirm')
+          translations.get('user_locations.dialog.confirm')
         );
       var cancel = $('<button/>')
         .addClass('ls-ui-comp-user_locations-dialog-cancel')
         .text(
-          translations.get('user_locations.cancel')
+          translations.get('user_locations.dialog.cancel')
         );
       div.append(message).append(confirm).append(cancel);
       return div;
@@ -154,7 +154,9 @@ function(
       var target;
       var locationId;
       var action;
-      var li;
+      var messageKey;
+      var location;
+
       e.preventDefault();
       e.stopPropagation();
       target = $(e.target);
@@ -163,14 +165,37 @@ function(
       // look like a number eg "1243" get converted to type number
       locationId = String(target.data('id'));
 
+      location = self._locations[locationId];
+      // @todo test this
+      if (!location) {
+        return;
+      }
+
       action = target.data('action');
       if ('location' === action) {
         self.selectLocationById(locationId);
       } else if ('prefer' === action) {
-        self.setPreferredLocationById(locationId);
+        self.displayDialog(
+          target.parent('li'),
+          self.translations.get('user_locations.dialog.prefer'),
+          function() {
+            self.setPreferredLocationById(locationId);
+          }
+        );
       } else if ('remove' === action) {
-        self.displayConfirmDialogue(target.parent('li'));
-        // self.removeLocationById(locationId);
+
+        // @todo test this?
+        messageKey = location.isPreferred ?
+          'user_locations.dialog.remove_preferred' :
+          'user_locations.dialog.remove';
+
+        self.displayDialog(
+          target.parent('li'),
+          self.translations.get(messageKey),
+          function() {
+            self.removeLocationById(locationId);
+          }
+        );
       }
     });
 
@@ -197,33 +222,38 @@ function(
   UserLocations.prototype.constructor = UserLocations;
 
   /**
-   * Display a confirm dialogue
+   * Display a confrm/cancel dialogue
    *
    * @param {Element} element
+   * @param {String} message
+   * @param {Function} confirmCallback
    */
-  UserLocations.prototype.displayConfirmDialogue = function(element) {
-    var self = this;
-    var ul;
+  UserLocations.prototype.displayDialog = function(element, message, confirmCallback) {
+
+    var resetElement = function() {
+      element.find('.ls-ui-comp-user_locations-dialog').remove();
+      element.removeClass('ls-ui-comp-user_locations-location-with-dialog');
+    };
+
     element.addClass('ls-ui-comp-user_locations-location-with-dialog');
     element.append(
-      templates.confirmDialogue(
+      templates.dialog(
         this.translations,
-        'We will no longer use <location name> to give you relevant local info across the BBC.'
+        message
       )
     );
     element
+      .find('button.ls-ui-comp-user_locations-dialog-confirm')
+      .on('click', function() {
+        resetElement();
+        if ('function' === typeof confirmCallback) {
+          confirmCallback();
+        }
+      });
+    element
       .find('button.ls-ui-comp-user_locations-dialog-cancel')
       .on('click', function() {
-        element.find('.ls-ui-comp-user_locations-dialog').remove();
-        element.removeClass('ls-ui-comp-user_locations-location-with-dialog');
-        
-        // hack to work around chrome bug
-        /*
-        ul = element.parent().detach();
-        self.element
-          .find('.ls-ui-comp-user_locations-recent-heading')
-          .after(ul);
-        */
+        resetElement();
       });
   };
 
