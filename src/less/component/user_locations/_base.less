@@ -71,10 +71,17 @@
 /* dialog */
 
 .ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-with-dialog {
-  padding: 14px 14px 14px 14px;
+  padding: 0;
 }
 .ls-ui-comp-user_locations-location-with-dialog a {
   display: none;
+}
+.ls-ui-comp-user_locations-dialog {
+  padding: 14px 14px 14px 14px;
+  background: @ls-ui-input-background;
+}
+.ls-ui-comp-user_locations-dialog p {
+  padding: 0 0 7px 0;
 }
 .ls-ui-comp-user_locations-dialog button {
   background: @bg-color;
@@ -83,6 +90,10 @@
   padding: 10px 17px;
   border: none;
   cursor: pointer;
+  width: 47%;
+}
+.ls-ui-comp-user_locations-dialog .ls-ui-comp-user_locations-dialog-confirm {
+  margin-right: 10px;
 }
 .ls-ui-comp-user_locations-dialog p {
   margin-bottom: 7px;
