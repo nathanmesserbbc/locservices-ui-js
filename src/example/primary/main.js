@@ -24,7 +24,7 @@ require([
     api: {
       env: 'int',
       protocol: 'http',
-      'place-types': ['road', 'settlements', 'airport']
+      'place-types': ['road', 'settlement', 'airport']
     },
     namespace: namespace,
     container: element,
