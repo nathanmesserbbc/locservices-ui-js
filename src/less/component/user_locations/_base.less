@@ -15,7 +15,6 @@
   }
 
   li {
-      padding: 7px 5px;
       margin: 0;
       list-style-type: none;
       border-bottom: 1px solid @ls-ui-input-background;
@@ -30,25 +29,20 @@
   margin-bottom: 16px;
 }
 
-.ls-ui-comp-user_locations-name {
-    display: inline-block;
-    padding: 7px 10px;
-    font-size: @font15;
-    color: @font-color;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-}
 .ls-ui-comp-user_locations li {
-    padding-left: 25px;
+    position: relative;
+    padding: 14px 29px 14px 43px;
 }
-.ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-preferable {
+.ls-ui-comp-user_locations-location-with-dialog a {
+  display: none;
+}
+/*.ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-preferable {
     padding-left: 0;
-}
+}*/
 .ls-ui-comp-user_locations-action {
-    float: left;
+    position: absolute;
+    left: 7px;
+    top: 11px;
     width: 25px;
     height: 25px;
     padding: 0;
@@ -58,8 +52,20 @@
 .ls-ui-comp-user_locations-location-preferred .ls-ui-comp-user_locations-action {
     background: url("@{asset-path}/user_locations/star_filled_sm.png") no-repeat;
 }
+.ls-ui-comp-user_locations-name {
+    font-size: @font15;
+    color: @font-color;
+    text-decoration: none;
+    line-height: 1.4;
+
+    &:hover {
+      text-decoration: underline;
+    }
+}
 .ls-ui-comp-user_locations-remove {
-    float: right;
+    position: absolute;
+    right: 5px;
+    top: 11px;
     width: 24px;
     height: 24px;
     padding: 0;

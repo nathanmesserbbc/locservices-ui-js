@@ -36,6 +36,7 @@ function(
 
     recentLocationsHeading: function(translations, noOfLocations) {
       return $('<p />')
+        .addClass('ls-ui-comp-user_locations-recent-heading')
         .text(
           translations.get('user_locations.heading.recent') + ' (' + noOfLocations + ')'
         );
@@ -69,6 +70,10 @@ function(
         .text(translations.get('user_locations.action.remove'));
 
       var li = $('<li />');
+
+      // @todo test this class is added
+      li.addClass('ls-ui-comp-user_locations-location');
+
       if (location.isPreferred) {
         li.addClass('ls-ui-comp-user_locations-location-preferred');
       }
@@ -89,6 +94,24 @@ function(
       return $('<p/>')
         .addClass('ls-ui-comp-user_locations-message')
         .text(value);
+    },
+
+    confirmDialogue: function(translations, message) {
+      var div = $('<div/>')
+        .addClass('ls-ui-comp-user_locations-dialog');
+      var message = $('<p/>').text(message);
+      var confirm = $('<button/>')
+        .addClass('ls-ui-comp-user_locations-dialog-confirm')
+        .text(
+          translations.get('user_locations.confirm')
+        );
+      var cancel = $('<button/>')
+        .addClass('ls-ui-comp-user_locations-dialog-cancel')
+        .text(
+          translations.get('user_locations.cancel')
+        );
+      div.append(message).append(confirm).append(cancel);
+      return div;
     }
   };
 
@@ -131,6 +154,7 @@ function(
       var target;
       var locationId;
       var action;
+      var li;
       e.preventDefault();
       e.stopPropagation();
       target = $(e.target);
@@ -145,7 +169,8 @@ function(
       } else if ('prefer' === action) {
         self.setPreferredLocationById(locationId);
       } else if ('remove' === action) {
-        self.removeLocationById(locationId);
+        self.displayConfirmDialogue(target.parent('li'));
+        // self.removeLocationById(locationId);
       }
     });
 
@@ -170,6 +195,37 @@ function(
 
   UserLocations.prototype = new Component();
   UserLocations.prototype.constructor = UserLocations;
+
+  /**
+   * Display a confirm dialogue
+   *
+   * @param {Element} element
+   */
+  UserLocations.prototype.displayConfirmDialogue = function(element) {
+    var self = this;
+    var ul;
+    element.addClass('ls-ui-comp-user_locations-location-with-dialog');
+    element.append(
+      templates.confirmDialogue(
+        this.translations,
+        'We will no longer use <location name> to give you relevant local info across the BBC.'
+      )
+    );
+    element
+      .find('button.ls-ui-comp-user_locations-dialog-cancel')
+      .on('click', function() {
+        element.find('.ls-ui-comp-user_locations-dialog').remove();
+        element.removeClass('ls-ui-comp-user_locations-location-with-dialog');
+        
+        // hack to work around chrome bug
+        /*
+        ul = element.parent().detach();
+        self.element
+          .find('.ls-ui-comp-user_locations-recent-heading')
+          .after(ul);
+        */
+      });
+  };
 
   /**
    * Select a location by it's id

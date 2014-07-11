@@ -90,6 +90,22 @@ function(
         expect(stub.calledWith(testLocations[0].id)).toBe(true);
       });
 
+      // clicking remove
+
+      it('calls this.displayConfirmDialogue with expected element when clicking on remove', function() {
+        var stub;
+        stub = sinon.stub(userLocations, 'displayConfirmDialogue');
+
+        userLocations.element.append(
+          '<li><a class="ls-ui-comp-user_locations-action-remove" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="remove">Location</a></li>'
+        );
+        userLocations.element.find('.ls-ui-comp-user_locations-action-remove').trigger('click');
+
+        expect(stub.callCount).toBe(1);
+        expect(stub.args[0][0]).toBe(userLocations.element.find('li'));
+      });
+
+      /*
       it('calls this.removeLocationById with expected ID when clicking on remove', function() {
         var stub;
         stub = sinon.stub(userLocations, 'removeLocationById');
@@ -102,6 +118,7 @@ function(
         expect(stub.callCount).toBe(1);
         expect(stub.calledWith(testLocations[0].id)).toBe(true);
       });
+      */
 
       it('calls this.setPreferredLocationById with expected ID when clicking on prefer', function() {
         var stub;
