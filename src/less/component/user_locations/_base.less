@@ -33,12 +33,6 @@
     position: relative;
     padding: 14px 29px 14px 43px;
 }
-.ls-ui-comp-user_locations-location-with-dialog a {
-  display: none;
-}
-/*.ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-preferable {
-    padding-left: 0;
-}*/
 .ls-ui-comp-user_locations-action {
     position: absolute;
     left: 7px;
@@ -72,4 +66,24 @@
     margin-top: 2px;
     text-indent: -10000px;
     background: url("@{asset-path}/user_locations/close_cross_sm.png") no-repeat;
+}
+
+/* dialog */
+
+.ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-with-dialog {
+  padding: 14px 14px 14px 14px;
+}
+.ls-ui-comp-user_locations-location-with-dialog a {
+  display: none;
+}
+.ls-ui-comp-user_locations-dialog button {
+  background: @bg-color;
+  color: @text-light-colour;
+  font-size: 1.3em;
+  padding: 10px 17px;
+  border: none;
+  cursor: pointer;
+}
+.ls-ui-comp-user_locations-dialog p {
+  margin-bottom: 7px;
 }

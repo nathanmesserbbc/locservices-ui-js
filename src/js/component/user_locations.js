@@ -171,6 +171,9 @@ function(
         return;
       }
 
+      // @todo
+      // deal with prefer and remove location name interpolation
+
       action = target.data('action');
       if ('location' === action) {
         self.selectLocationById(locationId);
@@ -184,7 +187,7 @@ function(
         );
       } else if ('remove' === action) {
 
-        // @todo test this?
+        // @todo test this
         messageKey = location.isPreferred ?
           'user_locations.dialog.remove_preferred' :
           'user_locations.dialog.remove';
