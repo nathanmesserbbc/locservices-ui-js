@@ -1,66 +1,58 @@
 /*global define */
-
-define(['jquery', 'echo'], function($, Echo) {
+define(['jquery'], function($) {
 
   'use strict';
 
-  function Stats() {
+  /**
+   * Stats.
+   *
+   * @param {EchoClient} echoClient a configured instance of an echo client
+   * @constructor
+   */
+  function Stats(echoClient) {
+
+    // require an echo client
+    if (!echoClient || typeof echoClient !== 'object') {
+      throw new Error('The stats module requires an instance of an EchoClient');
+    }
 
     this.appName = 'locservices_ui';
-    this.actionName = 'locservicesui';
+    this._actionName = 'locservicesui';
 
-    /*
-     * @todo Should we allow a configured echo client to be passed in?
-     */
+    this._echo = echoClient;
+    this._ns = 'locservices:ui';
 
-    var echoConfig = {};
-    echoConfig[Echo.ConfigKeys.COMSCORE.URL] = 'http://data.bbc.co.uk/v1/analytics-echo-chamber-inbound/comscore';
-
-    // configure ?
-    Echo.Debug.enable();
-
-    this.echoClient = new Echo.EchoClient(
-      this.appName,
-      Echo.Enums.ApplicationType.WEB,
-      echoConfig
-    );
-
-    // do we need this ?
-    //echo.optOutOfCookies();
-
-    this.registerEventNamespace('locservices:ui');
+    this._bindUIEvents();
   }
+
+  /**
+   * Bind event handlers to all the ui component events
+   */
+  Stats.prototype._bindUIEvents = function() {
+
+    var self = this;
+
+    $.on(this._ns + ':component:geolocation:location', function(location) {
+      self.logActionEvent('location', {
+        locationId: location.id
+      });
+    });
+
+  };
 
   /**
    * Log an event via the echo client
    *
    * @param {String} actionType The event action type
-   * @param {String} labels     The event labels
+   * @param {Object} labels     The event labels
    */
   Stats.prototype.logActionEvent = function(actionType, labels) {
 
-    this.echoClient.userActionEvent(
+    this._echo.userActionEvent(
       actionType,
-      this.actionName,
-      labels
+      this._actionName,
+      labels || {}
     );
-
-  };
-
-  /**
-   * Register an event namespace
-   *
-   * @param {String} eventNamespace The namespace to register
-   */
-  Stats.prototype.registerEventNamespace = function(eventNamespace) {
-
-    //var self = this;
-
-    $.on(eventNamespace + ':component:geolocation:location', function(location) {
-      console.log('GEOLOCAITON', location);
-      //self.logActionEvent('geo_location', {
-      //});
-    });
 
   };
 
