@@ -4,57 +4,69 @@ define(['jquery'], function($) {
   'use strict';
 
   /**
+   * Log an action event.
+   *
+   * @see http://bbc-data.github.io/data-client-js/versions/v2.0.0/EchoClient-EchoClient.html
+   * for info on its interface
+   *
+   * @param {EchoClient} echoClient a configured instance of the Echo Client
+   * @param {String} actionType the action type
+   * @param {Object} labels additional labels passed for stats
+   */
+  function logActionEvent(echoClient, actionType, labels) {
+    echoClient.userActionEvent(actionType, 'locservicesui', labels || {});
+  }
+
+  /**
    * Stats.
    *
    * @param {EchoClient} echoClient a configured instance of an echo client
+   * @param {Object} options additional options
    * @constructor
    */
-  function Stats(echoClient) {
+  function Stats(echoClient, options) {
+
+    options = options || {};
+    options.namespace = options.namespace || 'locservices:ui';
 
     // require an echo client
     if (!echoClient || typeof echoClient !== 'object') {
       throw new Error('The stats module requires an instance of an EchoClient');
     }
 
-    this.appName = 'locservices_ui';
-    this._actionName = 'locservicesui';
+    this._echoClient = echoClient;
+    this._registeredNamespaces = {};
 
-    this._echo = echoClient;
-    this._ns = 'locservices:ui';
-
-    this._bindUIEvents();
+    this.registerNamespace(options.namespace);
   }
 
   /**
-   * Bind event handlers to all the ui component events
+   * Register a namespace. By registering a namespace, event listeners for all
+   * UI events will be registered using it.
+   *
+   * @param {String} ns
+   * @returns {Boolean} whether the namespace has been registered
    */
-  Stats.prototype._bindUIEvents = function() {
+  Stats.prototype.registerNamespace = function(ns) {
 
-    var self = this;
+    var echoClient = this._echoClient;
 
-    $.on(this._ns + ':component:geolocation:location', function(location) {
-      self.logActionEvent('location', {
+    // prevent duplicating event binding
+    if (this._registeredNamespaces[ns] === true) {
+      return false;
+    }
+
+    $.on(ns + ':component:geolocation:location', function(location) {
+      logActionEvent(echoClient, 'geolocation_location', {
         locationId: location.id
       });
     });
 
-  };
+    this._registeredNamespaces[ns] = true;
 
-  /**
-   * Log an event via the echo client
-   *
-   * @param {String} actionType The event action type
-   * @param {Object} labels     The event labels
-   */
-  Stats.prototype.logActionEvent = function(actionType, labels) {
-
-    this._echo.userActionEvent(
-      actionType,
-      this._actionName,
-      labels || {}
-    );
-
+    return true;
   };
 
   return Stats;
+
 });
