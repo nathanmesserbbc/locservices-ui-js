@@ -5,14 +5,16 @@ define([
   'locservices/ui/component/component',
   'locservices/core/bbc_cookies',
   'locservices/core/recent_locations',
-  'locservices/core/preferred_location'
+  'locservices/core/preferred_location',
+  'locservices/core/filter'
 ],
 function(
   $,
   Component,
   BBCCookies,
   RecentLocations,
-  PreferredLocation
+  PreferredLocation,
+  filter
 ) {
 
   'use strict';
@@ -179,8 +181,9 @@ function(
    */
   function UserLocations(options) {
     var self = this;
-    var api;
-    var bbcCookies;
+    var api,
+        bbcCookies,
+        defaultQueryParams;
 
     options = options || {};
     options.componentId = 'user_locations';
@@ -199,6 +202,13 @@ function(
     }
 
     this._locations = [];
+
+    defaultQueryParams =  api.getDefaultQueryParameters();
+    this._filter = {
+      filter: defaultQueryParams['filter'],
+      country: defaultQueryParams['countries'],
+      placeType: defaultQueryParams['place-types']
+    };
 
     this.preferredLocation = new PreferredLocation(api);
     this.recentLocations = new RecentLocations();
@@ -483,7 +493,11 @@ function(
     }
 
     if (this.recentLocations.isSupported()) {
-      recentLocations = this.recentLocations.all();
+      recentLocations = filter(this.recentLocations.all(), {
+        filter: this._filter.filter,
+        placeType: this._filter.placeType,
+        country: this._filter.country
+      });
       noOfRecentLocations = recentLocations.length;
       if (0 < noOfRecentLocations) {
         if (4 < noOfRecentLocations) {

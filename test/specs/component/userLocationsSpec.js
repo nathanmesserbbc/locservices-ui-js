@@ -32,7 +32,11 @@ function(
 
     beforeEach(function() {
       container = $('<div/>');
-      api = {};
+      api = {
+        getDefaultQueryParameters: function() {
+          return {};
+        }
+      };
       translations = new En();
       userLocations = new UserLocations({
         api: api,
@@ -424,7 +428,7 @@ function(
         sinon.stub(userLocations, 'render');
 
         expectedLocation.isPreferred = true;
-        
+
         userLocations.removeLocationById(expectedLocation.id);
         expect(stub.calledOnce).toEqual(true);
       });
@@ -663,8 +667,38 @@ function(
         expect(locations[2]).toEqual(testLocations[3]);
       });
 
-    });
+      describe('filtered', function() {
 
-  });
+        beforeEach(function() {
+          api = {
+            getDefaultQueryParameters: function() {
+              return {
+                filter: 'international',
+                countries: 'US'
+              };
+            }
+          };
+          userLocations = new UserLocations({
+            api: api,
+            translations: translations,
+            container: container
+          });
+          stubRecentLocationsIsSupported = sinon.stub(userLocations.recentLocations, 'isSupported');
+          stubRecentLocationsAll = sinon.stub(userLocations.recentLocations, 'all');
+        });
+
+        it('returns locations filtered by api configuration', function() {
+          var locations;
+          stubRecentLocationsIsSupported.returns(true);
+          stubRecentLocationsAll.returns(testLocations);
+          locations = userLocations.getRecentLocations();
+          expect(locations.length).toEqual(0);
+        });
+
+      }); // filtered
+
+    }); // getRecentLocations()
+
+  }); // module
 
 });
