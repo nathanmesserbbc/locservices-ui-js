@@ -541,6 +541,7 @@ function(
         expect(locations[2]).toEqual(testLocations[3]);
       });
 
+<<<<<<< HEAD
     });
 
     describe('getRecentLocations() filtered', function() {
@@ -569,16 +570,40 @@ function(
         stubRecentLocationsIsSupported = sinon.stub(userLocations.recentLocations, 'isSupported');
         stubRecentLocationsAll = sinon.stub(userLocations.recentLocations, 'all');
       });
+=======
+      describe('filtered', function() {
 
-      it('returns locations filtered by api configuration', function() {
-        var locations;
-        stubRecentLocationsIsSupported.returns(true);
-        stubRecentLocationsAll.returns(testLocations);
-        locations = userLocations.getRecentLocations();
-        expect(locations.length).toEqual(0);
-      });
-    });
+        beforeEach(function() {
+          api = {
+            getDefaultQueryParameters: function() {
+              return {
+                filter: 'international',
+                countries: 'US'
+              };
+            }
+          };
+          userLocations = new UserLocations({
+            api: api,
+            translations: translations,
+            container: container
+          });
+          stubRecentLocationsIsSupported = sinon.stub(userLocations.recentLocations, 'isSupported');
+          stubRecentLocationsAll = sinon.stub(userLocations.recentLocations, 'all');
+        });
 
-  });
+        it('returns locations filtered by api configuration', function() {
+          var locations;
+          stubRecentLocationsIsSupported.returns(true);
+          stubRecentLocationsAll.returns(testLocations);
+          locations = userLocations.getRecentLocations();
+          expect(locations.length).toEqual(0);
+        });
+>>>>>>> 92e1d12f9ab1f98f10550ded42419336e66b2698
+
+      }); // filtered
+
+    }); // getRecentLocations()
+
+  }); // module
 
 });
