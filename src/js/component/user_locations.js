@@ -101,8 +101,9 @@ function(
    */
   function UserLocations(options) {
     var self = this;
-    var api;
-    var bbcCookies;
+    var api,
+        bbcCookies,
+        defaultQueryParams;
 
     options = options || {};
     options.componentId = 'user_locations';
@@ -121,10 +122,12 @@ function(
     }
 
     this._locations = [];
+
+    defaultQueryParams =  api.getDefaultQueryParameters();
     this._filter = {
-      filter: api.getDefaultQueryParameters()['filter'],
-      country: api.getDefaultQueryParameters()['countries'],
-      placeType: api.getDefaultQueryParameters()['place-types']
+      filter: defaultQueryParams['filter'],
+      country: defaultQueryParams['countries'],
+      placeType: defaultQueryParams['place-types']
     };
 
     this.preferredLocation = new PreferredLocation(api);
