@@ -99,14 +99,14 @@ define([
 
       it('should set content on when search results are available', function() {
         message.set('');
-        $.emit('message-test:component:search_results:results', [{ search: 'Cardiff', offset: 0, totalResults: 1 }]);
+        $.emit('message-test:component:search_results:results', [{ searchTerm: 'Cardiff', offset: 0, totalResults: 1 }]);
         expect(message.element.text()).toBe('Showing 1 of 1');
         expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
       it('should set content on when search results returns nothing', function() {
         message.set('');
-        $.emit('message-test:component:search_results:results', [{ search: 'Cardiff', totalResults: 0 }]);
+        $.emit('message-test:component:search_results:results', [{ searchTerm: 'Cardiff', totalResults: 0 }]);
         expect(message.element.text()).toBe('We could not find any results for "Cardiff"');
         expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
