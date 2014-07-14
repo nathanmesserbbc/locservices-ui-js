@@ -3,8 +3,8 @@
   p {
       padding: 8px;
       margin: 0;
-      line-height: 1.3;
       font-size: @font14;
+      line-height: @font13;
       color: @font-color;
   }
 
@@ -41,12 +41,16 @@
       text-decoration: underline;
     }
 }
-.ls-ui-comp-user_locations li {
+
+.ls-ui-comp-user_locations {
+  li {
     padding-left: 25px;
-}
-.ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-preferable {
+  }
+  .ls-ui-comp-user_locations-location-preferable {
     padding-left: 0;
+  }
 }
+
 .ls-ui-comp-user_locations-action {
     float: left;
     width: 25px;
@@ -55,9 +59,11 @@
     text-indent: -10000px;
     background: url("@{asset-path}/user_locations/star_empty_sm.png") no-repeat;
 }
+
 .ls-ui-comp-user_locations-location-preferred .ls-ui-comp-user_locations-action {
     background: url("@{asset-path}/user_locations/star_filled_sm.png") no-repeat;
 }
+
 .ls-ui-comp-user_locations-remove {
     float: right;
     width: 24px;

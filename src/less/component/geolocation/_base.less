@@ -1,13 +1,13 @@
 .ls-ui-comp-geolocation {
   position: relative;
-  background: @bg-color;
-  text-align: left;
-  border: 0 none;
-  padding: 0;
   display: block;
   width: 100%;
-  font-size: 1em;
+  padding: 0;
+  font-size: @font10;
   cursor: pointer;
+  background: @bg-color;
+  border: 0 none;
+  -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
@@ -17,19 +17,19 @@
     top: 0;
     right: 0;
     display: block;
-    width: 36px;
-    height: 36px;
+    width: @button-height;
+    height: @button-height;
     background: url("@{asset-path}/geolocation/geolocation.png") no-repeat center center;
   }
 
   .ls-ui-comp-geolocation-label {
     display: block;
-    margin: 0 36px 0 0;
-    height: 36px;
+    height: @button-height;
+    padding: 0 10px 0 0;
+    margin: 0 @button-height 0 0;
+    font-size: @font13;
+    line-height: @button-height;
     color: @text-light-colour;
-    font-size: 1.3em;
-    line-height: 2.7em;
-    padding-left: 10px;
   }
 }
 
