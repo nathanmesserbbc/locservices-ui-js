@@ -162,7 +162,6 @@ function(
       var target;
       var locationId;
       var action;
-      var messageKey;
       var location;
 
       e.preventDefault();
@@ -196,17 +195,20 @@ function(
       } else if ('remove' === action) {
 
         // @todo test this
-        messageKey = location.isPreferred ?
-          'user_locations.dialog.remove_preferred' :
-          'user_locations.dialog.remove';
+        if (location.isPreferred) {
 
-        self.displayDialog(
-          target.parent('li'),
-          self.translations.get(messageKey),
-          function() {
-            self.removeLocationById(locationId);
-          }
-        );
+          self.displayDialog(
+            target.parent('li'),
+            self.translations.get('user_locations.dialog.remove_preferred'),
+            function() {
+              self.removeLocationById(locationId);
+            }
+          );
+
+        } else {
+          self.removeLocationById(locationId);
+        }
+
       }
     });
 
@@ -298,7 +300,7 @@ function(
 
       // @todo test this ?
       this.element.find('.ls-ui-comp-user_locations-location-preferred').removeClass('ls-ui-comp-user_locations-location-preferred');
-      this.element.find('a[data-id="' +locationId + '"]').parent().addClass('ls-ui-comp-user_locations-location-preferred');
+      this.element.find('a[data-id="' + locationId + '"]').parent().addClass('ls-ui-comp-user_locations-location-preferred');
 
       if (this.preferredLocation.isSet()) {
         preferredLocation = this.preferredLocation.get();

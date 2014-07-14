@@ -96,16 +96,33 @@ function(
       describe('clicking remove()', function() {
 
         var locationElement;
+        var removeLocation;
         var removeElement;
 
         beforeEach(function() {
-          locationElement = $('<li><a class="ls-ui-comp-user_locations-action-remove" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="remove">Location</a></li>');
+          removeLocation = {
+            id: 'REMOVE',
+            name: 'remove',
+            placeType: 'settlement',
+            country: 'GB'
+          };
+          userLocations._locations[removeLocation.id] = removeLocation;
+          locationElement = $('<li><a class="ls-ui-comp-user_locations-action-remove" href="#' + removeLocation.id + '" data-id="' + removeLocation.id + '" data-action="remove">Location</a></li>');
           removeElement = locationElement.find('.ls-ui-comp-user_locations-action-remove');
           userLocations.element.append(locationElement);
         });
 
-        it('calls this.displayConfirmDialogue when clicking on remove', function() {
+        it('calls this.removeLocationById when clicking on remove recent', function() {
           var stub;
+          stub = sinon.stub(userLocations, 'removeLocationById');
+          removeElement.trigger('click');
+          expect(stub.callCount).toBe(1);
+          expect(stub.args[0][0]).toBe(removeLocation.id);
+        });
+
+        it('calls this.displayConfirmDialogue when clicking on remove preferred', function() {
+          var stub;
+          removeLocation.isPreferred = true;
           stub = sinon.stub(userLocations, 'displayDialog');
           removeElement.trigger('click');
           expect(stub.callCount).toBe(1);
@@ -114,15 +131,16 @@ function(
           expect(typeof stub.args[0][2]).toBe('function');
         });
 
-        it('calls this.removeLocationById when clicking on remove then confirm', function() {
+        it('calls this.removeLocationById when clicking on remove preferred then confirm', function() {
           var stub;
+          removeLocation.isPreferred = true;
           stub = sinon.stub(userLocations, 'removeLocationById');
           removeElement.trigger('click');
           locationElement
-            .find('button.ls-ui-comp-user_locations-dialog-confirm')
+            .find('.ls-ui-comp-user_locations-dialog-confirm button')
             .trigger('click');
           expect(stub.callCount).toBe(1);
-          expect(stub.args[0][0]).toBe(testLocations[0].id);
+          expect(stub.args[0][0]).toBe(removeLocation.id);
         });
 
       });
@@ -153,7 +171,7 @@ function(
           stub = sinon.stub(userLocations, 'setPreferredLocationById');
           preferElement.trigger('click');
           locationElement
-            .find('button.ls-ui-comp-user_locations-dialog-confirm')
+            .find('.ls-ui-comp-user_locations-dialog-confirm button')
             .trigger('click');
           expect(stub.callCount).toBe(1);
           expect(stub.args[0][0]).toBe(testLocations[0].id);
@@ -242,7 +260,7 @@ function(
       it('clicking confirm removes "ls-ui-comp-user_locations-location-with-dialog" class', function() {
         userLocations.displayDialog(locationElement, 'foo');
         expect(locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')).toBe(true);
-        locationElement.find('button.ls-ui-comp-user_locations-dialog-confirm').trigger('click');
+        locationElement.find('.ls-ui-comp-user_locations-dialog-confirm button').trigger('click');
         expect(locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')).toBe(false);
       });
 
@@ -251,28 +269,28 @@ function(
         userLocations.displayDialog(locationElement, 'foo', function() {
           hasCalledCallback = true;
         });
-        locationElement.find('button.ls-ui-comp-user_locations-dialog-confirm').trigger('click');
+        locationElement.find('.ls-ui-comp-user_locations-dialog-confirm button').trigger('click');
         expect(hasCalledCallback).toBe(true);
       });
 
       it('clicking confirm removes dialog', function() {
         userLocations.displayDialog(locationElement, 'foo');
         expect(locationElement.find('.ls-ui-comp-user_locations-dialog').length).toBe(1);
-        locationElement.find('button.ls-ui-comp-user_locations-dialog-confirm').trigger('click');
+        locationElement.find('.ls-ui-comp-user_locations-dialog-confirm button').trigger('click');
         expect(locationElement.find('.ls-ui-comp-user_locations-dialog').length).toBe(0);
       });
 
       it('clicking cancel removes "ls-ui-comp-user_locations-location-with-dialog" class', function() {
         userLocations.displayDialog(locationElement, 'foo');
         expect(locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')).toBe(true);
-        locationElement.find('button.ls-ui-comp-user_locations-dialog-cancel').trigger('click');
+        locationElement.find('.ls-ui-comp-user_locations-dialog-cancel button').trigger('click');
         expect(locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')).toBe(false);
       });
 
       it('clicking cancel removes dialog', function() {
         userLocations.displayDialog(locationElement, 'foo');
         expect(locationElement.find('.ls-ui-comp-user_locations-dialog').length).toBe(1);
-        locationElement.find('button.ls-ui-comp-user_locations-dialog-cancel').trigger('click');
+        locationElement.find('.ls-ui-comp-user_locations-dialog-cancel button').trigger('click');
         expect(locationElement.find('.ls-ui-comp-user_locations-dialog').length).toBe(0);
       });
 

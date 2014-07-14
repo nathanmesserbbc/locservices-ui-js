@@ -10,7 +10,6 @@ define(function() {
     'user_locations.action.remove': 'Remove',
     'user_locations.dialog.confirm': 'Confirm',
     'user_locations.dialog.cancel': 'Cancel',
-    'user_locations.dialog.remove': 'We will no longer use <location name> to give you relevant local info across the BBC.',
     'user_locations.dialog.remove_preferred': 'We will no longer use <location name> to give you relevant local info across the BBC.',
     'user_locations.dialog.prefer': 'We will now use <location name> to give you relevant local info across the BBC.',
     'user_locations.message.preferred': 'We\'ll use your main location to give you relevant local info across the BBC.',
