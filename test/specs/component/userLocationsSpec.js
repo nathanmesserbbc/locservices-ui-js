@@ -32,7 +32,11 @@ function(
 
     beforeEach(function() {
       container = $('<div/>');
-      api = {};
+      api = {
+        getDefaultQueryParameters: function() {
+          return {};
+        }
+      };
       translations = new En();
       userLocations = new UserLocations({
         api: api,
@@ -42,6 +46,10 @@ function(
     });
 
     describe('constructor()', function() {
+
+      beforeEach(function() {
+        userLocations._locations[testLocations[0].id] = testLocations[0];
+      });
 
       it('should set this.componentId to "user_locations"', function() {
         expect(userLocations.componentId).toBe('user_locations');
@@ -79,7 +87,6 @@ function(
       it('calls this.selectLocationById location event when clicking on a location name', function() {
         var stub;
         stub = sinon.stub(userLocations, 'selectLocationById');
-
         userLocations.element.empty();
         userLocations.element.append(
           '<li><a class="ls-ui-comp-user_locations-name" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="location">Location</a></li>'
@@ -90,30 +97,90 @@ function(
         expect(stub.calledWith(testLocations[0].id)).toBe(true);
       });
 
-      it('calls this.removeLocationById with expected ID when clicking on remove', function() {
-        var stub;
-        stub = sinon.stub(userLocations, 'removeLocationById');
+      describe('clicking remove()', function() {
 
-        userLocations.element.append(
-          '<li><a class="ls-ui-comp-user_locations-action-remove" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="remove">Location</a></li>'
-        );
-        userLocations.element.find('.ls-ui-comp-user_locations-action-remove').trigger('click');
+        var locationElement;
+        var removeLocation;
+        var removeElement;
 
-        expect(stub.callCount).toBe(1);
-        expect(stub.calledWith(testLocations[0].id)).toBe(true);
+        beforeEach(function() {
+          removeLocation = {
+            id: 'REMOVE',
+            name: 'remove',
+            placeType: 'settlement',
+            country: 'GB'
+          };
+          userLocations._locations[removeLocation.id] = removeLocation;
+          locationElement = $('<li><a class="ls-ui-comp-user_locations-action-remove" href="#' + removeLocation.id + '" data-id="' + removeLocation.id + '" data-action="remove">Location</a></li>');
+          removeElement = locationElement.find('.ls-ui-comp-user_locations-action-remove');
+          userLocations.element.append(locationElement);
+        });
+
+        it('calls this.removeLocationById when clicking on remove recent', function() {
+          var stub;
+          stub = sinon.stub(userLocations, 'removeLocationById');
+          removeElement.trigger('click');
+          expect(stub.callCount).toBe(1);
+          expect(stub.args[0][0]).toBe(removeLocation.id);
+        });
+
+        it('calls this.displayConfirmDialogue when clicking on remove preferred', function() {
+          var stub;
+          removeLocation.isPreferred = true;
+          stub = sinon.stub(userLocations, 'displayDialog');
+          removeElement.trigger('click');
+          expect(stub.callCount).toBe(1);
+          expect(stub.args[0][0][0]).toBe(locationElement[0]);
+          expect(typeof stub.args[0][1]).toBe('string');
+          expect(typeof stub.args[0][2]).toBe('function');
+        });
+
+        it('calls this.removeLocationById when clicking on remove preferred then confirm', function() {
+          var stub;
+          removeLocation.isPreferred = true;
+          stub = sinon.stub(userLocations, 'removeLocationById');
+          removeElement.trigger('click');
+          locationElement
+            .find('.ls-ui-comp-user_locations-dialog-confirm button')
+            .trigger('click');
+          expect(stub.callCount).toBe(1);
+          expect(stub.args[0][0]).toBe(removeLocation.id);
+        });
+
       });
 
-      it('calls this.setPreferredLocationById with expected ID when clicking on prefer', function() {
-        var stub;
-        stub = sinon.stub(userLocations, 'setPreferredLocationById');
+      describe('clicking prefer()', function() {
 
-        userLocations.element.append(
-          '<li><a class="ls-ui-comp-user_locations-action-prefer" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="prefer">Location</a></li>'
-        );
-        userLocations.element.find('.ls-ui-comp-user_locations-action-prefer').trigger('click');
+        var locationElement;
+        var preferElement;
 
-        expect(stub.callCount).toBe(1);
-        expect(stub.calledWith(testLocations[0].id)).toBe(true);
+        beforeEach(function() {
+          locationElement = $('<li><a class="ls-ui-comp-user_locations-action-prefer" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="prefer">Location</a></li>');
+          preferElement = locationElement.find('.ls-ui-comp-user_locations-action-prefer');
+          userLocations.element.append(locationElement);
+        });
+
+        it('calls this.displayConfirmDialogue when clicking on prefer', function() {
+          var stub;
+          stub = sinon.stub(userLocations, 'displayDialog');
+          preferElement.trigger('click');
+          expect(stub.callCount).toBe(1);
+          expect(stub.args[0][0][0]).toBe(locationElement[0]);
+          expect(typeof stub.args[0][1]).toBe('string');
+          expect(typeof stub.args[0][2]).toBe('function');
+        });
+
+        it('calls this.setPreferredLocationById when clicking on prefer then confirm', function() {
+          var stub;
+          stub = sinon.stub(userLocations, 'setPreferredLocationById');
+          preferElement.trigger('click');
+          locationElement
+            .find('.ls-ui-comp-user_locations-dialog-confirm button')
+            .trigger('click');
+          expect(stub.callCount).toBe(1);
+          expect(stub.args[0][0]).toBe(testLocations[0].id);
+        });
+
       });
 
       it('calls this.recentLocations.add on search_results location event', function() {
@@ -170,6 +237,69 @@ function(
 
     });
 
+    describe('displayDialog()', function() {
+
+      var locationElement;
+
+      beforeEach(function() {
+        locationElement = $('<li></li>');
+        userLocations.element.append(locationElement);
+      });
+
+      it('adds "ls-ui-comp-user_locations-location-with-dialog" class to element', function() {
+        userLocations.displayDialog(locationElement);
+        expect(
+          locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')
+        ).toBe(true);
+      });
+
+      it('renders message', function() {
+        var expectedMessage = 'foo';
+        userLocations.displayDialog(locationElement, expectedMessage);
+        expect(
+          locationElement.find('p').text()
+        ).toBe(expectedMessage);
+      });
+
+      it('clicking confirm removes "ls-ui-comp-user_locations-location-with-dialog" class', function() {
+        userLocations.displayDialog(locationElement, 'foo');
+        expect(locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')).toBe(true);
+        locationElement.find('.ls-ui-comp-user_locations-dialog-confirm button').trigger('click');
+        expect(locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')).toBe(false);
+      });
+
+      it('clicking confirm calls success callback', function() {
+        var hasCalledCallback = false;
+        userLocations.displayDialog(locationElement, 'foo', function() {
+          hasCalledCallback = true;
+        });
+        locationElement.find('.ls-ui-comp-user_locations-dialog-confirm button').trigger('click');
+        expect(hasCalledCallback).toBe(true);
+      });
+
+      it('clicking confirm removes dialog', function() {
+        userLocations.displayDialog(locationElement, 'foo');
+        expect(locationElement.find('.ls-ui-comp-user_locations-dialog').length).toBe(1);
+        locationElement.find('.ls-ui-comp-user_locations-dialog-confirm button').trigger('click');
+        expect(locationElement.find('.ls-ui-comp-user_locations-dialog').length).toBe(0);
+      });
+
+      it('clicking cancel removes "ls-ui-comp-user_locations-location-with-dialog" class', function() {
+        userLocations.displayDialog(locationElement, 'foo');
+        expect(locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')).toBe(true);
+        locationElement.find('.ls-ui-comp-user_locations-dialog-cancel button').trigger('click');
+        expect(locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')).toBe(false);
+      });
+
+      it('clicking cancel removes dialog', function() {
+        userLocations.displayDialog(locationElement, 'foo');
+        expect(locationElement.find('.ls-ui-comp-user_locations-dialog').length).toBe(1);
+        locationElement.find('.ls-ui-comp-user_locations-dialog-cancel button').trigger('click');
+        expect(locationElement.find('.ls-ui-comp-user_locations-dialog').length).toBe(0);
+      });
+
+    });
+
     describe('setPreferredLocationById()', function() {
 
       var expectedLocation;
@@ -184,13 +314,15 @@ function(
         userLocations._locations[testLocations[0].id] = testLocations[0];
       });
 
-      it('calls this.preferredLocation.set() with the expected location id', function() {
+      // ensure location is preferable
+
+      it('does not call this.preferredLocation.get() if the location is not preferrable', function() {
         var stub;
-        stub = sinon.stub(userLocations.preferredLocation, 'set');
+        stub = sinon.stub(userLocations.preferredLocation, 'get');
+        sinon.stub(userLocations.preferredLocation, 'isValidLocation').returns(false);
         sinon.stub(userLocations, 'render');
         userLocations.setPreferredLocationById(expectedLocation.id);
-        expect(stub.calledOnce).toEqual(true);
-        expect(stub.args[0][0]).toEqual(expectedLocation.id);
+        expect(stub.callCount).toEqual(0);
       });
 
       it('does not call this.preferredLocation.set() if the location is not preferrable', function() {
@@ -202,7 +334,21 @@ function(
         expect(stub.callCount).toEqual(0);
       });
 
-      // ensure that the locaiton is preferrable
+      // removes the location being preferred from the list of recents
+
+      it('removes the location being preferred from the list of recents', function() {
+        var stub;
+        stub = sinon.stub(userLocations.recentLocations, 'remove');
+        sinon.stub(userLocations.preferredLocation, 'set');
+        sinon.stub(userLocations.preferredLocation, 'isSet').returns(true);
+        sinon.stub(userLocations.preferredLocation, 'get').returns(expectedLocation);
+        sinon.stub(userLocations, 'render');
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(stub.calledOnce).toEqual(true);
+        expect(stub.args[0][0]).toEqual(expectedLocation.id);
+      });
+
+      // remove the existing preferred location and adding to recents
 
       it('adds the current preferredLocation to the recent locations list', function() {
         var stub;
@@ -216,6 +362,17 @@ function(
         expect(stub.args[0][0]).toEqual(expectedLocation);
       });
 
+      // set a new preferred location
+
+      it('calls this.preferredLocation.set() with the expected location id', function() {
+        var stub;
+        stub = sinon.stub(userLocations.preferredLocation, 'set');
+        sinon.stub(userLocations, 'render');
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(stub.calledOnce).toEqual(true);
+        expect(stub.args[0][0]).toEqual(expectedLocation.id);
+      });
+
       it('calls this.render() if location is valid', function() {
         var stub;
         userLocations.preferredLocation.set = function(id, options) {
@@ -227,13 +384,29 @@ function(
         expect(stub.calledOnce).toEqual(true);
       });
 
-      it('does not call this.render() if location is invalid', function() {
+      // setting preferred errors
+
+      it('does not call this.render() if setting preferred fails', function() {
         var stub;
-        sinon.stub(userLocations.preferredLocation, 'set');
-        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
         stub = sinon.stub(userLocations, 'render');
-        userLocations.setPreferredLocationById('foo');
+        sinon.stub(userLocations.preferredLocation, 'set', function(id, options) {
+          options.error();
+        });
+        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
+        userLocations.setPreferredLocationById(expectedLocation.id);
         expect(stub.callCount).toEqual(0);
+      });
+
+      it('emits an error if setting preferred fails', function() {
+        var stub;
+        stub = sinon.stub(userLocations, 'emit');
+        sinon.stub(userLocations.preferredLocation, 'set', function(id, options) {
+          options.error();
+        });
+        sinon.stub(userLocations, 'getRecentLocations').returns(testLocations);
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(stub.args[0][0]).toEqual('error');
+        expect(stub.args[0][1][0].code).toEqual('user_locations.error.preferred_location');
       });
 
     });
@@ -255,7 +428,7 @@ function(
         sinon.stub(userLocations, 'render');
 
         expectedLocation.isPreferred = true;
-        
+
         userLocations.removeLocationById(expectedLocation.id);
         expect(stub.calledOnce).toEqual(true);
       });
@@ -368,7 +541,7 @@ function(
         stubPreferredLocationIsSet.returns(true);
         stubPreferredLocationGet.returns(expectedLocation);
         stubGetRecentLocations.returns([]);
-        var expectedHtml = '<li class="ls-ui-comp-user_locations-location-preferred ls-ui-comp-user_locations-location-preferable">' +
+        var expectedHtml = '<li class="ls-ui-comp-user_locations-location ls-ui-comp-user_locations-location-preferred ls-ui-comp-user_locations-location-preferable">' +
           '<a class="ls-ui-comp-user_locations-action" href="#CF5" data-id="CF5" data-action="none">Prefer</a>' +
           '<a class="ls-ui-comp-user_locations-name" href="#CF5" data-id="CF5" data-action="location"><strong>CF5</strong></a>' +
           '<a class="ls-ui-comp-user_locations-remove" href="#CF5" data-id="CF5" data-action="remove">Remove</a>' +
@@ -447,21 +620,22 @@ function(
         expect(userLocations.getRecentLocations()).toEqual([]);
       });
 
-      it('returns at most 4 recent locations if a preferred location is set', function() {
+      it('returns at most 3 recent locations if recents contains the preferred location', function() {
         var locations;
         stubPreferredLocationIsSet.returns(true);
+        stubPreferredLocationGet.returns(testLocations[0]);
+        stubRecentLocationsIsSupported.returns(true);
+        stubRecentLocationsAll.returns(testLocations);
+        locations = userLocations.getRecentLocations();
+        expect(locations.length).toEqual(3);
+      });
+
+      it('returns at most 4 recent locations if no preferred location is set', function() {
+        var locations;
         stubRecentLocationsIsSupported.returns(true);
         stubRecentLocationsAll.returns(testLocations);
         locations = userLocations.getRecentLocations();
         expect(locations.length).toEqual(4);
-      });
-
-      it('returns at most 5 recent locations if no preferred location is set', function() {
-        var locations;
-        stubRecentLocationsIsSupported.returns(true);
-        stubRecentLocationsAll.returns(testLocations);
-        locations = userLocations.getRecentLocations();
-        expect(locations.length).toEqual(5);
       });
 
       it('sets a recent locations isPreferable via this.preferredLocation.isValidLocation', function() {
@@ -487,15 +661,44 @@ function(
         stubRecentLocationsIsSupported.returns(true);
         stubRecentLocationsAll.returns(testLocations);
         locations = userLocations.getRecentLocations();
-        expect(locations.length).toEqual(4);
+        expect(locations.length).toEqual(3);
         expect(locations[0]).toEqual(testLocations[0]);
         expect(locations[1]).toEqual(testLocations[1]);
         expect(locations[2]).toEqual(testLocations[3]);
-        expect(locations[3]).toEqual(testLocations[4]);
       });
 
-    });
+      describe('filtered', function() {
 
-  });
+        beforeEach(function() {
+          api = {
+            getDefaultQueryParameters: function() {
+              return {
+                filter: 'international',
+                countries: 'US'
+              };
+            }
+          };
+          userLocations = new UserLocations({
+            api: api,
+            translations: translations,
+            container: container
+          });
+          stubRecentLocationsIsSupported = sinon.stub(userLocations.recentLocations, 'isSupported');
+          stubRecentLocationsAll = sinon.stub(userLocations.recentLocations, 'all');
+        });
+
+        it('returns locations filtered by api configuration', function() {
+          var locations;
+          stubRecentLocationsIsSupported.returns(true);
+          stubRecentLocationsAll.returns(testLocations);
+          locations = userLocations.getRecentLocations();
+          expect(locations.length).toEqual(0);
+        });
+
+      }); // filtered
+
+    }); // getRecentLocations()
+
+  }); // module
 
 });

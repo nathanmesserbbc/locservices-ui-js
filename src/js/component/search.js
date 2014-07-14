@@ -71,7 +71,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     if (!searchTerm || true === self.isSearching) {
       return;
     }
+
+    // @todo test this event is emitted
     self.emit('start', [searchTerm]);
+
     self.isSearching = true;
 
     self.api.search(searchTerm, {
@@ -83,7 +86,12 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       error: function() {
         self.emit('end');
         self.isSearching = false;
-        self.emit('error', ['Error searching for "' + searchTerm + '"']);
+
+        // @todo test this error is emitted
+        self.emit('error', [{
+          code: 'search.error.search',
+          message: 'There was an API error searching for ' + searchTerm
+        }]);
       }
     });
   };
