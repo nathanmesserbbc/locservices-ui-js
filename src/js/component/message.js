@@ -34,12 +34,14 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.clear();
     });
 
-    $.on(self.eventNamespaceBase + ':component:search:results', function(results, metadata) {
+    $.on(self.eventNamespaceBase + ':component:search_results:results', function(metadata) {
       if (metadata.totalResults === 0) {
         self.set(self.translations.get('message.no_results') + '"' + metadata.search + '"');
         return;
       }
-      self.set(self.translations.get('message.results') + '"' + metadata.search + '"');
+      var current = metadata.offset + 10;
+      current = current > metadata.totalResults ? metadata.totalResults : current;
+      self.set(self.translations.get('message.showing') + current + self.translations.get('message.of') + metadata.totalResults);
     });
 
     $.on(self.eventNamespaceBase + ':component:geolocation:end', function() {
