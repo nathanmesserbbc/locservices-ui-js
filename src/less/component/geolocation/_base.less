@@ -1,7 +1,8 @@
 .ls-ui-comp-geolocation {
+  position: relative;
   background: @bg-color;
   text-align: left;
-  border: none;
+  border: 0 none;
   padding: 0;
   display: block;
   width: 100%;
@@ -12,15 +13,18 @@
   box-sizing: border-box;
 
   .ls-ui-comp-geolocation-icon {
-    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
     width: 36px;
     height: 36px;
-    background: url("@{img-root}/locator_sprite_1x.png") no-repeat -73px 8px;
-    float: right;
+    background: url("@{asset-path}/geolocation/geolocation.png") no-repeat center center;
   }
 
   .ls-ui-comp-geolocation-label {
-    display: inline-block;
+    display: block;
+    margin: 0 36px 0 0;
     height: 36px;
     color: @text-light-colour;
     font-size: 1.3em;
