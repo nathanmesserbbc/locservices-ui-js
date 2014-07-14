@@ -36,7 +36,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     $.on(self.eventNamespaceBase + ':component:search_results:results', function(metadata) {
       if (metadata.totalResults === 0) {
-        self.set(self.translations.get('message.no_results') + '"' + metadata.search + '"');
+        self.set(self.translations.get('message.no_results') + '"' + metadata.searchTerm + '"');
         return;
       }
       var current = metadata.offset + 10;
