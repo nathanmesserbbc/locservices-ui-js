@@ -27,6 +27,7 @@ function(
 
     preferredLocationHeading: function(translations) {
       return $('<p />')
+        .addClass('ls-ui-comp-user_locations-heading')
         .text(
           translations.get('user_locations.heading.preferred')
         );
@@ -36,6 +37,7 @@ function(
 
     recentLocationsHeading: function(translations, noOfLocations) {
       return $('<p />')
+        .addClass('ls-ui-comp-user_locations-heading')
         .addClass('ls-ui-comp-user_locations-recent-heading')
         .text(
           translations.get('user_locations.heading.recent') + ' (' + noOfLocations + ')'
@@ -100,17 +102,23 @@ function(
       var div = $('<div/>')
         .addClass('ls-ui-comp-user_locations-dialog');
       var message = $('<p/>').text(messageText);
-      var confirm = $('<button/>')
+      var buttons = $('<div/>').addClass('ls-ui-comp-user_locations-dialog-buttons');
+      var confirm = $('<span/>').append($('<button/>'));
+      confirm
         .addClass('ls-ui-comp-user_locations-dialog-confirm')
+        .find('button')
         .text(
           translations.get('user_locations.dialog.confirm')
         );
-      var cancel = $('<button/>')
+      var cancel = $('<span/>').append($('<button/>'));
+      cancel
         .addClass('ls-ui-comp-user_locations-dialog-cancel')
+        .find('button')
         .text(
           translations.get('user_locations.dialog.cancel')
         );
-      div.append(message).append(confirm).append(cancel);
+      buttons.append(confirm).append(cancel);
+      div.append(message).append(buttons);
       return div;
     }
   };
@@ -246,7 +254,7 @@ function(
       )
     );
     element
-      .find('button.ls-ui-comp-user_locations-dialog-confirm')
+      .find('.ls-ui-comp-user_locations-dialog-confirm button')
       .on('click', function() {
         resetElement();
         if ('function' === typeof confirmCallback) {
@@ -254,7 +262,7 @@ function(
         }
       });
     element
-      .find('button.ls-ui-comp-user_locations-dialog-cancel')
+      .find('.ls-ui-comp-user_locations-dialog-cancel button')
       .on('click', function() {
         resetElement();
       });
