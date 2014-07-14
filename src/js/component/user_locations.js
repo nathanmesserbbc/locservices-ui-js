@@ -19,12 +19,28 @@ function(
 
   var templates = {
 
+    /**
+     * Template for the root element
+     *
+     * @return {object}
+     */
     element: function() {
       return $('<div />').addClass('ls-ui-comp-user_locations');
     },
 
+    /**
+     * Template for an empty list of preferred locations
+     *
+     * @return {object}
+     */
     preferredLocationList: $('<ul/>').addClass('ls-ui-comp-user_locations-preferred'),
 
+    /**
+     * Template for the preferred location heading
+     *
+     * @param {Object} translations
+     * @return {Object}
+     */
     preferredLocationHeading: function(translations) {
       return $('<p />')
         .addClass('ls-ui-comp-user_locations-heading')
@@ -33,8 +49,20 @@ function(
         );
     },
 
+    /**
+     * Template for an empty list of recent locations
+     *
+     * @return {Object}
+     */
     recentLocationsList: $('<ul/>').addClass('ls-ui-comp-user_locations-recent'),
 
+    /**
+     * Template for the recent locations heading
+     *
+     * @param {Object} translations
+     * @param {Number} noOfLocations The number of recent locations
+     * @return {Object}
+     */
     recentLocationsHeading: function(translations, noOfLocations) {
       return $('<p />')
         .addClass('ls-ui-comp-user_locations-heading')
@@ -44,6 +72,13 @@ function(
         );
     },
 
+    /**
+     * Template for the recent locations heading
+     *
+     * @param {Object} translations
+     * @param {Object} location The location to render
+     * @return {Object}
+     */
     location: function(translations, location) {
       var locationId = location.id;
 
@@ -88,6 +123,13 @@ function(
       return li;
     },
 
+    /**
+     * Template for the message displayed below location lists
+     *
+     * @param {Object} translations
+     * @param {Boolean} hasRecentLocations
+     * @return {Object}
+     */
     message: function(translations, hasRecentLocations) {
       var value = translations.get('user_locations.message.preferred');
       if (hasRecentLocations) {
@@ -98,6 +140,13 @@ function(
         .text(value);
     },
 
+    /**
+     * Template for a confirm/cancel dialog
+     *
+     * @param {Object} translations
+     * @param {String} messageText
+     * @return {Object}
+     */
     dialog: function(translations, messageText) {
       var div = $('<div/>')
         .addClass('ls-ui-comp-user_locations-dialog');
@@ -193,10 +242,7 @@ function(
           }
         );
       } else if ('remove' === action) {
-
-        // @todo test this
         if (location.isPreferred) {
-
           self.displayDialog(
             target.parent('li'),
             self.translations.get('user_locations.dialog.remove_preferred'),
@@ -204,12 +250,11 @@ function(
               self.removeLocationById(locationId);
             }
           );
-
         } else {
           self.removeLocationById(locationId);
         }
-
       }
+
     });
 
     var handleLocationEvent = function(location) {
