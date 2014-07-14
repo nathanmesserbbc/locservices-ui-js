@@ -551,11 +551,6 @@ function(
       var stubRecentLocationsAll;
 
       beforeEach(function() {
-        stubPreferredLocationIsSet = sinon.stub(userLocations.preferredLocation, 'isSet');
-        stubPreferredLocationGet = sinon.stub(userLocations.preferredLocation, 'get');
-        stubRecentLocationsIsSupported = sinon.stub(userLocations.recentLocations, 'isSupported');
-        stubRecentLocationsAll = sinon.stub(userLocations.recentLocations, 'all');
-
         api = {
           getDefaultQueryParameters: function() {
             return {
@@ -569,6 +564,10 @@ function(
           translations: translations,
           container: container
         });
+        stubPreferredLocationIsSet = sinon.stub(userLocations.preferredLocation, 'isSet');
+        stubPreferredLocationGet = sinon.stub(userLocations.preferredLocation, 'get');
+        stubRecentLocationsIsSupported = sinon.stub(userLocations.recentLocations, 'isSupported');
+        stubRecentLocationsAll = sinon.stub(userLocations.recentLocations, 'all');
       });
 
       it('returns locations filtered by api configuration', function() {
