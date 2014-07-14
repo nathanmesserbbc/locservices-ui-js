@@ -541,36 +541,6 @@ function(
         expect(locations[2]).toEqual(testLocations[3]);
       });
 
-<<<<<<< HEAD
-    });
-
-    describe('getRecentLocations() filtered', function() {
-
-      var stubPreferredLocationIsSet;
-      var stubPreferredLocationGet;
-      var stubRecentLocationsIsSupported;
-      var stubRecentLocationsAll;
-
-      beforeEach(function() {
-        api = {
-          getDefaultQueryParameters: function() {
-            return {
-              filter: 'international',
-              countries: 'US'
-            };
-          }
-        };
-        userLocations = new UserLocations({
-          api: api,
-          translations: translations,
-          container: container
-        });
-        stubPreferredLocationIsSet = sinon.stub(userLocations.preferredLocation, 'isSet');
-        stubPreferredLocationGet = sinon.stub(userLocations.preferredLocation, 'get');
-        stubRecentLocationsIsSupported = sinon.stub(userLocations.recentLocations, 'isSupported');
-        stubRecentLocationsAll = sinon.stub(userLocations.recentLocations, 'all');
-      });
-=======
       describe('filtered', function() {
 
         beforeEach(function() {
@@ -598,7 +568,6 @@ function(
           locations = userLocations.getRecentLocations();
           expect(locations.length).toEqual(0);
         });
->>>>>>> 92e1d12f9ab1f98f10550ded42419336e66b2698
 
       }); // filtered
 
