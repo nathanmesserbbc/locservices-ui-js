@@ -42,9 +42,14 @@ define(['locservices/ui/translations/en'], function(En) {
       });
 
       it('should have a chainable interface', function() {
-        expect(translations.set('new.key')).toBe(translations);
+        expect(translations.set('new.key', 'value')).toBe(translations);
       });
 
+      it('should throw an error if no transaltion is given', function() {
+        expect(function() {
+          translations.set('new.key');
+        }).toThrow(new Error('Please provided a translation for new.key.'));
+      });
     });
   });
 });

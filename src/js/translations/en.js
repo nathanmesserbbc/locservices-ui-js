@@ -54,6 +54,10 @@ define(function() {
    * @return this
    */
   TranslationsEn.prototype.set = function(key, value) {
+
+    if (undefined === value) {
+      throw new Error('Please provided a translation for ' + key + '.');
+    }
     dictionary[key] = value;
     return this;
   };
