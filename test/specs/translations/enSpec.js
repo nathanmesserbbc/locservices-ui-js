@@ -23,5 +23,28 @@ define(['locservices/ui/translations/en'], function(En) {
       });
 
     });
+
+    describe('set()', function() {
+
+      it('should set translation for key', function() {
+        var expected = 'Find my location';
+        var oldValue = translations.get('search.submit');
+
+        translations.set('search.submit', expected);
+        expect(translations.get('search.submit')).toBe(expected);
+        translations.set('search.submit', oldValue);
+      });
+
+      it('should create new key if it does not exist', function() {
+        var expected = 'New translation';
+
+        expect(translations.set('new.key', expected).get('new.key')).toBe(expected);
+      });
+
+      it('should have a chainable interface', function() {
+        expect(translations.set('new.key')).toBe(translations);
+      });
+
+    });
   });
 });

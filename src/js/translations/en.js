@@ -32,11 +32,30 @@ define(function() {
 
   function TranslationsEn() {}
 
+  /**
+   * Returns translation for given key or false if
+   * key is not present
+   *
+   * @param {String} key for translation
+   * @return String|Boolean
+   */
   TranslationsEn.prototype.get = function(key) {
     if (dictionary.hasOwnProperty(key)) {
       return dictionary[key];
     }
     return false;
+  };
+
+  /**
+   * Sets the trnaslation for a given key
+   *
+   * @param {String} key for translation
+   * @param {String} translation value for given key
+   * @return this
+   */
+  TranslationsEn.prototype.set = function(key, value) {
+    dictionary[key] = value;
+    return this;
   };
 
   return TranslationsEn;
