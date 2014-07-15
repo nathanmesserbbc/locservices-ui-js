@@ -56,36 +56,37 @@ define(['jquery'], function($) {
   /**
    * Render a dialog
    *
-   * @param {Object} element
-   * @param {String} message
-   * @param {String} confirmLabel
-   * @param {String} cancelLabel
-   * @param {Function} confirmCallback
-   * @param {Function} cancelCallback
+   * @param {Object} options
    */
-  function Dialog(element, message, confirmLabel, cancelLabel, confirmCallback, cancelCallback) {
+  function Dialog(options) {
+    var self = this;
+    options = options || {};
+    this.element = options.element; 
+    this.confirmLabel = 'confirm';
+    this.cancelLabel = 'cancel';
+
     var handleClick = function(callback) {
-      element.find('.ls-ui-comp-dialog').remove();
+      self.element.find('.ls-ui-comp-dialog').remove();
       if ('function' === typeof callback) {
         callback();
       }
     };
-    element.append(
+    this.element.append(
       templates.dialog(
-        message,
-        confirmLabel,
-        cancelLabel
+        options.message,
+        this.confirmLabel,
+        this.cancelLabel
       )
     );
-    element
+    this.element
       .find('.ls-ui-comp-dialog-confirm button')
       .on('click', function() {
-        handleClick(confirmCallback);
+        handleClick(options.success);
       });
-    element
+    this.element
       .find('.ls-ui-comp-dialog-cancel button')
       .on('click', function() {
-        handleClick(cancelCallback);
+        handleClick(options.cancel);
       });
   }
 

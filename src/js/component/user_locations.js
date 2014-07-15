@@ -266,21 +266,21 @@ function(
 
     element.addClass('ls-ui-comp-user_locations-location-with-dialog');
 
-    new Dialog(
-      element, 
-      message, 
-      this.translations.get('user_locations.dialog.confirm'),
-      this.translations.get('user_locations.dialog.cancel'),
-      function() {
+    new Dialog({
+      element: element, 
+      message: message, 
+      confirmLabel: this.translations.get('user_locations.dialog.confirm'),
+      cancelLabel: this.translations.get('user_locations.dialog.cancel'),
+      success: function() {
         resetElement();
         if ('function' === typeof confirmCallback) {
           confirmCallback();
         }
       }, 
-      function() {
+      cancel: function() {
         resetElement();
       }
-    );
+    });
 
   };
 

@@ -12,20 +12,22 @@ define([
   'locservices/ui/component/auto_complete',
   'locservices/ui/component/search_results',
   'locservices/ui/component/user_locations',
-  'locservices/ui/component/close_button'
+  'locservices/ui/component/close_button',
+  'locservices/ui/component/dialog'
 ], function(
   $,
   Api,
+  PreferredLocation,
   BBCCookies,
   Cookies,
-  PreferredLocation,
   Search,
   Message,
   Geolocation,
   AutoComplete,
   SearchResults,
   UserLocations,
-  CloseButton
+  CloseButton,
+  Dialog
 ) {
   'use strict';
 
@@ -48,7 +50,7 @@ define([
   var preferredLocation = new PreferredLocation();
   var bbcCookies = new BBCCookies();
   var cookies = new Cookies();
-  var cookiesColdStartKey = 'locservices_ui_cold_start';
+  var cookiesColdStartKey = 'locserv_uics';
 
   function Primary(options) {
     verify(options);
@@ -57,7 +59,9 @@ define([
     var alwaysOpen = options.alwaysOpen || false;
 
     var events = {
+
       onLocation: function(location) {
+
         var emitLocation = function() {
           $.emit(self.namespace + ':controller:location', [location]);
         };
@@ -71,9 +75,8 @@ define([
           );
         };
 
-        // @todo test this
-        if (shouldDisplayColdStartDialog()) {
-          preferredLocation.setLocation(locationId, {
+        var setAsPreferredLocation = function() {
+          preferredLocation.setLocation(location.id, {
             success: function() {
               emitLocation();
             },
@@ -81,9 +84,33 @@ define([
               // @todo handle this
             }
           });
+        };
+
+        var declinePreferredLocation = function() {
+          // @todo path and domain
+          // @todo clear this if ever setting a preferred location ?!
+          cookies.set(cookiesColdStartKey, '1');
+          emitLocation();
+        };
+
+        // @todo test this
+        if (shouldDisplayColdStartDialog()) {
+          new Dialog({
+            element: outside, 
+            message: 'Save location?', 
+            confirmLabel: self.translations.get('user_locations.dialog.confirm'),
+            cancelLabel: self.translations.get('user_locations.dialog.cancel'),
+            success: function() {
+              setAsPreferredLocation();
+            },
+            cancel: function() {
+              declinePreferredLocation();
+            }
+          });
         } else {
           emitLocation();
         }
+
       },
       onActive: function() {
         $.emit(self.namespace + ':controller:active');
@@ -104,6 +131,8 @@ define([
         self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
       }
     };
+
+    self.translations = options.translations;
     self.api = new Api(options.api);
     self.container = options.container;
 
@@ -125,49 +154,49 @@ define([
 
     self.search = new Search({
       api: this.api,
-      translations: options.translations,
+      translations: self.translations,
       eventNamespace: self.namespace,
       container: searchEl
     });
 
     self.autoComplete = new AutoComplete({
       api: this.api,
-      translations: options.translations,
+      translations: self.translations,
       eventNamespace: self.namespace,
       element: self.search.input,
       container: outside
     });
 
     self.message = new Message({
-      translations: options.translations,
+      translations: self.translations,
       eventNamespace: self.namespace,
       container: outside
     });
 
     self.results = new SearchResults({
       api: this.api,
-      translations: options.translations,
+      translations: self.translations,
       eventNamespace: self.namespace,
       container: outside
     });
 
     self.geolocation = new Geolocation({
       api: this.api,
-      translations: options.translations,
+      translations: self.translations,
       eventNamespace: self.namespace,
       container: outside
     });
 
     self.userLocations = new UserLocations({
       api: this.api,
-      translations: options.translations,
+      translations: self.translations,
       eventNamespace: self.namespace,
       container: outside
     });
 
     if (!alwaysOpen) {
       self.closeButton = new CloseButton({
-        translations: options.translations,
+        translations: self.translations,
         eventNamespace: self.namespace,
         container: outside
       });

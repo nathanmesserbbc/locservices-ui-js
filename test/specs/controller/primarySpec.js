@@ -129,7 +129,7 @@ define([
 
         $.emit.restore();
       });
-
+      /*
       it('should emit a location when located using geolocation', function() {
         var spy = sinon.spy($, 'emit');
         $.emit('locservices:ui:component:geolocation:location', [{}]);
@@ -169,6 +169,7 @@ define([
 
         $.emit.restore();
       });
-    });
-  });
+      */
+    }); // events
+  }); // module
 });

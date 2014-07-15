@@ -18,14 +18,21 @@ define([
 
       it('displays the expected message', function() {
         var expectedMessage = 'This is a test message.';
-        new Dialog(element, expectedMessage);
+        new Dialog({
+          element: element,
+          message: expectedMessage
+        });
         expect(element.find('p').text()).toBe(expectedMessage);
       });
 
       it('calls confirm callback when clicking confirm', function() {
         var hasCalledCallback;
-        new Dialog(element, 'Test', function() {
-          hasCalledCallback = true;
+        new Dialog({
+          element: element,
+          message: 'Test', 
+          success: function() {
+            hasCalledCallback = true;
+          }
         });
         element.find('.ls-ui-comp-dialog-confirm button').trigger('click');
         expect(hasCalledCallback).toBe(true);
@@ -33,22 +40,32 @@ define([
 
       it('calls cancel callback when clicking cancel', function() {
         var hasCalledCallback;
-        new Dialog(element, 'Test', undefined, function() {
-          hasCalledCallback = true;
+        new Dialog({
+          element: element,
+          message: 'Test',
+          cancel: function() {
+            hasCalledCallback = true;
+          }
         });
         element.find('.ls-ui-comp-dialog-cancel button').trigger('click');
         expect(hasCalledCallback).toBe(true);
       });
 
       it('clicking confirm removes dialog', function() {
-        new Dialog(element, 'Test');
+        new Dialog({
+          element: element,
+          message: 'Test'
+        });
         expect(element.find('.ls-ui-comp-dialog').length).toBe(1);
         element.find('.ls-ui-comp-dialog-confirm button').trigger('click');
         expect(element.find('.ls-ui-comp-dialog').length).toBe(0);
       });
 
       it('clicking cancel removes dialog', function() {
-        new Dialog(element, 'Test');
+        new Dialog({
+          element: element,
+          message: 'Test'
+        });
         expect(element.find('.ls-ui-comp-dialog').length).toBe(1);
         element.find('.ls-ui-comp-dialog-cancel button').trigger('click');
         expect(element.find('.ls-ui-comp-dialog').length).toBe(0);
