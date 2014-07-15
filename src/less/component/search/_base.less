@@ -2,15 +2,15 @@
   position: relative;
 
   .ls-ui-container {
-    margin: 0 36px 0 0;
+    margin: 0 @button-height 0 0;
   }
 
   .ls-ui-input {
     display: block;
     width: 100%;
+    height: @button-height;
     padding: 10px 8px;
-    margin: 0 36px 0 0;
-    height: 36px;
+    margin: 0 @button-height 0 0;
     font-size: @font14;
     background: @ls-ui-input-background;
     border: none;
@@ -25,13 +25,14 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 36px;
-    height: 36px;
+    width: @button-height;
+    height: @button-height;
+    padding: 0;
     text-indent: -9999px;
     cursor: pointer;
     background-color: @ls-ui-input-background;
     background-image: url("@{asset-path}/search/search@1x.png");
-    background-position: 7px 7px;
+    background-position: center center;
     background-repeat: no-repeat;
     border: none;
   }
