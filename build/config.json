@@ -7,6 +7,7 @@
     "app": "src/",
     "less": "src/less/",
     "js": "src/js/",
+    "images": "src/img/",
     "minjs": "dist/js/",
     "css": "src/css/",
     "test": "test/",

@@ -40,6 +40,7 @@ define([
     self._api = options.api;
     self.input = options.element.attr('autocomplete', 'off');
     self.searchResultsData = null;
+    self.currentSearchTerm = '';
     self.setComponentOptions(options);
 
     self.searchResults = $('<ul />').addClass('ls-ui-comp-auto_complete');
@@ -50,6 +51,7 @@ define([
     });
 
     $.on(self.eventNamespaceBase + ':component:search:start', function() {
+      self.currentSearchTerm = self.prepareSearchTerm(self.input.val());
       self._searchSubmitted = true;
     });
 
@@ -121,7 +123,7 @@ define([
 
     this._timeoutId = setTimeout(function() {
 
-      if (true === self._searchSubmitted) {
+      if (true === self._searchSubmitted || searchTerm === self.currentSearchTerm) {
         return;
       }
       self._waitingForResults = true;

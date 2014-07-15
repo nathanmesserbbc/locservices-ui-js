@@ -21,7 +21,8 @@ module.exports = function(grunt) {
     jscs: require('./build/jscs')(grunt),
     copy: require('./build/copy')(grunt),
     cssmin: require('./build/cssmin')(grunt),
-    requirejs: require('./build/require')(grunt)
+    requirejs: require('./build/require')(grunt),
+    imagemin: require('./build/imagemin')(grunt)
   });
 
   grunt.registerTask('barlesque', 'Downloads Barlesque templates from API', require('./build/barlesque')(grunt));
