@@ -165,8 +165,6 @@ function(
 
     this.setComponentOptions(options);
 
-    this._dialog = new Dialog(options);
-
     bbcCookies = new BBCCookies();
     if (bbcCookies.isPersonalisationDisabled()) {
       return;
@@ -263,23 +261,26 @@ function(
   UserLocations.prototype.displayDialog = function(element, message, confirmCallback) {
 
     var resetElement = function() {
-
-      // do in dialog class?
-      element.find('.ls-ui-comp-dialog').remove();
-
       element.removeClass('ls-ui-comp-user_locations-location-with-dialog');
     };
 
     element.addClass('ls-ui-comp-user_locations-location-with-dialog');
 
-    this._dialog.render(element, message, function() {
-      resetElement();
-      if ('function' === typeof confirmCallback) {
-        confirmCallback();
+    new Dialog(
+      element, 
+      message, 
+      this.translations.get('user_locations.dialog.confirm'),
+      this.translations.get('user_locations.dialog.cancel'),
+      function() {
+        resetElement();
+        if ('function' === typeof confirmCallback) {
+          confirmCallback();
+        }
+      }, 
+      function() {
+        resetElement();
       }
-    }, function() {
-      resetElement();
-    });
+    );
 
   };
 

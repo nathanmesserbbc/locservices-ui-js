@@ -1,6 +1,6 @@
 /*global define */
 
-define(['jquery', 'locservices/ui/component/component'], function($, Component) {
+define(['jquery'], function($) {
 
   'use strict';
 
@@ -9,24 +9,25 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     /**
      * Template for a dialog
      *
-     * @param {Object} translations
      * @param {String} messageText
+     * @param {String} confirmLabel
+     * @param {String} cancelLabel
      * @return {Object}
      */
-    dialog: function(translations, messageText) {
+    dialog: function(messageText, confirmLabel, cancelLabel) {
       var div = $('<div/>')
         .addClass('ls-ui-comp-dialog');
       var message = $('<p/>').text(messageText);
       var buttons = $('<div/>').addClass('ls-ui-comp-dialog-buttons');
       buttons.append(
         templates.button(
-          translations.get('dialog.confirm'),
+          confirmLabel,
           'ls-ui-comp-dialog-confirm'
         )
       );
       buttons.append(
         templates.button(
-          translations.get('dialog.cancel'),
+          cancelLabel,
           'ls-ui-comp-dialog-cancel'
         )
       );
@@ -52,25 +53,17 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   };
 
-  function Dialog(options) {
-    var self = this;
-    options = options || {};
-    options.componentId = 'dialog';
-
-    self.setComponentOptions(options);
-  }
-  Dialog.prototype = new Component();
-  Dialog.prototype.constructor = Dialog;
-
   /**
    * Render a dialog
    *
    * @param {Object} element
    * @param {String} message
+   * @param {String} confirmLabel
+   * @param {String} cancelLabel
    * @param {Function} confirmCallback
    * @param {Function} cancelCallback
    */
-  Dialog.prototype.render = function(element, message, confirmCallback, cancelCallback) {
+  function Dialog(element, message, confirmLabel, cancelLabel, confirmCallback, cancelCallback) {
     var handleClick = function(callback) {
       element.find('.ls-ui-comp-dialog').remove();
       if ('function' === typeof callback) {
@@ -79,8 +72,9 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     };
     element.append(
       templates.dialog(
-        this.translations,
-        message
+        message,
+        confirmLabel,
+        cancelLabel
       )
     );
     element
@@ -93,7 +87,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       .on('click', function() {
         handleClick(cancelCallback);
       });
-  };
+  }
 
   return Dialog;
 });

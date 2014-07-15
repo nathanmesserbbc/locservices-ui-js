@@ -3,6 +3,9 @@
 define([
   'jquery',
   'locservices/core/api',
+  'locservices/core/preferred_location',
+  'locservices/core/bbc_cookies',
+  'locservices/core/cookies',
   'locservices/ui/component/search',
   'locservices/ui/component/message',
   'locservices/ui/component/geolocation',
@@ -13,6 +16,9 @@ define([
 ], function(
   $,
   Api,
+  BBCCookies,
+  Cookies,
+  PreferredLocation,
   Search,
   Message,
   Geolocation,
@@ -39,6 +45,11 @@ define([
     }
   };
 
+  var preferredLocation = new PreferredLocation();
+  var bbcCookies = new BBCCookies();
+  var cookies = new Cookies();
+  var cookiesColdStartKey = 'locservices_ui_cold_start';
+
   function Primary(options) {
     verify(options);
 
@@ -47,7 +58,32 @@ define([
 
     var events = {
       onLocation: function(location) {
-        $.emit(self.namespace + ':controller:location', [location]);
+        var emitLocation = function() {
+          $.emit(self.namespace + ':controller:location', [location]);
+        };
+
+        var shouldDisplayColdStartDialog = function() {
+          return (
+            false === preferredLocation.isSet() && 
+            false === bbcCookies.isPersonalisationDisabled() && 
+            cookies.isSupported() && 
+            '1' !== cookies.get(cookiesColdStartKey)
+          );
+        };
+
+        // @todo test this
+        if (shouldDisplayColdStartDialog()) {
+          preferredLocation.setLocation(locationId, {
+            success: function() {
+              emitLocation();
+            },
+            error: function() {
+              // @todo handle this
+            }
+          });
+        } else {
+          emitLocation();
+        }
       },
       onActive: function() {
         $.emit(self.namespace + ':controller:active');
