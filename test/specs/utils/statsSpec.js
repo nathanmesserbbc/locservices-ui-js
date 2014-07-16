@@ -27,7 +27,7 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
 
     });
 
-    describe('registerNamespace() method', function() {
+    describe('registerNamespace()', function() {
 
       var stats, stub, ns;
 
@@ -50,20 +50,26 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
         onStub.restore();
       });
 
-      it('registers an event for the geolocation:location event', function() {
-        var location = { id: 123 };
-        var labels = { locationId: location.id };
-        $.emit(ns + ':component:geolocation:location', [location]);
-        expect(stub.calledWith('geolocation_location', 'locservicesui', labels)).toBe(true);
-      });
+      describe('registers geolocation events for', function() {
 
-      it('registers the event whent geolocation permission has been denied', function() {
-        var error = { code: 'geolocation.error.browser.permission' };
-        $.emit(ns + ':component:geolocation:error', [error]);
-        expect(stub.calledWith('geolocation_denied', 'locservicesui')).toBe(true);
-      });
+        it('the geolocation:location event', function() {
+          var location = { id: 123 };
+          var labels = { locationId: location.id };
+          $.emit(ns + ':component:geolocation:location', [location]);
+          expect(stub.calledWith('geolocation_location', 'locservicesui', labels)).toBe(true);
+        });
 
+        it('the geolocation error of browser denied permissions', function() {
+          var error = { code: 'geolocation.error.browser.permission' };
+          $.emit(ns + ':component:geolocation:error', [error]);
+          expect(stub.calledWith('geolocation_denied', 'locservicesui')).toBe(true);
+        });
+
+        it('a geolocation button click', function() {
+          $.emit(ns + ':component:geolocation:click');
+          expect(stub.calledWith('geolocation_click', 'locservicesui')).toBe(true);
+        });
+      });
     });
-
   });
 });

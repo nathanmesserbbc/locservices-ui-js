@@ -68,6 +68,10 @@ define(['jquery'], function($) {
       }
     });
 
+    $.on(ns + ':component:geolocation:click', function() {
+      logActionEvent(echoClient, 'geolocation_click');
+    });
+
     this._registeredNamespaces[ns] = true;
 
     return true;
