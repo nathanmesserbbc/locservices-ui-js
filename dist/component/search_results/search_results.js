@@ -68,12 +68,15 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     this.moreResults.on('click', function(evt) {
       evt.preventDefault();
+
+      // @todo handle API error
       self.api.search(self.searchTerm, {
         start: self.offset + 10,
         success: function(resp) {
           self.render(resp.results, resp.metadata);
         }
       });
+
       return false;
     });
 

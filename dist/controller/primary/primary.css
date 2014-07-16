@@ -8,7 +8,7 @@
   position: relative;
 }
 .ls-ui-ctrl-primary .ls-ui-ctrl-primary-search {
-  margin-top: 41px;
+  margin-top: 54px;
 }
 .ls-ui-ctrl-primary .ls-ui-comp-geolocation {
   display: none;
@@ -17,10 +17,10 @@
   display: none;
 }
 .ls-ui-ctrl-primary .ls-ui-comp-close_button {
-  display: none;
   position: absolute;
-  top: -45px;
+  top: -54px;
   right: 0;
+  display: none;
 }
 .ls-ui-ctrl-active {
   background: white;
@@ -39,16 +39,16 @@
   display: block;
 }
 .li-ui-ctrl-geolocation .ls-ui-ctrl-primary-search {
-  margin-top: 83px;
+  margin-top: 112px;
 }
 .li-ui-ctrl-geolocation .ls-ui-comp-geolocation {
   position: absolute;
+  top: -54px;
   display: block;
   margin-bottom: 8px;
-  top: -43px;
 }
 .li-ui-ctrl-geolocation .ls-ui-comp-close_button {
-  top: -84px;
+  top: -112px;
 }
 @media (min-width: 400px) {
   .ls-ui-ctrl-primary {
@@ -64,7 +64,7 @@
     right: 0;
   }
   .ls-ui-ctrl-active .ls-ui-ctrl-primary-search {
-    margin-right: 41px;
+    margin-right: 52px;
   }
   .ls-ui-ctrl-open .ls-ui-ctrl-primary-search {
     margin-right: 0;
@@ -73,7 +73,7 @@
   .li-ui-ctrl-geolocation .li-ui-comp-search_results,
   .li-ui-ctrl-geolocation .ls-ui-comp-message,
   .li-ui-ctrl-geolocation .ls-ui-comp-auto_complete {
-    margin-right: 41px;
+    margin-right: 52px;
   }
   .li-ui-ctrl-geolocation .ls-ui-comp-geolocation {
     top: 0;
@@ -83,18 +83,18 @@
   .li-ui-ctrl-geolocation.ls-ui-ctrl-active .li-ui-comp-search_results,
   .li-ui-ctrl-geolocation.ls-ui-ctrl-active .ls-ui-comp-message,
   .li-ui-ctrl-geolocation.ls-ui-ctrl-active .ls-ui-comp-auto_complete {
-    margin-right: 82px;
+    margin-right: 104px;
   }
   .li-ui-ctrl-geolocation.ls-ui-ctrl-active .ls-ui-comp-geolocation {
     position: absolute;
     top: 0;
-    right: 41px;
+    right: 50px;
   }
   .li-ui-ctrl-geolocation.ls-ui-ctrl-open .ls-ui-ctrl-primary-search,
   .li-ui-ctrl-geolocation.ls-ui-ctrl-open .li-ui-comp-search_results,
   .li-ui-ctrl-geolocation.ls-ui-ctrl-open .ls-ui-comp-message,
   .li-ui-ctrl-geolocation.ls-ui-ctrl-open .ls-ui-comp-auto_complete {
-    margin-right: 41px;
+    margin-right: 52px;
   }
   .li-ui-ctrl-geolocation.ls-ui-ctrl-open .ls-ui-comp-geolocation {
     right: 0;

@@ -7,7 +7,7 @@ module.exports = function() {
       noIDs: false,
       noUnderscores: false,
       noUniversalSelectors: false,
-      strictPropertyOrder: false
+      strictPropertyOrder: true
     },
     build: {
       src: '<%= config.paths.css %>**/*.css'

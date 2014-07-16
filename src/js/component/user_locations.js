@@ -5,42 +5,82 @@ define([
   'locservices/ui/component/component',
   'locservices/core/bbc_cookies',
   'locservices/core/recent_locations',
-  'locservices/core/preferred_location'
+  'locservices/core/preferred_location',
+  'locservices/core/filter'
 ],
 function(
   $,
   Component,
   BBCCookies,
   RecentLocations,
-  PreferredLocation
+  PreferredLocation,
+  filter
 ) {
 
   'use strict';
 
   var templates = {
 
+    /**
+     * Template for the root element
+     *
+     * @return {object}
+     */
     element: function() {
       return $('<div />').addClass('ls-ui-comp-user_locations');
     },
 
+    /**
+     * Template for an empty list of preferred locations
+     *
+     * @return {object}
+     */
     preferredLocationList: $('<ul/>').addClass('ls-ui-comp-user_locations-preferred'),
 
+    /**
+     * Template for the preferred location heading
+     *
+     * @param {Object} translations
+     * @return {Object}
+     */
     preferredLocationHeading: function(translations) {
       return $('<p />')
+        .addClass('ls-ui-comp-user_locations-heading')
         .text(
           translations.get('user_locations.heading.preferred')
         );
     },
 
+    /**
+     * Template for an empty list of recent locations
+     *
+     * @return {Object}
+     */
     recentLocationsList: $('<ul/>').addClass('ls-ui-comp-user_locations-recent'),
 
+    /**
+     * Template for the recent locations heading
+     *
+     * @param {Object} translations
+     * @param {Number} noOfLocations The number of recent locations
+     * @return {Object}
+     */
     recentLocationsHeading: function(translations, noOfLocations) {
       return $('<p />')
+        .addClass('ls-ui-comp-user_locations-heading')
+        .addClass('ls-ui-comp-user_locations-recent-heading')
         .text(
           translations.get('user_locations.heading.recent') + ' (' + noOfLocations + ')'
         );
     },
 
+    /**
+     * Template for the recent locations heading
+     *
+     * @param {Object} translations
+     * @param {Object} location The location to render
+     * @return {Object}
+     */
     location: function(translations, location) {
       var locationId = location.id;
 
@@ -69,6 +109,10 @@ function(
         .text(translations.get('user_locations.action.remove'));
 
       var li = $('<li />');
+
+      // @todo test this class is added
+      li.addClass('ls-ui-comp-user_locations-location');
+
       if (location.isPreferred) {
         li.addClass('ls-ui-comp-user_locations-location-preferred');
       }
@@ -81,6 +125,13 @@ function(
       return li;
     },
 
+    /**
+     * Template for the message displayed below location lists
+     *
+     * @param {Object} translations
+     * @param {Boolean} hasRecentLocations
+     * @return {Object}
+     */
     message: function(translations, hasRecentLocations) {
       var value = translations.get('user_locations.message.preferred');
       if (hasRecentLocations) {
@@ -89,6 +140,37 @@ function(
       return $('<p/>')
         .addClass('ls-ui-comp-user_locations-message')
         .text(value);
+    },
+
+    /**
+     * Template for a confirm/cancel dialog
+     *
+     * @param {Object} translations
+     * @param {String} messageText
+     * @return {Object}
+     */
+    dialog: function(translations, messageText) {
+      var div = $('<div/>')
+        .addClass('ls-ui-comp-user_locations-dialog');
+      var message = $('<p/>').text(messageText);
+      var buttons = $('<div/>').addClass('ls-ui-comp-user_locations-dialog-buttons');
+      var confirm = $('<span/>').append($('<button/>'));
+      confirm
+        .addClass('ls-ui-comp-user_locations-dialog-confirm')
+        .find('button')
+        .text(
+          translations.get('user_locations.dialog.confirm')
+        );
+      var cancel = $('<span/>').append($('<button/>'));
+      cancel
+        .addClass('ls-ui-comp-user_locations-dialog-cancel')
+        .find('button')
+        .text(
+          translations.get('user_locations.dialog.cancel')
+        );
+      buttons.append(confirm).append(cancel);
+      div.append(message).append(buttons);
+      return div;
     }
   };
 
@@ -99,8 +181,9 @@ function(
    */
   function UserLocations(options) {
     var self = this;
-    var api;
-    var bbcCookies;
+    var api,
+        bbcCookies,
+        defaultQueryParams;
 
     options = options || {};
     options.componentId = 'user_locations';
@@ -120,6 +203,13 @@ function(
 
     this._locations = [];
 
+    defaultQueryParams =  api.getDefaultQueryParameters();
+    this._filter = {
+      filter: defaultQueryParams['filter'],
+      country: defaultQueryParams['countries'],
+      placeType: defaultQueryParams['place-types']
+    };
+
     this.preferredLocation = new PreferredLocation(api);
     this.recentLocations = new RecentLocations();
 
@@ -131,6 +221,8 @@ function(
       var target;
       var locationId;
       var action;
+      var location;
+
       e.preventDefault();
       e.stopPropagation();
       target = $(e.target);
@@ -139,14 +231,40 @@ function(
       // look like a number eg "1243" get converted to type number
       locationId = String(target.data('id'));
 
+      location = self._locations[locationId];
+      // @todo test this
+      if (!location) {
+        return;
+      }
+
+      // @todo
+      // deal with prefer and remove location name interpolation
+
       action = target.data('action');
       if ('location' === action) {
         self.selectLocationById(locationId);
       } else if ('prefer' === action) {
-        self.setPreferredLocationById(locationId);
+        self.displayDialog(
+          target.parent('li'),
+          self.translations.get('user_locations.dialog.prefer'),
+          function() {
+            self.setPreferredLocationById(locationId);
+          }
+        );
       } else if ('remove' === action) {
-        self.removeLocationById(locationId);
+        if (location.isPreferred) {
+          self.displayDialog(
+            target.parent('li'),
+            self.translations.get('user_locations.dialog.remove_preferred'),
+            function() {
+              self.removeLocationById(locationId);
+            }
+          );
+        } else {
+          self.removeLocationById(locationId);
+        }
       }
+
     });
 
     var handleLocationEvent = function(location) {
@@ -170,6 +288,42 @@ function(
 
   UserLocations.prototype = new Component();
   UserLocations.prototype.constructor = UserLocations;
+
+  /**
+   * Display a confrm/cancel dialogue
+   *
+   * @param {Element} element
+   * @param {String} message
+   * @param {Function} confirmCallback
+   */
+  UserLocations.prototype.displayDialog = function(element, message, confirmCallback) {
+
+    var resetElement = function() {
+      element.find('.ls-ui-comp-user_locations-dialog').remove();
+      element.removeClass('ls-ui-comp-user_locations-location-with-dialog');
+    };
+
+    element.addClass('ls-ui-comp-user_locations-location-with-dialog');
+    element.append(
+      templates.dialog(
+        this.translations,
+        message
+      )
+    );
+    element
+      .find('.ls-ui-comp-user_locations-dialog-confirm button')
+      .on('click', function() {
+        resetElement();
+        if ('function' === typeof confirmCallback) {
+          confirmCallback();
+        }
+      });
+    element
+      .find('.ls-ui-comp-user_locations-dialog-cancel button')
+      .on('click', function() {
+        resetElement();
+      });
+  };
 
   /**
    * Select a location by it's id
@@ -198,6 +352,10 @@ function(
     if (location && this.preferredLocation.isValidLocation(location)) {
 
       this.recentLocations.remove(locationId);
+
+      // @todo test this ?
+      this.element.find('.ls-ui-comp-user_locations-location-preferred').removeClass('ls-ui-comp-user_locations-location-preferred');
+      this.element.find('a[data-id="' + locationId + '"]').parent().addClass('ls-ui-comp-user_locations-location-preferred');
 
       if (this.preferredLocation.isSet()) {
         preferredLocation = this.preferredLocation.get();
@@ -335,7 +493,11 @@ function(
     }
 
     if (this.recentLocations.isSupported()) {
-      recentLocations = this.recentLocations.all();
+      recentLocations = filter(this.recentLocations.all(), {
+        filter: this._filter.filter,
+        placeType: this._filter.placeType,
+        country: this._filter.country
+      });
       noOfRecentLocations = recentLocations.length;
       if (0 < noOfRecentLocations) {
         if (4 < noOfRecentLocations) {
