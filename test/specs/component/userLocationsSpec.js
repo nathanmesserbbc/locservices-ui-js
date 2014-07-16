@@ -208,7 +208,7 @@ function(
         var expectedLocation;
         expectedLocation = 'foo';
         stub = sinon.stub(userLocations.recentLocations, 'add');
-        $.emit('locservices:ui:component:auto_complete:location', [expectedLocation]);
+        $.emit('locservices:ui:component:auto_complete:location', [expectedLocation, '']);
         expect(stub.calledOnce).toBe(true);
         expect(stub.calledWith(expectedLocation)).toBe(true);
       });

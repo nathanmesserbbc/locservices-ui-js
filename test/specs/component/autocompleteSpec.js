@@ -113,6 +113,25 @@ define([
 //      });
     });
 
+    describe('search results', function() {
+
+      it('emits the location event when one is selected', function() {
+        var locations = [
+          { id: 1 }
+        ];
+        var expectedParams = [locations[0], 'foo'];
+        var stub = sinon.stub(autoComplete, 'emit');
+
+        autoComplete.currentSearchTerm = 'foo';
+        autoComplete.searchResultsData = locations;
+        autoComplete.searchResults.append('<li>foo</li>');
+        autoComplete.searchResults.find('li:eq(0)').trigger('mousedown');
+
+        expect(stub.calledWith('location', expectedParams)).toBe(true);
+        stub.restore();
+      });
+    });
+
     describe('events', function() {
 
       it('should react to search starting', function() {

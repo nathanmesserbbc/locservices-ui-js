@@ -72,6 +72,14 @@ define(['jquery'], function($) {
       logActionEvent(echoClient, 'geolocation_click');
     });
 
+    $.on(ns + ':component:auto_complete:location', function(location, searchTerm) {
+      logActionEvent(echoClient, 'auto_complete_location', {
+        locationId: location.id,
+        searchTerm: searchTerm,
+        searchTermLength: searchTerm.length
+      });
+    });
+
     this._registeredNamespaces[ns] = true;
 
     return true;

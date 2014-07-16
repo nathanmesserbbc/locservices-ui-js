@@ -148,7 +148,7 @@ define([
 
       it('should emit a location when a location is selected from the auto complete', function() {
         var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:component:auto_complete:location', [{}]);
+        $.emit('locservices:ui:component:auto_complete:location', [{}, '']);
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
 
         $.emit.restore();

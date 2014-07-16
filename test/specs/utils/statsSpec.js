@@ -50,6 +50,19 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
         onStub.restore();
       });
 
+      describe('registers auto_complete events for', function() {
+        it('location selected event', function() {
+          var location = { id: 123 };
+          var expectedLabels = {
+            locationId: location.id,
+            searchTerm: 'foo',
+            searchTermLength: 3
+          };
+          $.emit(ns + ':component:auto_complete:location', [location, 'foo']);
+          expect(stub.calledWith('auto_complete_location', 'locservicesui', expectedLabels)).toBe(true);
+        });
+      });
+
       describe('registers geolocation events for', function() {
 
         it('the geolocation:location event', function() {

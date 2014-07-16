@@ -72,7 +72,7 @@ define([
 
     self.searchResults.on('mousedown', 'li', function() {
       var location = self.searchResultsData[$(this).index()];
-      self.emit('location', [location]);
+      self.emit('location', [location, self.currentSearchTerm]);
       self.clear();
     });
 
