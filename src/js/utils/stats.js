@@ -62,6 +62,12 @@ define(['jquery'], function($) {
       });
     });
 
+    $.on(ns + ':component:geolocation:error', function(err) {
+      if (err.code === 'geolocation.error.browser.permission') {
+        logActionEvent(echoClient, 'geolocation_denied');
+      }
+    });
+
     this._registeredNamespaces[ns] = true;
 
     return true;

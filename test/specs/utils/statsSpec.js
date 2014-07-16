@@ -57,6 +57,12 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
         expect(stub.calledWith('geolocation_location', 'locservicesui', labels)).toBe(true);
       });
 
+      it('registers the event whent geolocation permission has been denied', function() {
+        var error = { code: 'geolocation.error.browser.permission' };
+        $.emit(ns + ':component:geolocation:error', [error]);
+        expect(stub.calledWith('geolocation_denied', 'locservicesui')).toBe(true);
+      });
+
     });
 
   });
