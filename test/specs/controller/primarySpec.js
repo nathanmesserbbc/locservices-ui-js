@@ -106,7 +106,7 @@ define([
       it('should update itself if geolocation is available', function() {
         var spy = sinon.spy(controller.container, 'addClass');
         $.emit('locservices:ui:component:geolocation:available');
-        expect(spy.getCall(0).args[0]).toEqual('li-ui-ctrl-geolocation');
+        expect(spy.getCall(0).args[0]).toEqual('ls-ui-ctrl-geolocation');
 
         controller.container.addClass.restore();
       });
