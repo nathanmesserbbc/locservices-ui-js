@@ -100,6 +100,12 @@ define(['jquery'], function($) {
       });
     });
 
+    $.on(ns + ':component:user_locations:location_add', function(location) {
+      logActionEvent(echoClient, 'user_locations_location_add', {
+        locationId: location.id
+      });
+    });
+
     this._registeredNamespaces[ns] = true;
 
     return true;

@@ -269,6 +269,7 @@ function(
 
     var handleLocationEvent = function(location) {
       if (self.recentLocations.add(location)) {
+        self.emit('location_add', [location]);
         self.render();
       }
     };

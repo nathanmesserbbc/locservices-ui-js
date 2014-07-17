@@ -109,6 +109,12 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
           $.emit(ns + ':component:user_locations:location_remove', [locationId]);
           expect(stub.calledWith('user_locations_location_remove', 'locservicesui', labels)).toBe(true);
         });
+        it('captures the location_add event', function() {
+          var location = { id: 1234 };
+          var labels = { locationId: location.id };
+          $.emit(ns + ':component:user_locations:location_add', [location]);
+          expect(stub.calledWith('user_locations_location_add', 'locservicesui', labels)).toBe(true);
+        });
       });
     });
 

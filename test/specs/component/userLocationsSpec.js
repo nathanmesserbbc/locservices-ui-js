@@ -213,6 +213,46 @@ function(
         expect(stub.calledWith(expectedLocation)).toBe(true);
       });
 
+      // handleLocationEvent
+      it('emits the location_added event when search results emits a location', function() {
+        var location = { id: 123 };
+        var emitStub = sinon.stub(userLocations, 'emit');
+        var addStub = sinon.stub(userLocations.recentLocations, 'add', function() {
+          return true;
+        });
+
+        $.emit('locservices:ui:component:search_results:location', [location]);
+        expect(emitStub.calledWith('location_add', [location])).toBe(true);
+
+        emitStub.restore();
+        addStub.restore();
+      });
+      it('emits the location_added event when the geolocation:location event is emitted', function() {
+        var location = { id: 123 };
+        var emitStub = sinon.stub(userLocations, 'emit');
+        var addStub = sinon.stub(userLocations.recentLocations, 'add', function() {
+          return true;
+        });
+
+        $.emit('locservices:ui:component:geolocation:location', [location]);
+        expect(emitStub.calledWith('location_add', [location])).toBe(true);
+
+        emitStub.restore();
+        addStub.restore();
+      });
+      it('emits the location_added event when the auto_complete:location event is emitted', function() {
+        var location = { id: 123 };
+        var emitStub = sinon.stub(userLocations, 'emit');
+        var addStub = sinon.stub(userLocations.recentLocations, 'add', function() {
+          return true;
+        });
+
+        $.emit('locservices:ui:component:auto_complete:location', [location, '']);
+        expect(emitStub.calledWith('location_add', [location])).toBe(true);
+
+        emitStub.restore();
+        addStub.restore();
+      });
     });
 
     describe('selectLocationById()', function() {
