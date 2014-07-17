@@ -27,6 +27,8 @@ define(function() {
     'message.geolocation.detect': 'Detecting your location.',
     'message.no_results': 'We could not find any results for ',
     'message.results': 'Search results for ',
+    'message.showing': 'Showing ',
+    'message.of': ' of ',
     'primary_search.close': 'Close'
   };
 

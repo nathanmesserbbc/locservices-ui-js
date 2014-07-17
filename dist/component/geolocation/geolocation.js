@@ -57,6 +57,7 @@ define([
     this._button.on('click', function(e) {
       e.preventDefault();
       $(this).attr('disabled', 'disabled').addClass('disabled');
+      self.emit('click');
       self.reverseGeocode();
     });
   }

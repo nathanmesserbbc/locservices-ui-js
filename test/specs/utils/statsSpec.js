@@ -82,7 +82,16 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
           $.emit(ns + ':component:geolocation:click');
           expect(stub.calledWith('geolocation_click', 'locservicesui')).toBe(true);
         });
+
+        it('the user_locations location event', function() {
+          var location = { id: 123 };
+          var labels = { locationId: 123 };
+          $.emit(ns + ':component:user_locations:location', [location]);
+          expect(stub.calledWith('user_locations_location_select', 'locservicesui', labels)).toBe(true);
+        });
+
       });
     });
+
   });
 });
