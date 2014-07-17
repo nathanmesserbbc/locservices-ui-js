@@ -62,8 +62,8 @@ define(['jquery'], function($) {
     var self = this;
     options = options || {};
     this.element = options.element; 
-    this.confirmLabel = 'confirm';
-    this.cancelLabel = 'cancel';
+    this.confirmLabel = options.confirmLabel || 'Confirm';
+    this.cancelLabel = options.cancelLabel || 'Cancel';
 
     var handleClick = function(callback) {
       self.element.find('.ls-ui-comp-dialog').remove();

@@ -25,6 +25,24 @@ define([
         expect(element.find('p').text()).toBe(expectedMessage);
       });
 
+      it('displays the expected confirm label', function() {
+        var expectedLabel = 'Foo';
+        new Dialog({
+          element: element,
+          confirmLabel: expectedLabel
+        });
+        expect(element.find('.ls-ui-comp-dialog-confirm button').text()).toBe(expectedLabel);
+      });
+
+      it('displays the expected cancel label', function() {
+        var expectedLabel = 'Bar';
+        new Dialog({
+          element: element,
+          cancelLabel: expectedLabel
+        });
+        expect(element.find('.ls-ui-comp-dialog-cancel button').text()).toBe(expectedLabel);
+      });
+
       it('calls confirm callback when clicking confirm', function() {
         var hasCalledCallback;
         new Dialog({
