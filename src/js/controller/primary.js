@@ -47,11 +47,6 @@ define([
     }
   };
 
-  var preferredLocation = new PreferredLocation();
-  var bbcCookies = new BBCCookies();
-  var cookies = new Cookies();
-  var cookiesColdStartKey = 'locserv_uics';
-
   function Primary(options) {
     verify(options);
 
@@ -61,56 +56,7 @@ define([
     var events = {
 
       onLocation: function(location) {
-
-        var emitLocation = function() {
-          $.emit(self.namespace + ':controller:location', [location]);
-        };
-
-        var shouldDisplayColdStartDialog = function() {
-          return (
-            false === preferredLocation.isSet() && 
-            false === bbcCookies.isPersonalisationDisabled() && 
-            cookies.isSupported() && 
-            '1' !== cookies.get(cookiesColdStartKey)
-          );
-        };
-
-        var setAsPreferredLocation = function() {
-          preferredLocation.setLocation(location.id, {
-            success: function() {
-              emitLocation();
-            },
-            error: function() {
-              // @todo handle this
-            }
-          });
-        };
-
-        var declinePreferredLocation = function() {
-          // @todo path and domain
-          // @todo clear this if ever setting a preferred location ?!
-          cookies.set(cookiesColdStartKey, '1');
-          emitLocation();
-        };
-
-        // @todo test this
-        if (shouldDisplayColdStartDialog()) {
-          new Dialog({
-            element: outside, 
-            message: 'Save location?', 
-            confirmLabel: self.translations.get('user_locations.dialog.confirm'),
-            cancelLabel: self.translations.get('user_locations.dialog.cancel'),
-            success: function() {
-              setAsPreferredLocation();
-            },
-            cancel: function() {
-              declinePreferredLocation();
-            }
-          });
-        } else {
-          emitLocation();
-        }
-
+        self.selectLocation(location);
       },
       onActive: function() {
         $.emit(self.namespace + ':controller:active');
@@ -131,6 +77,11 @@ define([
         self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
       }
     };
+
+    self.preferredLocation = new PreferredLocation();
+    self.bbcCookies = new BBCCookies();
+    self.cookies = new Cookies();
+    self.cookiesColdStartKey = 'locserv_uics';
 
     self.translations = options.translations;
     self.api = new Api(options.api);
@@ -207,6 +158,60 @@ define([
       $.emit(self.namespace + ':component:search:focus');
     }
   }
+
+  Primary.prototype.selectLocation = function(location) {
+    var self = this;
+
+    var emitLocation = function() {
+      $.emit(self.namespace + ':controller:location', [location]);
+    };
+
+    var setAsPreferredLocation = function() {
+      self.preferredLocation.setLocation(location.id, {
+        success: function() {
+          emitLocation();
+        },
+        error: function() {
+          // @todo handle this
+        }
+      });
+    };
+
+    var declinePreferredLocation = function() {
+      // @todo path and domain
+      // @todo clear this if ever setting a preferred location ?!
+      self.cookies.set(self.cookiesColdStartKey, '1');
+      emitLocation();
+    };
+
+    // @todo test this
+    if (this.shouldColdStartDialogBeDisplayed()) {
+      new Dialog({
+        element: outside, 
+        message: 'Save location?', 
+        confirmLabel: self.translations.get('user_locations.dialog.confirm'),
+        cancelLabel: self.translations.get('user_locations.dialog.cancel'),
+        success: function() {
+          setAsPreferredLocation();
+        },
+        cancel: function() {
+          declinePreferredLocation();
+        }
+      });
+    } else {
+      emitLocation();
+    }
+
+  };
+
+  Primary.prototype.shouldColdStartDialogBeDisplayed = function() {
+    return (
+      false === this.preferredLocation.isSet() && 
+      false === this.bbcCookies.isPersonalisationDisabled() && 
+      this.cookies.isSupported() && 
+      '1' !== this.cookies.get(this.cookiesColdStartKey)
+    );
+  };
 
   return Primary;
 });
