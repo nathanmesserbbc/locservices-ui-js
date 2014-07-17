@@ -54,7 +54,7 @@ define([
         self.container.addClass('ls-ui-ctrl-active');
       },
       onGeolocation: function() {
-        self.container.addClass('li-ui-ctrl-geolocation');
+        self.container.addClass('ls-ui-ctrl-geolocation');
       },
       onSearchResults: function() {
         self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
