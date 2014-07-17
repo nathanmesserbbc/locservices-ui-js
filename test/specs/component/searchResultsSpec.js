@@ -85,6 +85,17 @@ define([
         expect(container.find('li').length).toEqual(responseMultiple.results.length);
       });
 
+      it('always emits the results event with metadata', function() {
+        var stub = sinon.stub(searchResults, 'emit');
+        var expectedMetadata = {
+          searchTerm: responseMultiple.metadata.search,
+          offset: 0,
+          totalResults: responseMultiple.metadata.totalResults
+        };
+        searchResults.render(responseMultiple.results, responseMultiple.metadata);
+        expect(stub.calledWith('results', expectedMetadata)).toBe(true);
+      });
+
       // @todo Test the label includes name and container
 
       // @todo Test the <li> contains a link (and locationId)

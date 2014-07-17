@@ -116,6 +116,17 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
           expect(stub.calledWith('user_locations_location_add', 'locservicesui', labels)).toBe(true);
         });
       });
+
+      describe('- search results -', function() {
+        it('records a stat when search yielded no results', function() {
+          $.emit(ns + ':component:search_results:results', {
+            searchTerm: 'foo',
+            offset: 0,
+            totalResults: 0
+          });
+          expect(stub.calledWith('search_no_results', 'locservicesui')).toBe(true);
+        });
+      });
     });
 
   });
