@@ -30,7 +30,8 @@ require([
     },
     namespace: namespace,
     container: element,
-    translations: new En()
+    translations: new En(),
+    alwaysOpen: true
   });
 
   $.on(namespace + ':controller:active', function() {

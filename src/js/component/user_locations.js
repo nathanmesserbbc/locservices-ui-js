@@ -209,8 +209,7 @@ function(
         return;
       }
 
-      // @todo
-      // deal with prefer and remove location name interpolation
+      // @todo <location name> interpolation in messages
 
       action = target.data('action');
       if ('location' === action) {
