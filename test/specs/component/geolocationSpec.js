@@ -7,27 +7,27 @@ define([
   'locservices/core/api'
 ], function($, Geolocation, En, geo, Api) {
 
-  var geolocation, container, translations, api;
-
-  geo.isSupported = true;
-  api = new Api();
-
-  beforeEach(function() {
-    container = $('<div />');
-    translations = new En();
-    geolocation = new Geolocation({
-      container: container,
-      translations: translations,
-      api: api
-    });
-  });
-
-  afterEach(function() {
-    container.remove();
-  });
-
   describe('Geolocation', function() {
 
+    var geolocation, container, translations, api;
+
+    geo.isSupported = true;
+    api = new Api();
+
+    beforeEach(function() {
+      container = $('<div />');
+      translations = new En();
+      geolocation = new Geolocation({
+        container: container,
+        translations: translations,
+        api: api
+      });
+    });
+
+    afterEach(function() {
+      container.remove();
+    });
+  
     it('throws an error when an api is not present in options', function() {
       var fn = function() {
         geolocation = new Geolocation({

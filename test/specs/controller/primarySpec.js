@@ -213,13 +213,39 @@ define([
         $.emit.restore();
       });
 
+      it('should emit location event after confirming dialog and failing to set cookie', function() {
+        var spy = sinon.spy($, 'emit');
+        stubShouldColdStartDialogBeDisplayed.returns(true);
+        sinon.stub(controller.preferredLocation, 'set', function(id, options) {
+          options.error(true);
+        });
+        controller.selectLocation(location);
+        expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
+        container.find('.ls-ui-comp-dialog-confirm button').trigger('click');
+        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:controller:location');
+        expect(spy.getCall(0).args[1]).toEqual([location]);
+        $.emit.restore();
+      });
+
       it('should set cookie after canceling dialog', function() {
         var stub = sinon.stub(controller.cookies, 'set');
+        var args;
+        var actualExpires;
+        var expectedExpires = new Date();
+        expectedExpires.setFullYear(expectedExpires.getFullYear() + 1);
+
         stubShouldColdStartDialogBeDisplayed.returns(true);
         controller.selectLocation(location);
         container.find('.ls-ui-comp-dialog-cancel button').trigger('click');
-        expect(stub.getCall(0).args[0]).toEqual('locserv_uics');
-        expect(stub.getCall(0).args[1]).toEqual('1');
+
+        args = stub.getCall(0).args;
+        actualExpires = args[2];
+        actualExpires = new Date(actualExpires);
+        expect(args[0]).toEqual('locserv_uics');
+        expect(args[1]).toEqual('1');
+        expect(actualExpires.getTime() > (expectedExpires.getTime() - 5000)).toEqual(true);
+        expect(args[3]).toEqual('/');
+        expect(args[4]).toEqual('.bbc.co.uk');
       });
 
       it('should emit location event after canceling dialog', function() {

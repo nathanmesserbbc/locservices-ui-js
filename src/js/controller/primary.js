@@ -161,7 +161,6 @@ define([
 
   Primary.prototype.selectLocation = function(location) {
     var self = this;
-
     var emitLocation = function() {
       $.emit(self.namespace + ':controller:location', [location]);
     };
@@ -172,19 +171,26 @@ define([
           emitLocation();
         },
         error: function() {
-          // @todo handle this
+          // @todo log/display error?
+          emitLocation();
         }
       });
     };
 
     var declinePreferredLocation = function() {
-      // @todo path and domain
       // @todo clear this if ever setting a preferred location ?!
-      self.cookies.set(self.cookiesColdStartKey, '1');
+      var expires = new Date();
+      expires.setFullYear(expires.getFullYear() + 1);
+      self.cookies.set(
+        self.cookiesColdStartKey, 
+        '1', 
+        expires.toGMTString(), 
+        '/',
+        self.preferredLocation.getCookieDomain()
+      );
       emitLocation();
     };
 
-    // @todo test this
     if (this.shouldColdStartDialogBeDisplayed()) {
       new Dialog({
         element: outside, 
