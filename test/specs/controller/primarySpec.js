@@ -135,37 +135,33 @@ define([
 
         $.emit.restore();
       });
-      /*
-      it('should emit a location when located using geolocation', function() {
-        var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:component:geolocation:location', [{}]);
-        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
 
-        $.emit.restore();
+      it('should call setLocation when a location is selected via geolocation', function() {
+        var location = { id: 'foo' };
+        var stub = sinon.stub(controller, 'selectLocation');
+        $.emit('locservices:ui:component:geolocation:location', [location]);
+        expect(stub.args[0][0]).toEqual(location);
       });
 
-      it('should emit a location when a location is selected from the results', function() {
-        var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:component:search_results:location', [{}]);
-        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
-
-        $.emit.restore();
+      it('should call setLocation when a location is selected via search results', function() {
+        var location = { id: 'foo' };
+        var stub = sinon.stub(controller, 'selectLocation');
+        $.emit('locservices:ui:component:search_results:location', [location]);
+        expect(stub.args[0][0]).toEqual(location);
       });
 
-      it('should emit a location when a location is selected from the auto complete', function() {
-        var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:component:auto_complete:location', [{}]);
-        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
-
-        $.emit.restore();
+      it('should call setLocation when a location is selected via auto complete', function() {
+        var location = { id: 'foo' };
+        var stub = sinon.stub(controller, 'selectLocation');
+        $.emit('locservices:ui:component:auto_complete:location', [location]);
+        expect(stub.args[0][0]).toEqual(location);
       });
 
-      it('should emit a location when a location is selected from the user locations', function() {
-        var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:component:user_locations:location', [{}]);
-        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
-
-        $.emit.restore();
+      it('should call setLocation when a location is selected via auto complete', function() {
+        var location = { id: 'foo' };
+        var stub = sinon.stub(controller, 'selectLocation');
+        $.emit('locservices:ui:component:user_locations:location', [location]);
+        expect(stub.args[0][0]).toEqual(location);
       });
 
       it('should emit an inactive event when the close button is clicked', function() {
@@ -175,7 +171,7 @@ define([
 
         $.emit.restore();
       });
-      */
+
     }); // events
 
     describe('selectLocation()', function() {
