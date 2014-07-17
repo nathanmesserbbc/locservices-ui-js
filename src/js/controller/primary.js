@@ -78,14 +78,14 @@ define([
       }
     };
 
-    self.preferredLocation = new PreferredLocation();
-    self.bbcCookies = new BBCCookies();
-    self.cookies = new Cookies();
-    self.cookiesColdStartKey = 'locserv_uics';
-
     self.translations = options.translations;
     self.api = new Api(options.api);
     self.container = options.container;
+
+    self.preferredLocation = new PreferredLocation(self.api);
+    self.bbcCookies = new BBCCookies();
+    self.cookies = new Cookies();
+    self.cookiesColdStartKey = 'locserv_uics';
 
     self.container.addClass('ls-ui-ctrl-primary')
                   .append(outside.append(searchEl));
@@ -203,7 +203,7 @@ define([
     ) {
       new Dialog({
         element: outside, 
-        message: self.translations.get('primary.cold_start?'), 
+        message: self.translations.get('primary.cold_start'), 
         confirmLabel: self.translations.get('user_locations.dialog.confirm'),
         cancelLabel: self.translations.get('user_locations.dialog.cancel'),
         confirm: function() {

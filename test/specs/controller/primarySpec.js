@@ -91,6 +91,23 @@ define([
         };
         expect(failure).toThrow(new Error('Primary Controller requires an container option.'));
       });
+
+      it('should create preferredLocation passing an api', function() {
+        expect(typeof controller.preferredLocation).toEqual('object');
+        expect(typeof controller.preferredLocation.api).toEqual('object');
+      });
+
+      it('should create bbcCookies', function() {
+        expect(typeof controller.bbcCookies).toEqual('object');
+      });
+
+      it('should create cookies passing api', function() {
+        expect(typeof controller.cookies).toEqual('object');
+      });
+
+      it('should set cookiesColdStartKey to \'locserv_uics\'', function() {
+        expect(controller.cookiesColdStartKey).toEqual('locserv_uics');
+      });
     });
 
     describe('events', function() {
