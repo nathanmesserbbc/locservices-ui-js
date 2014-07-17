@@ -436,7 +436,11 @@ function(
     if (hasPreferredLocation) {
       preferredLocation = this.preferredLocation.get();
       this._locations[preferredLocation.id] = preferredLocation;
+
+      // @todo always ensure this property is set so that stats tracking can
+      // capture clicking a preferred location
       preferredLocation.isPreferred = true;
+
       preferredLocation.isPreferable = true;
       templates.preferredLocationList.append(
         templates.location(this.translations, preferredLocation)

@@ -397,6 +397,33 @@ function(
         stub.restore();
       });
 
+      it('emits the location with isPreferred property for main location select', function() {
+        var prefLocSetStub = sinon.stub(userLocations.preferredLocation, 'isSet', function() {
+          return true;
+        });
+        var prefLocStub = sinon.stub(userLocations.preferredLocation, 'get', function() {
+          return expectedLocation;
+        });
+        var emitStub = sinon.stub(userLocations, 'emit');
+
+        // make a clone of the original object under test. the additional
+        // properties are added in render(). it's this location object that
+        // we expect to be emitted as an event parameter. this test needs to pass
+        // otherwise we'll lose the stats tracking for clicking the preferred location
+        var location = $.extend(true, {}, expectedLocation);
+        location.isPreferred = true;
+        location.isPreferable = true;
+
+        userLocations.render();
+        userLocations.selectLocationById(expectedLocation.id);
+
+        expect(emitStub.calledWith('location', [location])).toBe(true);
+
+        prefLocStub.restore();
+        emitStub.restore();
+        prefLocSetStub.restore();
+      });
+
       // setting preferred errors
 
       it('does not call this.render() if setting preferred fails', function() {

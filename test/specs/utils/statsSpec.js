@@ -97,6 +97,12 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
           $.emit(ns + ':component:user_locations:location', [location]);
           expect(stub.calledWith('user_locations_location_select', 'locservicesui', labels)).toBe(true);
         });
+        it('captures the main location selected event', function() {
+          var location = { id: 123, isPreferred: true };
+          var labels = { locationId: location.id };
+          $.emit(ns + ':component:user_locations:location', [location]);
+          expect(stub.calledWith('user_locations_location_main_select', 'locservicesui', labels)).toBe(true);
+        });
         it('captures the location_remove event', function() {
           var locationId = 123;
           var labels = { locationId: locationId };

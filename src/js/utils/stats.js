@@ -81,9 +81,11 @@ define(['jquery'], function($) {
     });
 
     $.on(ns + ':component:user_locations:location', function(location) {
-      logActionEvent(echoClient, 'user_locations_location_select', {
-        locationId: location.id
-      });
+      var actionType = 'user_locations_location_select';
+      if (location.isPreferred === true) {
+        actionType = 'user_locations_location_main_select';
+      }
+      logActionEvent(echoClient, actionType, { locationId: location.id });
     });
 
     $.on(ns + ':component:user_locations:make_main', function(locationId) {
