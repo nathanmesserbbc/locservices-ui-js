@@ -37,7 +37,7 @@ define(function() {
    * key is not present
    *
    * @param {String} key for translation
-   * @return String|Boolean
+   * @return {String|Boolean}
    */
   TranslationsEn.prototype.get = function(key) {
     if (dictionary.hasOwnProperty(key)) {
@@ -50,7 +50,7 @@ define(function() {
    * Sets the trnaslation for a given key
    *
    * @param {String} key for translation
-   * @param {String} translation value for given key
+   * @param {String} value translation value for given key
    * @return {Boolean}
    */
   TranslationsEn.prototype.set = function(key, value) {
