@@ -51,15 +51,15 @@ define(function() {
    *
    * @param {String} key for translation
    * @param {String} translation value for given key
-   * @return this
+   * @return {Boolean}
    */
   TranslationsEn.prototype.set = function(key, value) {
 
-    if (undefined === value) {
-      throw new Error('Please provided a translation for ' + key + '.');
+    if ('string' !== typeof key || '' === key || undefined === value) {
+      return false;
     }
     dictionary[key] = value;
-    return this;
+    return true;
   };
 
   return TranslationsEn;

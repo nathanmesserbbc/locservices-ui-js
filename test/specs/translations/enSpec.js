@@ -37,18 +37,32 @@ define(['locservices/ui/translations/en'], function(En) {
 
       it('should create new key if it does not exist', function() {
         var expected = 'New translation';
-
-        expect(translations.set('new.key', expected).get('new.key')).toBe(expected);
+        translations.set('new.key', expected);
+        expect(translations.get('new.key')).toBe(expected);
       });
 
-      it('should have a chainable interface', function() {
-        expect(translations.set('new.key', 'value')).toBe(translations);
+      it('should return true if key is set', function() {
+        var result;
+        result = translations.set('foo', 'bar');
+        expect(result).toBe(true);
       });
 
-      it('should throw an error if no transaltion is given', function() {
-        expect(function() {
-          translations.set('new.key');
-        }).toThrow(new Error('Please provided a translation for new.key.'));
+      it('should return false if key is not a string', function() {
+        var result;
+        result = translations.set(1, 'foo');
+        expect(result).toBe(false);
+      });
+
+      it('should return false if key is an empty string', function() {
+        var result;
+        result = translations.set('', 'foo');
+        expect(result).toBe(false);
+      });
+
+      it('should return false if no translation is given', function() {
+        var result;
+        result = translations.set('foo');
+        expect(result).toBe(false);
       });
     });
   });
