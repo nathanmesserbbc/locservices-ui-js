@@ -34,11 +34,34 @@ define(function() {
 
   function TranslationsEn() {}
 
+  /**
+   * Returns translation for given key or false if
+   * key is not present
+   *
+   * @param {String} key for translation
+   * @return {String|Boolean}
+   */
   TranslationsEn.prototype.get = function(key) {
     if (dictionary.hasOwnProperty(key)) {
       return dictionary[key];
     }
     return false;
+  };
+
+  /**
+   * Sets the trnaslation for a given key
+   *
+   * @param {String} key for translation
+   * @param {String} value translation value for given key
+   * @return {Boolean}
+   */
+  TranslationsEn.prototype.set = function(key, value) {
+
+    if ('string' !== typeof key || '' === key || undefined === value) {
+      return false;
+    }
+    dictionary[key] = value;
+    return true;
   };
 
   return TranslationsEn;
