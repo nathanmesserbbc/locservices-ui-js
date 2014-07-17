@@ -30,7 +30,7 @@ define([
         new Dialog({
           element: element,
           message: 'Test', 
-          success: function() {
+          confirm: function() {
             hasCalledCallback = true;
           }
         });

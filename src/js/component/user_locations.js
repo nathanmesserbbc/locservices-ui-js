@@ -281,7 +281,7 @@ function(
       message: message, 
       confirmLabel: this.translations.get('user_locations.dialog.confirm'),
       cancelLabel: this.translations.get('user_locations.dialog.cancel'),
-      success: function() {
+      confirm: function() {
         resetElement();
         if ('function' === typeof confirmCallback) {
           confirmCallback();

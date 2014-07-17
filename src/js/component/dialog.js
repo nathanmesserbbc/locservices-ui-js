@@ -81,7 +81,7 @@ define(['jquery'], function($) {
     this.element
       .find('.ls-ui-comp-dialog-confirm button')
       .on('click', function() {
-        handleClick(options.success);
+        handleClick(options.confirm);
       });
     this.element
       .find('.ls-ui-comp-dialog-cancel button')

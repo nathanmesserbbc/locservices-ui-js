@@ -168,7 +168,11 @@ define([
 
       beforeEach(function() {
         location = {
-          id: 'CF5'
+          id: '2644160',
+          name: 'Llandaff',
+          container: 'Cardiff',
+          placeType: 'settlement',
+          country: 'GB'
         };
         stubShouldColdStartDialogBeDisplayed = sinon.stub(controller, 'shouldColdStartDialogBeDisplayed').returns(false);
       });
@@ -197,6 +201,18 @@ define([
         stubShouldColdStartDialogBeDisplayed.returns(true);
         controller.selectLocation(location);
         expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
+      });
+
+      it('should not display cold start dialog if location is not preferrable', function() {
+        location = {
+          id: 'CF5 2YQ',
+          name: 'CF5 2YQ',
+          placeType: 'postcode',
+          country: 'GB'
+        };
+        stubShouldColdStartDialogBeDisplayed.returns(true);
+        controller.selectLocation(location);
+        expect(container.find('.ls-ui-comp-dialog').length).toEqual(0);
       });
 
       it('should emit location event after confirming dialog', function() {
@@ -231,8 +247,14 @@ define([
         var stub = sinon.stub(controller.cookies, 'set');
         var args;
         var actualExpires;
-        var expectedExpires = new Date();
+        var expectedExpires;
+        var expectedCookieDomain;
+        
+        expectedExpires = new Date();
         expectedExpires.setFullYear(expectedExpires.getFullYear() + 1);
+        expectedCookieDomain = '.foo.bar';
+
+        sinon.stub(controller.preferredLocation, 'getCookieDomain').returns(expectedCookieDomain);
 
         stubShouldColdStartDialogBeDisplayed.returns(true);
         controller.selectLocation(location);
@@ -245,7 +267,7 @@ define([
         expect(args[1]).toEqual('1');
         expect(actualExpires.getTime() > (expectedExpires.getTime() - 5000)).toEqual(true);
         expect(args[3]).toEqual('/');
-        expect(args[4]).toEqual('.bbc.co.uk');
+        expect(args[4]).toEqual(expectedCookieDomain);
       });
 
       it('should emit location event after canceling dialog', function() {

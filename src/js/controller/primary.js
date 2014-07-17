@@ -159,6 +159,11 @@ define([
     }
   }
 
+  /**
+   * Handle selecting a single location
+   *
+   * @param {Object} location
+   */
   Primary.prototype.selectLocation = function(location) {
     var self = this;
     var emitLocation = function() {
@@ -178,7 +183,8 @@ define([
     };
 
     var declinePreferredLocation = function() {
-      // @todo clear this if ever setting a preferred location ?!
+      // @todo clear the cookiesColdStartKey cookie if
+      // ever setting a preferred location ?!
       var expires = new Date();
       expires.setFullYear(expires.getFullYear() + 1);
       self.cookies.set(
@@ -191,13 +197,16 @@ define([
       emitLocation();
     };
 
-    if (this.shouldColdStartDialogBeDisplayed()) {
+    if (
+      this.preferredLocation.isValidLocation(location) && 
+      this.shouldColdStartDialogBeDisplayed(location)
+    ) {
       new Dialog({
         element: outside, 
-        message: 'Save location?', 
+        message: self.translations.get('primary.cold_start?'), 
         confirmLabel: self.translations.get('user_locations.dialog.confirm'),
         cancelLabel: self.translations.get('user_locations.dialog.cancel'),
-        success: function() {
+        confirm: function() {
           setAsPreferredLocation();
         },
         cancel: function() {
@@ -210,6 +219,11 @@ define([
 
   };
 
+  /**
+   * Should the cold start dialog be displayed
+   *
+   * @return {Boolean}
+   */
   Primary.prototype.shouldColdStartDialogBeDisplayed = function() {
     return (
       false === this.preferredLocation.isSet() && 
