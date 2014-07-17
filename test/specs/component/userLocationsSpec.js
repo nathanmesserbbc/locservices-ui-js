@@ -384,6 +384,19 @@ function(
         expect(stub.calledOnce).toEqual(true);
       });
 
+      it('emits the main_select event when a location is valid', function() {
+        var emitStub = sinon.stub(userLocations, 'emit');
+        var stub = sinon.stub(userLocations.preferredLocation, 'set', function(locationId, options) {
+          options.success();
+        });
+
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(emitStub.calledWith('main_select', [expectedLocation.id])).toBe(true);
+
+        emitStub.restore();
+        stub.restore();
+      });
+
       // setting preferred errors
 
       it('does not call this.render() if setting preferred fails', function() {

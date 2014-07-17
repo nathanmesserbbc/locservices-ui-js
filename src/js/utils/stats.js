@@ -86,6 +86,12 @@ define(['jquery'], function($) {
       });
     });
 
+    $.on(ns + ':component:user_locations:main_select', function(locationId) {
+      logActionEvent(echoClient, 'user_locations_location_main_select', {
+        locationId: locationId
+      });
+    });
+
     this._registeredNamespaces[ns] = true;
 
     return true;
