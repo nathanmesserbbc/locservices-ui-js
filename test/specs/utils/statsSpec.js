@@ -63,39 +63,45 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
         });
       });
 
-      describe('registers geolocation events for', function() {
+      describe('- geolocation events -', function() {
 
-        it('the geolocation:location event', function() {
+        it('captures the geolocation:location event', function() {
           var location = { id: 123 };
           var labels = { locationId: location.id };
           $.emit(ns + ':component:geolocation:location', [location]);
           expect(stub.calledWith('geolocation_location', 'locservicesui', labels)).toBe(true);
         });
 
-        it('the geolocation error of browser denied permissions', function() {
+        it('captures the geolocation_denied event', function() {
           var error = { code: 'geolocation.error.browser.permission' };
           $.emit(ns + ':component:geolocation:error', [error]);
           expect(stub.calledWith('geolocation_denied', 'locservicesui')).toBe(true);
         });
 
-        it('a geolocation button click', function() {
+        it('captures the geolocation_click event', function() {
           $.emit(ns + ':component:geolocation:click');
           expect(stub.calledWith('geolocation_click', 'locservicesui')).toBe(true);
         });
       });
 
-      describe('registers user_locations events for', function() {
-        it('the main_select event', function() {
+      describe('- user_locations -', function() {
+        it('captures the main_select event', function() {
           var locationId = 123;
           var labels = { locationId: 123 };
           $.emit(ns + ':component:user_locations:main_select', [locationId]);
           expect(stub.calledWith('user_locations_location_main_select', 'locservicesui', labels)).toBe(true);
         });
-        it('the user_locations location event', function() {
+        it('captures the location_select event', function() {
           var location = { id: 123 };
           var labels = { locationId: 123 };
           $.emit(ns + ':component:user_locations:location', [location]);
           expect(stub.calledWith('user_locations_location_select', 'locservicesui', labels)).toBe(true);
+        });
+        it('captures the location_remove event', function() {
+          var locationId = 123;
+          var labels = { locationId: locationId };
+          $.emit(ns + ':component:user_locations:location_remove', [locationId]);
+          expect(stub.calledWith('user_locations_location_remove', 'locservicesui', labels)).toBe(true);
         });
       });
     });

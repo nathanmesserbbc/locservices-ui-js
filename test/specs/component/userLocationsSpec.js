@@ -463,6 +463,13 @@ function(
         expect(stub.calledOnce).toEqual(true);
       });
 
+      it('emits the location_remove event', function() {
+        var emitStub = sinon.stub(userLocations, 'emit');
+        userLocations.removeLocationById(expectedLocation.id);
+        expect(emitStub.calledWith('location_remove', [expectedLocation.id])).toBe(true);
+        emitStub.restore();
+      });
+
     });
 
     describe('render()', function() {

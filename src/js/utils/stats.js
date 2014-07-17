@@ -92,6 +92,12 @@ define(['jquery'], function($) {
       });
     });
 
+    $.on(ns + ':component:user_locations:location_remove', function(locationId) {
+      logActionEvent(echoClient, 'user_locations_location_remove', {
+        locationId: locationId
+      });
+    });
+
     this._registeredNamespaces[ns] = true;
 
     return true;

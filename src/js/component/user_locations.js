@@ -397,6 +397,7 @@ function(
         this.recentLocations.remove(locationId);
       }
       this.render();
+      this.emit('location_remove', [locationId]);
     }
 
   };
