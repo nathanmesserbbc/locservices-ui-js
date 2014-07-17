@@ -167,7 +167,7 @@ define([
     };
 
     var setAsPreferredLocation = function() {
-      self.preferredLocation.setLocation(location.id, {
+      self.preferredLocation.set(location.id, {
         success: function() {
           emitLocation();
         },

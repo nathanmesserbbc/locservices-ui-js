@@ -1,4 +1,4 @@
-/*global describe, it, beforeEach */
+/*global describe, it, beforeEach, afterEach */
 
 define([
   'jquery',
@@ -173,6 +173,10 @@ define([
         stubShouldColdStartDialogBeDisplayed = sinon.stub(controller, 'shouldColdStartDialogBeDisplayed').returns(false);
       });
 
+      afterEach(function() {
+        container.find('.ls-ui-comp-dialog').remove();
+      });
+
       it('should emit an event when not displaying cold start dialog', function() {
         var spy = sinon.spy($, 'emit');
         controller.selectLocation(location);
@@ -180,8 +184,8 @@ define([
         expect(spy.getCall(0).args[1]).toEqual([location]);
         $.emit.restore();
       });
-
-      it('should not emit location event id displaying cold start dialog', function() {
+ 
+      it('should not emit location event if displaying cold start dialog', function() {
         var spy = sinon.spy($, 'emit');
         stubShouldColdStartDialogBeDisplayed.returns(true);
         controller.selectLocation(location);
@@ -191,11 +195,42 @@ define([
 
       it('should display cold start dialog when required', function() {
         stubShouldColdStartDialogBeDisplayed.returns(true);
-console.log('container', container.find('.ls-ui-comp-dialog').html());
-console.log('-------------');
         controller.selectLocation(location);
-console.log('container', container.find('.ls-ui-comp-dialog').length);
         expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
+      });
+
+      it('should emit location event after confirming dialog', function() {
+        var spy = sinon.spy($, 'emit');
+        stubShouldColdStartDialogBeDisplayed.returns(true);
+        sinon.stub(controller.preferredLocation, 'set', function(id, options) {
+          options.success(true);
+        });
+        controller.selectLocation(location);
+        expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
+        container.find('.ls-ui-comp-dialog-confirm button').trigger('click');
+        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:controller:location');
+        expect(spy.getCall(0).args[1]).toEqual([location]);
+        $.emit.restore();
+      });
+
+      it('should set cookie after canceling dialog', function() {
+        var stub = sinon.stub(controller.cookies, 'set');
+        stubShouldColdStartDialogBeDisplayed.returns(true);
+        controller.selectLocation(location);
+        container.find('.ls-ui-comp-dialog-cancel button').trigger('click');
+        expect(stub.getCall(0).args[0]).toEqual('locserv_uics');
+        expect(stub.getCall(0).args[1]).toEqual('1');
+      });
+
+      it('should emit location event after canceling dialog', function() {
+        var spy = sinon.spy($, 'emit');
+        stubShouldColdStartDialogBeDisplayed.returns(true);
+        controller.selectLocation(location);
+        expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
+        container.find('.ls-ui-comp-dialog-cancel button').trigger('click');
+        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:controller:location');
+        expect(spy.getCall(0).args[1]).toEqual([location]);
+        $.emit.restore();
       });
 
     });
