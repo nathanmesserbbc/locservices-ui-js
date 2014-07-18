@@ -143,43 +143,5 @@ define([
     }
   }
 
-  /**
-   * Get user capabilities.
-   * @todo move this to a base controller?
-   *
-   * @private
-   */
-  Primary.prototype._getUserCapabilities = function() {
-
-    var capabilities = {
-      'capability_geolocation': this.geolocation.isSupported,
-      // @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js
-      'capability_local_storage': (function() {
-        try {
-          localStorage.setItem('foo', 'foo');
-          localStorage.getItem('foo');
-          return true;
-        } catch (e) {
-          return false;
-        }
-      }()),
-      // @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/cors.js
-      'capability_cors': 'XMLHttpRequest' in window && 'withCredentials' in new XMLHttpRequest(),
-      // @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/cookies.js
-      'capability_cookies_enabled': (function() {
-        try {
-          document.cookie = 'cookietest=1';
-          var ret = document.cookie.indexOf('cookietest=1') !== -1;
-          document.cookie = 'cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT';
-          return ret;
-        } catch (e) {
-          return false;
-        }
-      }())
-    };
-
-    $.emit(this.namespace + ':controller:capabilities', [capabilities]);
-  };
-
   return Primary;
 });
