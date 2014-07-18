@@ -14,22 +14,17 @@ require.config({
 require([
     'jquery',
     'locservices/ui/translations/en',
-    'locservices/ui/component/close_button',
+    'locservices/ui/component/dialog',
     'pubsub'
-  ], function($, Translation, CloseButton) {
+  ], function($, Translation, Dialog) {
 
   'use strict';
 
-  var comp = $('.close-component');
+  var comp = $('.dialog-component');
   var translations = new Translation();
-  new CloseButton({
-    translations: translations,
+  var dialog = new Dialog({
     container: comp,
-    eventNamespace: 'close-button'
-  });
-
-  $.on('close-button:component:close_button:clicked', function() {
-    alert('Clicked');
+    message: 'This is a dialog.'
   });
 
 });

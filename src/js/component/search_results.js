@@ -46,7 +46,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   SearchResults.prototype.setup = function() {
 
-    var internalContainer = $('<div />').addClass('li-ui-comp-search_results');
+    var internalContainer = $('<div />').addClass('ls-ui-comp-search_results');
     this.list = $('<ul />');
     this.moreResults = $('<a />')
                           .attr('href', '')
