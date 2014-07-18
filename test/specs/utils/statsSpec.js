@@ -156,6 +156,11 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
           });
           expect(stub.calledWith('search_no_results', 'locservicesui')).toBe(true);
         });
+        it('records a stat when a search result is selected', function() {
+          var labels = { locationId: 123, offset: 0 };
+          $.emit(ns + ':component:search_results:location', [labels.locationId, labels.offset]);
+          expect(stub.calledWith('search_results_location', 'locservicesui', labels)).toBe(true);
+        });
       });
     });
 

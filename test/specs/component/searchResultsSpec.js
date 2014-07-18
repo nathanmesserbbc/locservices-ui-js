@@ -96,6 +96,12 @@ define([
         expect(stub.calledWith('results', expectedMetadata)).toBe(true);
       });
 
+      it('renders locationId and offset data attributes', function() {
+        searchResults.render(responseMultiple.results, responseMultiple.metadata);
+        expect(searchResults.list.find('a:eq(0)').data('id')).toEqual(2653822);
+        expect(searchResults.list.find('a:eq(0)').data('offset')).toEqual(0);
+      });
+
       // @todo Test the label includes name and container
 
       // @todo Test the <li> contains a link (and locationId)

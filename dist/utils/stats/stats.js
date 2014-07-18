@@ -141,6 +141,13 @@ define([
       }
     });
 
+    $.on(ns + ':component:search_results:location', function(locationId, offset) {
+      logActionEvent(echoClient, 'search_results_location', {
+        locationId: locationId,
+        offset: offset
+      });
+    });
+
     this._registeredNamespaces[ns] = true;
 
     return true;
