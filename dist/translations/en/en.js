@@ -10,8 +10,8 @@ define(function() {
     'user_locations.action.remove': 'Remove',
     'user_locations.dialog.confirm': 'Confirm',
     'user_locations.dialog.cancel': 'Cancel',
-    'user_locations.dialog.remove_preferred': 'We will no longer use <location name> to give you relevant local info across the BBC.',
-    'user_locations.dialog.prefer': 'We will now use <location name> to give you relevant local info across the BBC.',
+    'user_locations.dialog.remove_preferred': 'We will no longer use <strong>{name}</strong> to give you relevant local info across the BBC.',
+    'user_locations.dialog.prefer': 'We will now use <strong>{name}</strong> to give you relevant local info across the BBC.',
     'user_locations.message.preferred': 'We\'ll use your main location to give you relevant local info across the BBC.',
     'user_locations.message.change_preferred': 'You can change this to another location by hitting the star next to it.',
     'user_locations.error.preferred_location': 'Sorry, we are experiencing technical problems.',
@@ -27,16 +27,58 @@ define(function() {
     'message.geolocation.detect': 'Detecting your location.',
     'message.no_results': 'We could not find any results for ',
     'message.results': 'Search results for ',
-    'primary_search.close': 'Close'
+    'message.showing': 'Showing ',
+    'message.of': ' of ',
+    'primary.cold_start': 'We\'ll now use <strong>{name}</strong> as your main location to give you relevant local info across the BBC.',
+    'primary_search.close': 'Close',
+    'test.interpolation': 'Value {a} and value {b}.'
   };
 
   function TranslationsEn() {}
 
-  TranslationsEn.prototype.get = function(key) {
-    if (dictionary.hasOwnProperty(key)) {
-      return dictionary[key];
+  /**
+   * Returns translation for given key or false if
+   * key is not present
+   *
+   * @param {String} key for translation
+   * @param {Object} interpolationDictionary
+   * @return {String|Boolean}
+   */
+  TranslationsEn.prototype.get = function(key, interpolationDictionary) {
+    var result;
+    if (!dictionary.hasOwnProperty(key)) {
+      return false;
     }
-    return false;
+    result = dictionary[key];
+    if ('object' === typeof interpolationDictionary) {
+      result = String(result).replace(
+        /\{([^{}]*)\}/g,
+        function(valueToReplace, interpolationKey) {
+          if (interpolationDictionary.hasOwnProperty(interpolationKey)) {
+            return interpolationDictionary[interpolationKey];
+          } else {
+            return valueToReplace;
+          }
+        }
+      );
+    }
+    return result;
+  };
+
+  /**
+   * Sets the translation for a given key
+   *
+   * @param {String} key for translation
+   * @param {String} value translation value for given key
+   * @return {Boolean}
+   */
+  TranslationsEn.prototype.set = function(key, value) {
+
+    if ('string' !== typeof key || '' === key || undefined === value) {
+      return false;
+    }
+    dictionary[key] = value;
+    return true;
   };
 
   return TranslationsEn;
