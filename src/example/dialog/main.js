@@ -1,4 +1,4 @@
-/* global require, alert */
+/* global require */
 
 require.config({
   baseUrl: '/',

@@ -199,7 +199,7 @@ define([
 
     if (
       this.preferredLocation.isValidLocation(location) && 
-      this.shouldColdStartDialogBeDisplayed(location)
+      this.shouldColdStartDialogBeDisplayed()
     ) {
       new Dialog({
         element: outside, 
