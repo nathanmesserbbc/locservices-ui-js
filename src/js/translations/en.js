@@ -29,7 +29,8 @@ define(function() {
     'message.results': 'Search results for ',
     'message.showing': 'Showing ',
     'message.of': ' of ',
-    'primary_search.close': 'Close'
+    'primary_search.close': 'Close',
+    'test.interpolation': 'Value {a} and value {b}.'
   };
 
   function TranslationsEn() {}
@@ -39,13 +40,28 @@ define(function() {
    * key is not present
    *
    * @param {String} key for translation
+   * @param {Object} interpolationDictionary
    * @return {String|Boolean}
    */
-  TranslationsEn.prototype.get = function(key) {
-    if (dictionary.hasOwnProperty(key)) {
-      return dictionary[key];
+  TranslationsEn.prototype.get = function(key, interpolationDictionary) {
+    var result;
+    if (!dictionary.hasOwnProperty(key)) {
+      return false;
     }
-    return false;
+    result = dictionary[key];
+    if ('object' === typeof interpolationDictionary) {
+      result = String(result).replace(
+        /\{([^{}]*)\}/g,
+        function (valueToReplace, interpolationKey) {
+          if (interpolationDictionary.hasOwnProperty(interpolationKey)) {
+            return interpolationDictionary[interpolationKey];
+          } else {
+            return valueToReplace;
+          }
+        }
+      );
+    }
+    return result;
   };
 
   /**

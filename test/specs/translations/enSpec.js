@@ -18,8 +18,21 @@ define(['locservices/ui/translations/en'], function(En) {
       });
 
       it('should return a string for a valid key', function() {
-
         expect(translations.get('geolocation.button.label')).toBe('Use my current location');
+      });
+
+      it('should handle invalid interpolation dictionary', function() {
+        var result = translations.get('test.interpolation', 'not an object');
+        expect(result).toEqual('Value {a} and value {b}.');
+      });
+
+      it('should interpolate values', function() {
+        var values = {
+          a: 'foo',
+          b: 'bar'
+        };
+        var result = translations.get('test.interpolation', values);
+        expect(result).toEqual('Value foo and value bar.');
       });
 
     });
