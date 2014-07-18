@@ -190,7 +190,7 @@ define([
       self.cookies.set(
         self.cookiesColdStartKey, 
         '1', 
-        expires.toGMTString(), 
+        expires.toUTCString(), 
         '/',
         self.preferredLocation.getCookieDomain()
       );
@@ -202,7 +202,7 @@ define([
       this.shouldColdStartDialogBeDisplayed()
     ) {
       new Dialog({
-        element: outside, 
+        container: outside, 
         message: self.translations.get('primary.cold_start'), 
         confirmLabel: self.translations.get('user_locations.dialog.confirm'),
         cancelLabel: self.translations.get('user_locations.dialog.cancel'),

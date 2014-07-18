@@ -23,10 +23,8 @@ require([
   var comp = $('.dialog-component');
   var translations = new Translation();
   var dialog = new Dialog({
-    translations: translations,
-    container: comp
+    container: comp,
+    message: 'This is a dialog.'
   });
-
-  dialog.render(comp, 'This is a dialog message.');
 
 });

@@ -61,29 +61,29 @@ define(['jquery'], function($) {
   function Dialog(options) {
     var self = this;
     options = options || {};
-    this.element = options.element; 
+    this.container = options.container; 
     this.confirmLabel = options.confirmLabel || 'Confirm';
     this.cancelLabel = options.cancelLabel || 'Cancel';
 
     var handleClick = function(callback) {
-      self.element.find('.ls-ui-comp-dialog').remove();
+      self.container.find('.ls-ui-comp-dialog').remove();
       if ('function' === typeof callback) {
         callback();
       }
     };
-    this.element.append(
+    this.container.append(
       templates.dialog(
         options.message,
         this.confirmLabel,
         this.cancelLabel
       )
     );
-    this.element
+    this.container
       .find('.ls-ui-comp-dialog-confirm button')
       .on('click', function() {
         handleClick(options.confirm);
       });
-    this.element
+    this.container
       .find('.ls-ui-comp-dialog-cancel button')
       .on('click', function() {
         handleClick(options.cancel);

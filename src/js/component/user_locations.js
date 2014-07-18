@@ -276,7 +276,7 @@ function(
     element.addClass('ls-ui-comp-user_locations-location-with-dialog');
 
     new Dialog({
-      element: element, 
+      container: element, 
       message: message, 
       confirmLabel: this.translations.get('user_locations.dialog.confirm'),
       cancelLabel: this.translations.get('user_locations.dialog.cancel'),
