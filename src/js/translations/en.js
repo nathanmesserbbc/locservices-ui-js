@@ -52,7 +52,7 @@ define(function() {
     if ('object' === typeof interpolationDictionary) {
       result = String(result).replace(
         /\{([^{}]*)\}/g,
-        function (valueToReplace, interpolationKey) {
+        function(valueToReplace, interpolationKey) {
           if (interpolationDictionary.hasOwnProperty(interpolationKey)) {
             return interpolationDictionary[interpolationKey];
           } else {
