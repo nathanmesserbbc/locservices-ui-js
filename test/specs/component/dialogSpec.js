@@ -25,6 +25,15 @@ define([
         expect(element.find('p').text()).toBe(expectedMessage);
       });
 
+      it('displays the expected message when message includes html', function() {
+        var expectedMessage = 'This is a <strong>html</strong> test message.';
+        new Dialog({
+          container: element,
+          message: expectedMessage
+        });
+        expect(element.find('p').children().length).toBe(1);
+      });
+
       it('displays the expected confirm label', function() {
         var expectedLabel = 'Foo';
         new Dialog({

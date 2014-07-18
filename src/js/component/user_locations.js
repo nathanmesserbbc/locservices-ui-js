@@ -217,7 +217,12 @@ function(
       } else if ('prefer' === action) {
         self.displayDialog(
           target.parent('li'),
-          self.translations.get('user_locations.dialog.prefer'),
+          self.translations.get(
+            'user_locations.dialog.prefer',
+            {
+              name: location.name
+            }
+          ),
           function() {
             self.setPreferredLocationById(locationId);
           }
@@ -226,7 +231,12 @@ function(
         if (location.isPreferred) {
           self.displayDialog(
             target.parent('li'),
-            self.translations.get('user_locations.dialog.remove_preferred'),
+            self.translations.get(
+              'user_locations.dialog.remove_preferred',
+              {
+                name: location.name
+              }
+            ),
             function() {
               self.removeLocationById(locationId);
             }

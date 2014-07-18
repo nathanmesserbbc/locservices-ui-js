@@ -124,7 +124,7 @@ function(
           expect(stub.args[0][0]).toBe(removeLocation.id);
         });
 
-        it('calls this.displayConfirmDialogue when clicking on remove preferred', function() {
+        it('calls this.displayDialog when clicking on remove preferred', function() {
           var stub;
           removeLocation.isPreferred = true;
           stub = sinon.stub(userLocations, 'displayDialog');
@@ -132,6 +132,7 @@ function(
           expect(stub.callCount).toBe(1);
           expect(stub.args[0][0][0]).toBe(locationElement[0]);
           expect(typeof stub.args[0][1]).toBe('string');
+          expect(stub.args[0][1].indexOf(removeLocation.name)).toBeGreaterThan(-1);
           expect(typeof stub.args[0][2]).toBe('function');
         });
 
@@ -160,13 +161,14 @@ function(
           userLocations.element.append(locationElement);
         });
 
-        it('calls this.displayConfirmDialogue when clicking on prefer', function() {
+        it('calls this.displayDialog when clicking on prefer', function() {
           var stub;
           stub = sinon.stub(userLocations, 'displayDialog');
           preferElement.trigger('click');
           expect(stub.callCount).toBe(1);
           expect(stub.args[0][0][0]).toBe(locationElement[0]);
           expect(typeof stub.args[0][1]).toBe('string');
+          expect(stub.args[0][1].indexOf(testLocations[0].name)).toBeGreaterThan(-1);
           expect(typeof stub.args[0][2]).toBe('function');
         });
 

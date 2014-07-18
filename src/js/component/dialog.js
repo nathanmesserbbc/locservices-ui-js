@@ -17,7 +17,7 @@ define(['jquery'], function($) {
     dialog: function(messageText, confirmLabel, cancelLabel) {
       var div = $('<div/>')
         .addClass('ls-ui-comp-dialog');
-      var message = $('<p/>').text(messageText);
+      var message = $('<p/>').html(messageText);
       var buttons = $('<div/>').addClass('ls-ui-comp-dialog-buttons');
       buttons.append(
         templates.button(

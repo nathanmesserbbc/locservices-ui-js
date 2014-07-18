@@ -203,7 +203,12 @@ define([
     ) {
       new Dialog({
         container: outside, 
-        message: self.translations.get('primary.cold_start'), 
+        message: self.translations.get(
+          'primary.cold_start',
+          {
+            name: location.name
+          }
+        ), 
         confirmLabel: self.translations.get('user_locations.dialog.confirm'),
         cancelLabel: self.translations.get('user_locations.dialog.cancel'),
         confirm: function() {

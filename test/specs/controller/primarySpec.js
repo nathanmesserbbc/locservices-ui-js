@@ -216,6 +216,14 @@ define([
         expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
       });
 
+      it('should display cold start dialog with expected location name', function() {
+        var message;
+        stubShouldColdStartDialogBeDisplayed.returns(true);
+        controller.selectLocation(location);
+        message = container.find('.ls-ui-comp-dialog p').text();
+        expect(message.indexOf(location.name)).toBeGreaterThan(-1);
+      });
+
       it('should not display cold start dialog if location is not preferrable', function() {
         location = {
           id: 'CF5 2YQ',
