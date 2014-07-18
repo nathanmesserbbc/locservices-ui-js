@@ -27,6 +27,7 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
       expect(labels.hasOwnProperty('capability_bbccookies_preference_enabled')).toBe(true);
       expect(labels.hasOwnProperty('has_locserv_cookie')).toBe(true);
       expect(labels.hasOwnProperty('has_recent_locations')).toBe(true);
+      expect(labels.hasOwnProperty('recent_locations_total')).toBe(true);
 
       stub.restore();
     });

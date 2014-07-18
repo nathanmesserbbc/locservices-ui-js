@@ -37,7 +37,8 @@ define([
     'capability_cookies_enabled': (new Cookies()).isSupported(),
     'capability_bbccookies_preference_enabled': (new BBCCookies()).isPersonalisationDisabled(),
     'has_locserv_cookie': (new PreferredLocation()).isSet(),
-    'has_recent_locations': recentLocations.isSupported() && recentLocations.all().length > 0
+    'has_recent_locations': recentLocations.isSupported() && recentLocations.all().length > 0,
+    'recent_locations_total': recentLocations.isSupported() ? recentLocations.all().length : 0
   };
 
   /**
