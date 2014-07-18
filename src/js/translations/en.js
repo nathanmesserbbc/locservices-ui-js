@@ -65,7 +65,7 @@ define(function() {
   };
 
   /**
-   * Sets the trnaslation for a given key
+   * Sets the translation for a given key
    *
    * @param {String} key for translation
    * @param {String} value translation value for given key
