@@ -3,6 +3,7 @@
 define([
   'jquery',
   'locservices/ui/component/component',
+  'locservices/ui/component/dialog',
   'locservices/core/bbc_cookies',
   'locservices/core/recent_locations',
   'locservices/core/preferred_location',
@@ -11,6 +12,7 @@ define([
 function(
   $,
   Component,
+  Dialog,
   BBCCookies,
   RecentLocations,
   PreferredLocation,
@@ -140,38 +142,8 @@ function(
       return $('<p/>')
         .addClass('ls-ui-comp-user_locations-message')
         .text(value);
-    },
-
-    /**
-     * Template for a confirm/cancel dialog
-     *
-     * @param {Object} translations
-     * @param {String} messageText
-     * @return {Object}
-     */
-    dialog: function(translations, messageText) {
-      var div = $('<div/>')
-        .addClass('ls-ui-comp-user_locations-dialog');
-      var message = $('<p/>').text(messageText);
-      var buttons = $('<div/>').addClass('ls-ui-comp-user_locations-dialog-buttons');
-      var confirm = $('<span/>').append($('<button/>'));
-      confirm
-        .addClass('ls-ui-comp-user_locations-dialog-confirm')
-        .find('button')
-        .text(
-          translations.get('user_locations.dialog.confirm')
-        );
-      var cancel = $('<span/>').append($('<button/>'));
-      cancel
-        .addClass('ls-ui-comp-user_locations-dialog-cancel')
-        .find('button')
-        .text(
-          translations.get('user_locations.dialog.cancel')
-        );
-      buttons.append(confirm).append(cancel);
-      div.append(message).append(buttons);
-      return div;
     }
+
   };
 
   /**
@@ -237,8 +209,7 @@ function(
         return;
       }
 
-      // @todo
-      // deal with prefer and remove location name interpolation
+      // @todo <location name> interpolation in messages
 
       action = target.data('action');
       if ('location' === action) {
@@ -299,30 +270,27 @@ function(
   UserLocations.prototype.displayDialog = function(element, message, confirmCallback) {
 
     var resetElement = function() {
-      element.find('.ls-ui-comp-user_locations-dialog').remove();
       element.removeClass('ls-ui-comp-user_locations-location-with-dialog');
     };
 
     element.addClass('ls-ui-comp-user_locations-location-with-dialog');
-    element.append(
-      templates.dialog(
-        this.translations,
-        message
-      )
-    );
-    element
-      .find('.ls-ui-comp-user_locations-dialog-confirm button')
-      .on('click', function() {
+
+    new Dialog({
+      container: element, 
+      message: message, 
+      confirmLabel: this.translations.get('user_locations.dialog.confirm'),
+      cancelLabel: this.translations.get('user_locations.dialog.cancel'),
+      confirm: function() {
         resetElement();
         if ('function' === typeof confirmCallback) {
           confirmCallback();
         }
-      });
-    element
-      .find('.ls-ui-comp-user_locations-dialog-cancel button')
-      .on('click', function() {
+      }, 
+      cancel: function() {
         resetElement();
-      });
+      }
+    });
+
   };
 
   /**

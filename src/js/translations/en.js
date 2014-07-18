@@ -29,6 +29,7 @@ define(function() {
     'message.results': 'Search results for ',
     'message.showing': 'Showing ',
     'message.of': ' of ',
+    'primary.cold_start': 'We\'ll now use <location name> as your main location to give you relevant local info across the BBC.',
     'primary_search.close': 'Close',
     'test.interpolation': 'Value {a} and value {b}.'
   };
