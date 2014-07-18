@@ -269,6 +269,7 @@ function(
 
     var handleLocationEvent = function(location) {
       if (self.recentLocations.add(location)) {
+        self.emit('location_add', [location]);
         self.render();
       }
     };
@@ -367,6 +368,7 @@ function(
       this.preferredLocation.set(location.id, {
         success: function() {
           self.render();
+          self.emit('make_main', [locationId]);
         },
         error: function() {
           self.emit('error', [{
@@ -396,6 +398,7 @@ function(
         this.recentLocations.remove(locationId);
       }
       this.render();
+      this.emit('location_remove', [locationId]);
     }
 
   };
@@ -434,7 +437,11 @@ function(
     if (hasPreferredLocation) {
       preferredLocation = this.preferredLocation.get();
       this._locations[preferredLocation.id] = preferredLocation;
+
+      // @todo always ensure this property is set so that stats tracking can
+      // capture clicking a preferred location
       preferredLocation.isPreferred = true;
+
       preferredLocation.isPreferable = true;
       templates.preferredLocationList.append(
         templates.location(this.translations, preferredLocation)

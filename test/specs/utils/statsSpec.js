@@ -10,6 +10,35 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
 
   describe('The Stats', function() {
 
+    it('registers user capability and properties by a single event', function() {
+      var stub = sinon.stub(echoClient, 'userActionEvent');
+      new Stats(echoClient);
+
+      expect(stub.calledOnce).toBe(true);
+
+      var actionType = stub.args[0][0];
+      var labels = stub.args[0][2];
+
+      expect(actionType).toEqual('locservices_user');
+      expect(labels.hasOwnProperty('capability_geolocation')).toBe(true);
+      expect(labels.hasOwnProperty('capability_local_storage')).toBe(true);
+      expect(labels.hasOwnProperty('capability_recent_locations')).toBe(true);
+      expect(labels.hasOwnProperty('capability_cookies_enabled')).toBe(true);
+      expect(labels.hasOwnProperty('capability_bbccookies_preference_enabled')).toBe(true);
+      expect(labels.hasOwnProperty('has_locserv_cookie')).toBe(true);
+      expect(labels.hasOwnProperty('has_recent_locations')).toBe(true);
+
+      stub.restore();
+    });
+
+    it('registers user capabilities and properties only once', function() {
+
+      var stub = sinon.stub(echoClient, 'userActionEvent');
+      new Stats(echoClient);
+      expect(stub.called).toBe(false);
+      stub.restore();
+    });
+
     describe('constructor', function() {
 
       it('throws an error if an echo client is not passed in as an options', function() {

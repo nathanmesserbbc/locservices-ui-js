@@ -1,5 +1,12 @@
 /*global define */
-define(['jquery'], function($) {
+define([
+  'jquery',
+  'locservices/core/geolocation',
+  'locservices/core/recent_locations',
+  'locservices/core/cookies',
+  'locservices/core/bbc_cookies',
+  'locservices/core/preferred_location'
+], function($, geolocation, RecentLocations, Cookies, BBCCookies, PreferredLocation) {
 
   'use strict';
 
@@ -11,11 +18,27 @@ define(['jquery'], function($) {
    *
    * @param {EchoClient} echoClient a configured instance of the Echo Client
    * @param {String} actionType the action type
-   * @param {Object} labels additional labels passed for stats
+   * @param {Object} [labels] additional labels passed for stats
    */
   function logActionEvent(echoClient, actionType, labels) {
     echoClient.userActionEvent(actionType, 'locservicesui', labels || {});
   }
+
+  // ensures we only log capabilities once when the module is used for the
+  // first time.
+  var hasLoggedCapabilities = false;
+
+  var recentLocations = new RecentLocations();
+
+  var caps = {
+    'capability_geolocation': geolocation.isSupported,
+    'capability_recent_locations': recentLocations.isSupported(),
+    'capability_local_storage': (typeof window.localStorage === 'object' && window.localStorage.getItem),
+    'capability_cookies_enabled': (new Cookies()).isSupported(),
+    'capability_bbccookies_preference_enabled': (new BBCCookies()).isPersonalisationDisabled(),
+    'has_locserv_cookie': (new PreferredLocation()).isSet(),
+    'has_recent_locations': recentLocations.isSupported() && recentLocations.all().length > 0
+  };
 
   /**
    * Stats.
@@ -28,6 +51,11 @@ define(['jquery'], function($) {
 
     options = options || {};
     options.namespace = options.namespace || 'locservices:ui';
+
+    if (!hasLoggedCapabilities) {
+      logActionEvent(echoClient, 'locservices_user', caps);
+      hasLoggedCapabilities = true;
+    }
 
     // require an echo client
     if (!echoClient || typeof echoClient !== 'object') {
