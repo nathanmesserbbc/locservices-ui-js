@@ -126,7 +126,7 @@ define([
 
       it('should emit an active event on internal error', function() {
         var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:error');
+        $.emit('locservices:ui:error', [{}]);
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:active');
 
         $.emit.restore();

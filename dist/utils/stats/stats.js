@@ -91,7 +91,7 @@ define([
       });
     });
 
-    $.on(ns + ':component:geolocation:error', function(err) {
+    $.on(ns + ':error', function(err) {
       if (err.code === 'geolocation.error.browser.permission') {
         logActionEvent(echoClient, 'geolocation_denied');
       }

@@ -104,7 +104,7 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
 
         it('captures the geolocation_denied event', function() {
           var error = { code: 'geolocation.error.browser.permission' };
-          $.emit(ns + ':component:geolocation:error', [error]);
+          $.emit(ns + ':error', [error]);
           expect(stub.calledWith('geolocation_denied', 'locservicesui')).toBe(true);
         });
 
