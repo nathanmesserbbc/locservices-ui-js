@@ -60,7 +60,7 @@ define([
 
     verify(options);
 
-    if (options.hasOwnProperty('echoClient') && typeof options.echoClient === 'object') {
+    if (typeof options.echoClient === 'object') {
       this._stats = new Stats(options.echoClient);
     }
 
