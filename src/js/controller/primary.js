@@ -13,7 +13,8 @@ define([
   'locservices/ui/component/search_results',
   'locservices/ui/component/user_locations',
   'locservices/ui/component/close_button',
-  'locservices/ui/component/dialog'
+  'locservices/ui/component/dialog',
+  'locservices/ui/utils/stats'
 ], function(
   $,
   Api,
@@ -27,7 +28,8 @@ define([
   SearchResults,
   UserLocations,
   CloseButton,
-  Dialog
+  Dialog,
+  Stats
 ) {
   'use strict';
 
@@ -47,8 +49,20 @@ define([
     }
   };
 
+  /**
+   * Primary Controller.
+   *
+   * @param {Object} options controller options.
+   *
+   * @constructor
+   */
   function Primary(options) {
+
     verify(options);
+
+    if (options.hasOwnProperty('echoClient') && typeof options.echoClient === 'object') {
+      this._stats = new Stats(options.echoClient);
+    }
 
     var self = this;
     var alwaysOpen = options.alwaysOpen || false;

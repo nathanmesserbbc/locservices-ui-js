@@ -45,7 +45,7 @@ define([
    * Stats.
    *
    * @param {EchoClient} echoClient a configured instance of an echo client
-   * @param {Object} options additional options
+   * @param {Object} [options] additional options
    * @constructor
    */
   function Stats(echoClient, options) {

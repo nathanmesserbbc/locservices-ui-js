@@ -4,8 +4,9 @@ define([
   'jquery',
   'locservices/core/api',
   'locservices/ui/controller/primary',
-  'locservices/ui/translations/en'
-], function($, Api, Controller, Translations) {
+  'locservices/ui/translations/en',
+  'locservices/ui/utils/stats'
+], function($, Api, Controller, Translations, Stats) {
 
   describe('The primary search', function() {
     'use strict';
@@ -26,6 +27,21 @@ define([
           container: container,
           translations: translations
         });
+      });
+
+      it('does not create a new instance of Stats if echoClient is not defined', function() {
+        expect(controller._stats).toBeUndefined();
+      });
+
+      it('creates a new Stats instance when options is passed an echoClient', function() {
+        var echoClient = { userActionEvent: function() {} };
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations,
+          echoClient: echoClient
+        });
+        expect(controller._stats instanceof Stats).toBe(true);
       });
 
       it('should set the namespace', function() {
