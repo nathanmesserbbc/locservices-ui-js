@@ -47,6 +47,9 @@ define([
       labels.locationName += ', ' + location.container;
     }
 
+    if (recentLocationsIsSupported) {
+      labels.addedToRecentLocations = true;
+    }
     return labels;
   }
 
@@ -55,6 +58,8 @@ define([
   var hasLoggedCapabilities = false;
 
   var recentLocations = new RecentLocations();
+  var recentLocationsIsSupported = recentLocations.isSupported();
+  var allRecentLocations = recentLocations.all();
 
   var caps = {
     'capability_geolocation': geolocation.isSupported,
@@ -63,8 +68,8 @@ define([
     'capability_cookies_enabled': (new Cookies()).isSupported(),
     'capability_bbccookies_preference_enabled': (new BBCCookies()).isPersonalisationDisabled(),
     'has_locserv_cookie': (new PreferredLocation()).isSet(),
-    'has_recent_locations': recentLocations.isSupported() && recentLocations.all().length > 0,
-    'recent_locations_total': recentLocations.isSupported() ? recentLocations.all().length : 0
+    'has_recent_locations': recentLocationsIsSupported && allRecentLocations.length > 0,
+    'recent_locations_total': recentLocationsIsSupported ? allRecentLocations.length : 0
   };
 
   /**
@@ -147,10 +152,6 @@ define([
 
     $.on(ns + ':component:user_locations:location_remove', function(location) {
       logActionEvent(echoClient, 'user_locations_location_remove', getLabelsForLocation(location));
-    });
-
-    $.on(ns + ':component:user_locations:location_add', function(location) {
-      logActionEvent(echoClient, 'user_locations_location_add', getLabelsForLocation(location));
     });
 
     $.on(ns + ':component:search_results:results', function(metadata) {

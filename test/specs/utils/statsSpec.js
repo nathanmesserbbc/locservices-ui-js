@@ -1,5 +1,9 @@
 /*global define, beforeEach, afterEach */
-define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
+define([
+  'locservices/ui/utils/stats',
+  'locservices/core/recent_locations',
+  'jquery'
+], function(Stats, RecentLocations, $) {
 
   // mock echo client interface
   var echoClient = {
@@ -22,6 +26,11 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
     locationPlaceType: 'settlement',
     locationCountry: 'GB'
   };
+
+  var recentLocationsIsSupported = (new RecentLocations()).isSupported();
+  if (recentLocationsIsSupported) {
+    expectedLabels.addedToRecentLocations = true;
+  }
 
   describe('The Stats', function() {
 
@@ -143,10 +152,6 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
         it('captures the location_remove event', function() {
           $.emit(ns + ':component:user_locations:location_remove', [testLocation]);
           expect(stub.calledWith('user_locations_location_remove', 'locservicesui', expectedLabels)).toBe(true);
-        });
-        it('captures the location_add event', function() {
-          $.emit(ns + ':component:user_locations:location_add', [testLocation]);
-          expect(stub.calledWith('user_locations_location_add', 'locservicesui', expectedLabels)).toBe(true);
         });
       });
 
