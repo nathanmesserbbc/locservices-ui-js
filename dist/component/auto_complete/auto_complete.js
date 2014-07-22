@@ -72,7 +72,7 @@ define([
 
     self.searchResults.on('mousedown', 'li', function() {
       var location = self.searchResultsData[$(this).index()];
-      self.emit('location', [location]);
+      self.emit('location', [location, self.currentSearchTerm]);
       self.clear();
     });
 
@@ -224,7 +224,7 @@ define([
     if (null !== this._highlightedSearchResultIndex) {
       event.preventDefault();
       var location = this.searchResultsData[this._highlightedSearchResultIndex];
-      this.emit('location', [location]);
+      this.emit('location', [location, this.currentSearchTerm]);
     }
     this.clear();
   };

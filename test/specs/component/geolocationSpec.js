@@ -75,6 +75,16 @@ define([
         expect(geolocation._button.hasClass('disabled')).toBe(true);
         stub.restore();
       });
+
+      it('emits the click event', function() {
+
+        var geoStub = sinon.stub(geolocation, 'reverseGeocode');
+        var emitStub = sinon.stub(geolocation, 'emit');
+        geolocation.container.find('button').trigger('click');
+        expect(emitStub.calledWith('click')).toBe(true);
+        geoStub.restore();
+        emitStub.restore();
+      });
     });
 
     describe('reverseGeocode()', function() {

@@ -58,10 +58,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     var self = this;
     this.list.on('click', function(evt) {
-      var locationId;
+      var locationId, offset;
       evt.preventDefault();
       locationId = $(evt.target).data('id');
-      self.emit('location', [self._data[locationId]]);
+      offset = $(evt.target).data('offset');
+      self.emit('location', [self._data[locationId], offset]);
       self.clear();
       return false;
     });
@@ -101,7 +102,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       if (result.container) {
         label += ', ' + result.container;
       }
-      html += '<li><a href="" data-id="' + result.id + '">' + label + '</a></li>';
+      html += '<li><a href="" data-id="' + result.id + '" data-offset="' + this.offset + '">' + label + '</a></li>';
     }
 
     if (this.offset === 0) {

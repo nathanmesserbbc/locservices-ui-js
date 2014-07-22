@@ -210,11 +210,51 @@ function(
         var expectedLocation;
         expectedLocation = 'foo';
         stub = sinon.stub(userLocations.recentLocations, 'add');
-        $.emit('locservices:ui:component:auto_complete:location', [expectedLocation]);
+        $.emit('locservices:ui:component:auto_complete:location', [expectedLocation, '']);
         expect(stub.calledOnce).toBe(true);
         expect(stub.calledWith(expectedLocation)).toBe(true);
       });
 
+      // handleLocationEvent
+      it('emits the location_added event when search results emits a location', function() {
+        var location = { id: 123 };
+        var emitStub = sinon.stub(userLocations, 'emit');
+        var addStub = sinon.stub(userLocations.recentLocations, 'add', function() {
+          return true;
+        });
+
+        $.emit('locservices:ui:component:search_results:location', [location]);
+        expect(emitStub.calledWith('location_add', [location])).toBe(true);
+
+        emitStub.restore();
+        addStub.restore();
+      });
+      it('emits the location_added event when the geolocation:location event is emitted', function() {
+        var location = { id: 123 };
+        var emitStub = sinon.stub(userLocations, 'emit');
+        var addStub = sinon.stub(userLocations.recentLocations, 'add', function() {
+          return true;
+        });
+
+        $.emit('locservices:ui:component:geolocation:location', [location]);
+        expect(emitStub.calledWith('location_add', [location])).toBe(true);
+
+        emitStub.restore();
+        addStub.restore();
+      });
+      it('emits the location_added event when the auto_complete:location event is emitted', function() {
+        var location = { id: 123 };
+        var emitStub = sinon.stub(userLocations, 'emit');
+        var addStub = sinon.stub(userLocations.recentLocations, 'add', function() {
+          return true;
+        });
+
+        $.emit('locservices:ui:component:auto_complete:location', [location, '']);
+        expect(emitStub.calledWith('location_add', [location])).toBe(true);
+
+        emitStub.restore();
+        addStub.restore();
+      });
     });
 
     describe('selectLocationById()', function() {
@@ -386,6 +426,46 @@ function(
         expect(stub.calledOnce).toEqual(true);
       });
 
+      it('emits the location_prefer event when a location is valid', function() {
+        var emitStub = sinon.stub(userLocations, 'emit');
+        var stub = sinon.stub(userLocations.preferredLocation, 'set', function(locationId, options) {
+          options.success();
+        });
+
+        userLocations.setPreferredLocationById(expectedLocation.id);
+        expect(emitStub.calledWith('location_prefer', [expectedLocation])).toBe(true);
+
+        emitStub.restore();
+        stub.restore();
+      });
+
+      it('emits the location with isPreferred property for main location select', function() {
+        var prefLocSetStub = sinon.stub(userLocations.preferredLocation, 'isSet', function() {
+          return true;
+        });
+        var prefLocStub = sinon.stub(userLocations.preferredLocation, 'get', function() {
+          return expectedLocation;
+        });
+        var emitStub = sinon.stub(userLocations, 'emit');
+
+        // make a clone of the original object under test. the additional
+        // properties are added in render(). it's this location object that
+        // we expect to be emitted as an event parameter. this test needs to pass
+        // otherwise we'll lose the stats tracking for clicking the preferred location
+        var location = $.extend(true, {}, expectedLocation);
+        location.isPreferred = true;
+        location.isPreferable = true;
+
+        userLocations.render();
+        userLocations.selectLocationById(expectedLocation.id);
+
+        expect(emitStub.calledWith('location', [location])).toBe(true);
+
+        prefLocStub.restore();
+        emitStub.restore();
+        prefLocSetStub.restore();
+      });
+
       // setting preferred errors
 
       it('does not call this.render() if setting preferred fails', function() {
@@ -450,6 +530,13 @@ function(
         stub = sinon.stub(userLocations, 'render');
         userLocations.removeLocationById(expectedLocation.id);
         expect(stub.calledOnce).toEqual(true);
+      });
+
+      it('emits the location_remove event', function() {
+        var emitStub = sinon.stub(userLocations, 'emit');
+        userLocations.removeLocationById(expectedLocation.id);
+        expect(emitStub.calledWith('location_remove', [expectedLocation])).toBe(true);
+        emitStub.restore();
       });
 
     });

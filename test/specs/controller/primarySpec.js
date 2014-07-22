@@ -4,8 +4,9 @@ define([
   'jquery',
   'locservices/core/api',
   'locservices/ui/controller/primary',
-  'locservices/ui/translations/en'
-], function($, Api, Controller, Translations) {
+  'locservices/ui/translations/en',
+  'locservices/ui/utils/stats'
+], function($, Api, Controller, Translations, Stats) {
 
   describe('The primary search', function() {
     'use strict';
@@ -15,18 +16,33 @@ define([
         controller,
         translations;
 
-    beforeEach(function() {
-      api = new Api();
-      container = $('<div />');
-      translations = new Translations();
-      controller = new Controller({
-        api: api,
-        container: container,
-        translations: translations
-      });
-    });
-
     describe('constructor', function() {
+
+      beforeEach(function() {
+        api = new Api();
+        container = $('<div />');
+        translations = new Translations();
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations
+        });
+      });
+
+      it('does not create a new instance of Stats if echoClient is not defined', function() {
+        expect(controller._stats).toBeUndefined();
+      });
+
+      it('creates a new Stats instance when options is passed an echoClient', function() {
+        var echoClient = { userActionEvent: function() {} };
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations,
+          echoClient: echoClient
+        });
+        expect(controller._stats instanceof Stats).toBe(true);
+      });
 
       it('should set the namespace', function() {
         expect(controller.namespace).toBe('locservices:ui');
@@ -108,13 +124,25 @@ define([
       it('should set cookiesColdStartKey to \'locserv_uics\'', function() {
         expect(controller.cookiesColdStartKey).toEqual('locserv_uics');
       });
+
     });
 
     describe('events', function() {
 
+      beforeEach(function() {
+        api = new Api();
+        container = $('<div />');
+        translations = new Translations();
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations
+        });
+      });
+
       it('should emit an active event on internal error', function() {
         var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:error');
+        $.emit('locservices:ui:error', [{}]);
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:active');
 
         $.emit.restore();
@@ -144,13 +172,6 @@ define([
         $.emit.restore();
       });
 
-      it('should call setLocation when a location is selected via geolocation', function() {
-        var location = { id: 'foo' };
-        var stub = sinon.stub(controller, 'selectLocation');
-        $.emit('locservices:ui:component:geolocation:location', [location]);
-        expect(stub.args[0][0]).toEqual(location);
-      });
-
       it('should call setLocation when a location is selected via search results', function() {
         var location = { id: 'foo' };
         var stub = sinon.stub(controller, 'selectLocation');
@@ -158,10 +179,17 @@ define([
         expect(stub.args[0][0]).toEqual(location);
       });
 
+      it('should call setLocation when a location is selected via geolocation', function() {
+        var location = { id: 'foo' };
+        var stub = sinon.stub(controller, 'selectLocation');
+        $.emit('locservices:ui:component:geolocation:location', [location]);
+        expect(stub.args[0][0]).toEqual(location);
+      });
+
       it('should call setLocation when a location is selected via auto complete', function() {
         var location = { id: 'foo' };
         var stub = sinon.stub(controller, 'selectLocation');
-        $.emit('locservices:ui:component:auto_complete:location', [location]);
+        $.emit('locservices:ui:component:auto_complete:location', [location, '']);
         expect(stub.args[0][0]).toEqual(location);
       });
 
@@ -180,7 +208,46 @@ define([
         $.emit.restore();
       });
 
-    }); // events
+      it('should emit a location when located using geolocation', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:geolocation:location', [{}]);
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+
+        $.emit.restore();
+      });
+
+      it('should emit a location when a location is selected from the results', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:search_results:location', [{}]);
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+
+        $.emit.restore();
+      });
+
+      it('should emit a location when a location is selected from the auto complete', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:auto_complete:location', [{}, '']);
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+
+        $.emit.restore();
+      });
+
+      it('should emit a location when a location is selected from the user locations', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:user_locations:location', [{}]);
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+
+        $.emit.restore();
+      });
+
+      it('should emit an inactive event when the close button is clicked', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:close_button:clicked');
+        expect(spy.getCall(2).args[0]).toEqual('locservices:ui:controller:inactive');
+
+        $.emit.restore();
+      });
+    });
 
     describe('selectLocation()', function() {
 
@@ -200,6 +267,7 @@ define([
 
       afterEach(function() {
         container.find('.ls-ui-comp-dialog').remove();
+        stubShouldColdStartDialogBeDisplayed.restore();
       });
 
       it('should emit an event when not displaying cold start dialog', function() {
@@ -247,7 +315,7 @@ define([
       it('should emit location event after confirming dialog', function() {
         var spy = sinon.spy($, 'emit');
         stubShouldColdStartDialogBeDisplayed.returns(true);
-        sinon.stub(controller.preferredLocation, 'set', function(id, options) {
+        var setStub = sinon.stub(controller.preferredLocation, 'set', function(id, options) {
           options.success(true);
         });
         controller.selectLocation(location);
@@ -256,6 +324,7 @@ define([
         expect(spy.getCall(0).args[0]).toEqual('locservices:ui:controller:location');
         expect(spy.getCall(0).args[1]).toEqual([location]);
         $.emit.restore();
+        setStub.restore();
       });
 
       it('should emit location event after confirming dialog and failing to set cookie', function() {
@@ -326,6 +395,13 @@ define([
         stubCookiesGet = sinon.stub(controller.cookies, 'get').returns(null);
       });
 
+      afterEach(function() {
+        stubPreferredLocation.restore();
+        stubBBCCookiesPersonalisationDisabled.restore();
+        stubCookiesIsSupported.restore();
+        stubCookiesGet.restore();
+      });
+
       it('should return true when expected', function() {
         expect(controller.shouldColdStartDialogBeDisplayed()).toEqual(true);
       });
@@ -351,6 +427,5 @@ define([
       });
 
     });
-
-  }); // module
+  });
 });
