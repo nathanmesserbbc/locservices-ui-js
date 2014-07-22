@@ -120,6 +120,14 @@ define([
         $.emit.restore();
       });
 
+      it('should emit on geolocation active event when it becomes available', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:geolocation:available');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:geolocation:available');
+
+        $.emit.restore();
+      });
+
       it('should update itself if geolocation is available', function() {
         var spy = sinon.spy(controller.container, 'addClass');
         $.emit('locservices:ui:component:geolocation:available');
@@ -201,7 +209,7 @@ define([
         expect(spy.getCall(0).args[1]).toEqual([location]);
         $.emit.restore();
       });
- 
+
       it('should not emit location event if displaying cold start dialog', function() {
         var spy = sinon.spy($, 'emit');
         stubShouldColdStartDialogBeDisplayed.returns(true);
@@ -270,7 +278,7 @@ define([
         var actualExpires;
         var expectedExpires;
         var expectedCookieDomain;
-        
+
         expectedExpires = new Date();
         expectedExpires.setFullYear(expectedExpires.getFullYear() + 1);
         expectedCookieDomain = '.foo.bar';
