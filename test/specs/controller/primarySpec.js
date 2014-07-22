@@ -148,6 +148,14 @@ define([
         $.emit.restore();
       });
 
+      it('should emit on geolocation active event when it becomes available', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:geolocation:available');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:geolocation:available');
+
+        $.emit.restore();
+      });
+
       it('should update itself if geolocation is available', function() {
         var spy = sinon.spy(controller.container, 'addClass');
         $.emit('locservices:ui:component:geolocation:available');
