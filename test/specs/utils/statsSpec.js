@@ -52,6 +52,8 @@ define([
       expect(labels.hasOwnProperty('has_locserv_cookie')).toBe(true);
       expect(labels.hasOwnProperty('has_recent_locations')).toBe(true);
       expect(labels.hasOwnProperty('recent_locations_total')).toBe(true);
+      expect(labels.hasOwnProperty('locserv_nation')).toBe(true);
+      expect(labels.hasOwnProperty('locserv_news_region')).toBe(true);
 
       stub.restore();
     });

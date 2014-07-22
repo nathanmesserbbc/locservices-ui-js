@@ -57,6 +57,8 @@ define([
   // first time.
   var hasLoggedCapabilities = false;
 
+  var preferredLocation = new PreferredLocation();
+  var locservCookie = preferredLocation.get();
   var recentLocations = new RecentLocations();
   var recentLocationsIsSupported = recentLocations.isSupported();
   var allRecentLocations = recentLocations.all();
@@ -67,9 +69,11 @@ define([
     'capability_local_storage': (typeof window.localStorage === 'object' && window.localStorage.getItem),
     'capability_cookies_enabled': (new Cookies()).isSupported(),
     'capability_bbccookies_preference_enabled': (new BBCCookies()).isPersonalisationDisabled(),
-    'has_locserv_cookie': (new PreferredLocation()).isSet(),
+    'has_locserv_cookie': preferredLocation.isSet(),
     'has_recent_locations': recentLocationsIsSupported && allRecentLocations.length > 0,
-    'recent_locations_total': recentLocationsIsSupported ? allRecentLocations.length : 0
+    'recent_locations_total': recentLocationsIsSupported ? allRecentLocations.length : 0,
+    'locserv_nation': preferredLocation.isSet() ? locservCookie.nation : '',
+    'locserv_news_region': preferredLocation.isSet() && locservCookie.news ? locservCookie.news.tld : ''
   };
 
   /**
