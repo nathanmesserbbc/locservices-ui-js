@@ -25,10 +25,9 @@ define(function() {
     'geolocation.error.browser.permission': 'Please enable Location Services in your device settings or browser.',
     'geolocation.error.outsideContext': 'Your location is not currently supported by this application.',
     'message.geolocation.detect': 'Detecting your location.',
-    'message.no_results': 'We could not find any results for ',
-    'message.results': 'Search results for ',
-    'message.showing': 'Showing ',
-    'message.of': ' of ',
+    'message.no_results': 'We could not find any results for "{searchTerm}"',
+    'message.results': 'Search results for "{searchTerm}"',
+    'message.total_results': 'Showing {current} of {total}',
     'primary.cold_start': 'We\'ll now use <strong>{name}</strong> as your main location to give you relevant local info across the BBC.',
     'primary_search.close': 'Close',
     'test.interpolation': 'Value {a} and value {b}.'
