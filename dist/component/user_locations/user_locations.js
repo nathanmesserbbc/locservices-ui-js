@@ -346,7 +346,7 @@ function(
       this.preferredLocation.set(location.id, {
         success: function() {
           self.render();
-          self.emit('make_main', [locationId]);
+          self.emit('location_prefer', [locationId]);
         },
         error: function() {
           self.emit('error', [{

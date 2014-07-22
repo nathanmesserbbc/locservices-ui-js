@@ -115,11 +115,11 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
       });
 
       describe('- user_locations -', function() {
-        it('captures the make_main event', function() {
+        it('captures the location_prefer event', function() {
           var locationId = 123;
           var labels = { locationId: 123 };
-          $.emit(ns + ':component:user_locations:make_main', [locationId]);
-          expect(stub.calledWith('user_locations_location_make_main', 'locservicesui', labels)).toBe(true);
+          $.emit(ns + ':component:user_locations:location_prefer', [locationId]);
+          expect(stub.calledWith('user_locations_location_prefer', 'locservicesui', labels)).toBe(true);
         });
         it('captures the location_select event', function() {
           var location = { id: 123 };

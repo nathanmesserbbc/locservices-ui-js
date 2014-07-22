@@ -117,8 +117,8 @@ define([
       logActionEvent(echoClient, actionType, { locationId: location.id });
     });
 
-    $.on(ns + ':component:user_locations:make_main', function(locationId) {
-      logActionEvent(echoClient, 'user_locations_location_make_main', {
+    $.on(ns + ':component:user_locations:location_prefer', function(locationId) {
+      logActionEvent(echoClient, 'user_locations_location_prefer', {
         locationId: locationId
       });
     });
