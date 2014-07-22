@@ -24,6 +24,32 @@ define([
     echoClient.userActionEvent(actionType, 'locservicesui', labels || {});
   }
 
+  /**
+   * Takes a location object and build up the labels.
+   *
+   * @param {Object} location
+   * @returns {Object}
+   */
+  function getLabelsForLocation(location) {
+
+    var labels = {};
+
+    if (typeof location !== 'object') {
+      return labels;
+    }
+
+    labels.locationId = location.id;
+    labels.locationPlaceType = location.placeType;
+    labels.locationCountry = location.country;
+    labels.locationName = location.name;
+
+    if (location.container) {
+      labels.locationName += ', ' + location.container;
+    }
+
+    return labels;
+  }
+
   // ensures we only log capabilities once when the module is used for the
   // first time.
   var hasLoggedCapabilities = false;
@@ -86,9 +112,7 @@ define([
     }
 
     $.on(ns + ':component:geolocation:location', function(location) {
-      logActionEvent(echoClient, 'geolocation_location', {
-        locationId: location.id
-      });
+      logActionEvent(echoClient, 'geolocation_location', getLabelsForLocation(location));
     });
 
     $.on(ns + ':error', function(err) {
@@ -102,11 +126,10 @@ define([
     });
 
     $.on(ns + ':component:auto_complete:location', function(location, searchTerm) {
-      logActionEvent(echoClient, 'auto_complete_location', {
-        locationId: location.id,
-        searchTerm: searchTerm,
-        searchTermLength: searchTerm.length
-      });
+      var labels = getLabelsForLocation(location);
+      labels.searchTerm = searchTerm;
+      labels.searchTermLength = searchTerm.length;
+      logActionEvent(echoClient, 'auto_complete_location', labels);
     });
 
     $.on(ns + ':component:user_locations:location', function(location) {
@@ -114,25 +137,20 @@ define([
       if (location.isPreferred === true) {
         actionType = 'user_locations_location_main_select';
       }
-      logActionEvent(echoClient, actionType, { locationId: location.id });
+      logActionEvent(echoClient, actionType, getLabelsForLocation(location));
     });
 
-    $.on(ns + ':component:user_locations:location_prefer', function(locationId) {
-      logActionEvent(echoClient, 'user_locations_location_prefer', {
-        locationId: locationId
-      });
+    $.on(ns + ':component:user_locations:location_prefer', function(location) {
+      var labels = getLabelsForLocation(location);
+      logActionEvent(echoClient, 'user_locations_location_prefer', labels);
     });
 
-    $.on(ns + ':component:user_locations:location_remove', function(locationId) {
-      logActionEvent(echoClient, 'user_locations_location_remove', {
-        locationId: locationId
-      });
+    $.on(ns + ':component:user_locations:location_remove', function(location) {
+      logActionEvent(echoClient, 'user_locations_location_remove', getLabelsForLocation(location));
     });
 
     $.on(ns + ':component:user_locations:location_add', function(location) {
-      logActionEvent(echoClient, 'user_locations_location_add', {
-        locationId: location.id
-      });
+      logActionEvent(echoClient, 'user_locations_location_add', getLabelsForLocation(location));
     });
 
     $.on(ns + ':component:search_results:results', function(metadata) {
@@ -141,11 +159,10 @@ define([
       }
     });
 
-    $.on(ns + ':component:search_results:location', function(locationId, offset) {
-      logActionEvent(echoClient, 'search_results_location', {
-        locationId: locationId,
-        offset: offset
-      });
+    $.on(ns + ':component:search_results:location', function(location, offset) {
+      var labels = getLabelsForLocation(location);
+      labels.offset = offset;
+      logActionEvent(echoClient, 'search_results_location', labels);
     });
 
     this._registeredNamespaces[ns] = true;

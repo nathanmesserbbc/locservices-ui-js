@@ -224,7 +224,7 @@ define([
     if (null !== this._highlightedSearchResultIndex) {
       event.preventDefault();
       var location = this.searchResultsData[this._highlightedSearchResultIndex];
-      this.emit('location', [location]);
+      this.emit('location', [location, this.currentSearchTerm]);
     }
     this.clear();
   };

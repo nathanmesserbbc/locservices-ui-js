@@ -433,7 +433,7 @@ function(
         });
 
         userLocations.setPreferredLocationById(expectedLocation.id);
-        expect(emitStub.calledWith('location_prefer', [expectedLocation.id])).toBe(true);
+        expect(emitStub.calledWith('location_prefer', [expectedLocation])).toBe(true);
 
         emitStub.restore();
         stub.restore();
@@ -535,7 +535,7 @@ function(
       it('emits the location_remove event', function() {
         var emitStub = sinon.stub(userLocations, 'emit');
         userLocations.removeLocationById(expectedLocation.id);
-        expect(emitStub.calledWith('location_remove', [expectedLocation.id])).toBe(true);
+        expect(emitStub.calledWith('location_remove', [expectedLocation])).toBe(true);
         emitStub.restore();
       });
 

@@ -8,6 +8,21 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
     }
   };
 
+  var testLocation = {
+    id: 123,
+    name: 'Pontypridd',
+    container: 'Wales',
+    country: 'GB',
+    placeType: 'settlement'
+  };
+
+  var expectedLabels = {
+    locationId: 123,
+    locationName: 'Pontypridd, Wales',
+    locationPlaceType: 'settlement',
+    locationCountry: 'GB'
+  };
+
   describe('The Stats', function() {
 
     it('registers user capability and properties by a single event', function() {
@@ -82,24 +97,19 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
 
       describe('registers auto_complete events for', function() {
         it('location selected event', function() {
-          var location = { id: 123 };
-          var expectedLabels = {
-            locationId: location.id,
-            searchTerm: 'foo',
-            searchTermLength: 3
-          };
-          $.emit(ns + ':component:auto_complete:location', [location, 'foo']);
-          expect(stub.calledWith('auto_complete_location', 'locservicesui', expectedLabels)).toBe(true);
+          var labels = $.extend({}, expectedLabels);
+          labels.searchTerm = 'foo';
+          labels.searchTermLength = 3;
+          $.emit(ns + ':component:auto_complete:location', [testLocation, 'foo']);
+          expect(stub.calledWith('auto_complete_location', 'locservicesui', labels)).toBe(true);
         });
       });
 
       describe('- geolocation events -', function() {
 
         it('captures the geolocation:location event', function() {
-          var location = { id: 123 };
-          var labels = { locationId: location.id };
-          $.emit(ns + ':component:geolocation:location', [location]);
-          expect(stub.calledWith('geolocation_location', 'locservicesui', labels)).toBe(true);
+          $.emit(ns + ':component:geolocation:location', [testLocation]);
+          expect(stub.calledWith('geolocation_location', 'locservicesui', expectedLabels)).toBe(true);
         });
 
         it('captures the geolocation_denied event', function() {
@@ -115,35 +125,28 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
       });
 
       describe('- user_locations -', function() {
+
         it('captures the location_prefer event', function() {
-          var locationId = 123;
-          var labels = { locationId: 123 };
-          $.emit(ns + ':component:user_locations:location_prefer', [locationId]);
-          expect(stub.calledWith('user_locations_location_prefer', 'locservicesui', labels)).toBe(true);
+          $.emit(ns + ':component:user_locations:location_prefer', [testLocation]);
+          expect(stub.calledWith('user_locations_location_prefer', 'locservicesui', expectedLabels)).toBe(true);
         });
         it('captures the location_select event', function() {
-          var location = { id: 123 };
-          var labels = { locationId: 123 };
-          $.emit(ns + ':component:user_locations:location', [location]);
-          expect(stub.calledWith('user_locations_location_select', 'locservicesui', labels)).toBe(true);
+          $.emit(ns + ':component:user_locations:location', [testLocation]);
+          expect(stub.calledWith('user_locations_location_select', 'locservicesui', expectedLabels)).toBe(true);
         });
         it('captures the main location selected event', function() {
-          var location = { id: 123, isPreferred: true };
-          var labels = { locationId: location.id };
-          $.emit(ns + ':component:user_locations:location', [location]);
-          expect(stub.calledWith('user_locations_location_main_select', 'locservicesui', labels)).toBe(true);
+          var mainLocation = $.extend({}, testLocation); // clones the original test location
+          mainLocation.isPreferred = true;
+          $.emit(ns + ':component:user_locations:location', [mainLocation]);
+          expect(stub.calledWith('user_locations_location_main_select', 'locservicesui', expectedLabels)).toBe(true);
         });
         it('captures the location_remove event', function() {
-          var locationId = 123;
-          var labels = { locationId: locationId };
-          $.emit(ns + ':component:user_locations:location_remove', [locationId]);
-          expect(stub.calledWith('user_locations_location_remove', 'locservicesui', labels)).toBe(true);
+          $.emit(ns + ':component:user_locations:location_remove', [testLocation]);
+          expect(stub.calledWith('user_locations_location_remove', 'locservicesui', expectedLabels)).toBe(true);
         });
         it('captures the location_add event', function() {
-          var location = { id: 1234 };
-          var labels = { locationId: location.id };
-          $.emit(ns + ':component:user_locations:location_add', [location]);
-          expect(stub.calledWith('user_locations_location_add', 'locservicesui', labels)).toBe(true);
+          $.emit(ns + ':component:user_locations:location_add', [testLocation]);
+          expect(stub.calledWith('user_locations_location_add', 'locservicesui', expectedLabels)).toBe(true);
         });
       });
 
@@ -157,8 +160,9 @@ define(['locservices/ui/utils/stats', 'jquery'], function(Stats, $) {
           expect(stub.calledWith('search_no_results', 'locservicesui')).toBe(true);
         });
         it('records a stat when a search result is selected', function() {
-          var labels = { locationId: 123, offset: 0 };
-          $.emit(ns + ':component:search_results:location', [labels.locationId, labels.offset]);
+          var labels = $.extend({}, expectedLabels);
+          labels.offset = 0;
+          $.emit(ns + ':component:search_results:location', [testLocation, labels.offset]);
           expect(stub.calledWith('search_results_location', 'locservicesui', labels)).toBe(true);
         });
       });

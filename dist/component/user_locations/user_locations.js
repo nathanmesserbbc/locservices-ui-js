@@ -346,7 +346,7 @@ function(
       this.preferredLocation.set(location.id, {
         success: function() {
           self.render();
-          self.emit('location_prefer', [locationId]);
+          self.emit('location_prefer', [location]);
         },
         error: function() {
           self.emit('error', [{
@@ -376,7 +376,7 @@ function(
         this.recentLocations.remove(locationId);
       }
       this.render();
-      this.emit('location_remove', [locationId]);
+      this.emit('location_remove', [location]);
     }
 
   };
