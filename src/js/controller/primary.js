@@ -63,6 +63,7 @@ define([
         self.container.addClass('ls-ui-ctrl-active');
       },
       onGeolocation: function() {
+        $.emit(self.namespace + ':controller:geolocation:available');
         self.container.addClass('ls-ui-ctrl-geolocation');
       },
       onSearchResults: function() {
@@ -188,9 +189,9 @@ define([
       var expires = new Date();
       expires.setFullYear(expires.getFullYear() + 1);
       self.cookies.set(
-        self.cookiesColdStartKey, 
-        '1', 
-        expires.toUTCString(), 
+        self.cookiesColdStartKey,
+        '1',
+        expires.toUTCString(),
         '/',
         self.preferredLocation.getCookieDomain()
       );
@@ -198,17 +199,17 @@ define([
     };
 
     if (
-      this.preferredLocation.isValidLocation(location) && 
+      this.preferredLocation.isValidLocation(location) &&
       this.shouldColdStartDialogBeDisplayed()
     ) {
       new Dialog({
-        container: outside, 
+        container: outside,
         message: self.translations.get(
           'primary.cold_start',
           {
             name: location.name
           }
-        ), 
+        ),
         confirmLabel: self.translations.get('user_locations.dialog.confirm'),
         cancelLabel: self.translations.get('user_locations.dialog.cancel'),
         confirm: function() {
@@ -231,9 +232,9 @@ define([
    */
   Primary.prototype.shouldColdStartDialogBeDisplayed = function() {
     return (
-      false === this.preferredLocation.isSet() && 
-      false === this.bbcCookies.isPersonalisationDisabled() && 
-      this.cookies.isSupported() && 
+      false === this.preferredLocation.isSet() &&
+      false === this.bbcCookies.isPersonalisationDisabled() &&
+      this.cookies.isSupported() &&
       '1' !== this.cookies.get(this.cookiesColdStartKey)
     );
   };
