@@ -89,7 +89,20 @@ function(
         stub = sinon.stub(userLocations, 'selectLocationById');
         userLocations.element.empty();
         userLocations.element.append(
-          '<li><a class="ls-ui-comp-user_locations-name" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="location">Location</a></li>'
+          '<li><a class="ls-ui-comp-user_locations-name" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="location"><strong>Location</strong>, Container</a></li>'
+        );
+        userLocations.element.find('.ls-ui-comp-user_locations-name strong').trigger('click');
+
+        expect(stub.callCount).toBe(1);
+        expect(stub.calledWith(testLocations[0].id)).toBe(true);
+      });
+
+      it('calls this.selectLocationById location event when clicking on a location container', function() {
+        var stub;
+        stub = sinon.stub(userLocations, 'selectLocationById');
+        userLocations.element.empty();
+        userLocations.element.append(
+          '<li><a class="ls-ui-comp-user_locations-name" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="location"><strong>Location</strong>, Container</a></li>'
         );
         userLocations.element.find('.ls-ui-comp-user_locations-name').trigger('click');
 
