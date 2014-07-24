@@ -11,25 +11,29 @@ define([
     'use strict';
 
     var search,
-        translations,
         container,
-        api;
+        translations,
+        api,
+        mockAPI;
 
     var submitSearch = function(term) {
       search.input.attr('value', term);
       search.form.trigger('submit');
     };
 
-    describe('constructor', function() {
-
-      beforeEach(function() {
-        translations = new En();
-        search = new Search({
-          translations: translations,
-          container: $('<div />'),
-          api: sinon.spy()
-        });
+    beforeEach(function() {
+      container = $('<div/>');
+      translations = new En();
+      api  = new Api();
+      mockAPI = sinon.mock(api);
+      search = new Search({
+        translations: translations,
+        container: container,
+        api: api
       });
+    });
+
+    describe('constructor', function() {
 
       it('should set this.componentId to "search"', function() {
         expect(search.componentId).toBe('search');
@@ -48,47 +52,70 @@ define([
         };
         expect(failure).toThrow(new Error('Search requires api parameter'));
       });
+
+      it('should call checkInput() on input keyup', function() {
+        var stub = sinon.stub(search, 'checkInput');
+        search.input.trigger('keyup');
+        expect(stub.callCount).toBe(1);
+      });
+    });
+
+    describe('checkInput', function() {
+
+      it('should set hasInputLength to true if there is input value', function() {
+        search.hasInputLength = false;
+        search.input.val('foo');
+        search.checkInput();
+        expect(search.hasInputLength).toBe(true);
+      });
+
+      it('should add \'ls-ui-comp-search-with-term\' class to form if there is input value', function() {
+        search.input.val('foo');
+        search.checkInput();
+        expect(search.form.hasClass('ls-ui-comp-search-with-term')).toBe(true);
+      });
+
+      it('should set hasInputLength to false if there is no input value', function() {
+        search.hasInputLength = true;
+        search.checkInput();
+        expect(search.hasInputLength).toBe(false);
+      });
+
+      it('should remove \'ls-ui-comp-search-with-term\' class from form if there is no input value', function() {
+        search.form.addClass('ls-ui-comp-search-with-term');
+        expect(search.form.hasClass('ls-ui-comp-search-with-term')).toBe(true);
+        search.hasInputLength = true;
+        search.checkInput();
+        expect(search.form.hasClass('ls-ui-comp-search-with-term')).toBe(false);
+      });
+
     });
 
     describe('search', function() {
 
-      var mock;
-
-      beforeEach(function() {
-        container = $('<div />');
-        api  = new Api();
-        mock = sinon.mock(api);
-
-        search = new Search({
-          translations: new En(),
-          container: container,
-          api: api
-        });
-      });
-
       it('should search for results when container is submitted', function() {
-        mock.expects('search').once();
+        mockAPI.expects('search').once();
         submitSearch('Cardiff');
-        mock.verify();
+        mockAPI.verify();
       });
 
       it('should only permit a single search at one time', function() {
-        mock.expects('search').once();
+        mockAPI.expects('search').once();
         submitSearch('Cardiff');
         submitSearch('Manchester');
-        mock.verify();
+        mockAPI.verify();
       });
 
       it('should not search if the search term is empty', function() {
-        mock.expects('search').never();
+        mockAPI.expects('search').never();
         submitSearch('');
-        mock.verify();
+        mockAPI.verify();
       });
 
       it('should not search if the search term consists of spaces', function() {
-        mock.expects('search').never();
+        mockAPI.expects('search').never();
         submitSearch('  ');
-        mock.verify();
+        mockAPI.verify();
       });
     });
 

@@ -21,6 +21,19 @@
     box-sizing: border-box;
   }
 
+  .ls-ui-input-clear {
+    display: none;
+    position: absolute;
+    top: 7px;
+    right: 42px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin-top: 2px;
+    text-indent: -10000px;
+    background: url("@{asset-path}/user_locations/close_cross_sm.png") no-repeat;
+  }
+
   .ls-ui-submit {
     position: absolute;
     top: 0;
@@ -44,5 +57,11 @@
       top: 1px;
       right: 1px;
     }
+  }
+}
+
+.ls-ui-comp-search-with-term {
+  .ls-ui-input-clear {
+    display: block;
   }
 }

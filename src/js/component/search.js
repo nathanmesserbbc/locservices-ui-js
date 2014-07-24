@@ -4,7 +4,9 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   'use strict';
 
-  var wrapEl = $('<div />').addClass('ls-ui-container');
+  var wrapEl = function() {
+    return $('<div />').addClass('ls-ui-container');
+  };
 
   var form = function() {
     return $('<form />')
@@ -21,6 +23,13 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
             .attr('placeholder', translations.get('search.placeholder'));
   };
 
+  var clear = function(translations) {
+    return $('<a />')
+            .attr('href', '#')
+            .attr('class', 'ls-ui-input-clear')
+            .text(translations.get('search.clear'));
+  };
+
   var submit = function(translations) {
     return $('<input />')
               .attr('type', 'submit')
@@ -29,6 +38,12 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
               .attr('title', translations.get('search.submit.title'));
   };
 
+  /**
+   * Search
+   *
+   * @param {Object} options
+   * @constructor
+   */
   function Search(options) {
     var self = this;
     options = options || {};
@@ -41,9 +56,20 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     }
     self.setComponentOptions(options);
     self.isSearching = false;
+    self.hasInputLength = false;
+
     render(self.translations, self.container);
 
-    self.input = self.container.find('input[type=text]');
+    self.input = self.container.find('input[type=text]')
+      .on('keyup', function() {
+        self.checkInput();
+      });
+
+    self.container.find('.ls-ui-input-clear')
+      .on('click', function() {
+        self.clear();
+      });
+
     self.form  = self.container.find('form');
 
     self.form.on('submit', function(e) {
@@ -54,14 +80,47 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.emit('focus');
     });
 
-    self.container.find('input[type=submit]').on('click', function() {
-      self.form.trigger('submit');
-      self.emit('focus');
-    });
+    self.container.find('input[type=submit]')
+      .on('click', function() {
+        self.form.trigger('submit');
+        self.emit('focus');
+      });
   }
   Search.prototype = new Component();
   Search.prototype.constructor = Search;
 
+  /**
+   * Clear the search input
+   */
+  Search.prototype.clear = function() {
+    // @todo test this method
+    this.input.val('');
+    this.checkInput();
+    this.emit('clear');
+  };
+
+  /**
+   * Check the state of the input element.
+   */
+  Search.prototype.checkInput = function() {
+    var value = this.input.val();
+    if (0 < value.length) {
+      if (false === this.hasInputLength) {
+        this.hasInputLength = true;
+        this.form.addClass('ls-ui-comp-search-with-term');
+      }
+    } else if (this.hasInputLength) {
+      this.hasInputLength = false;
+      this.form.removeClass('ls-ui-comp-search-with-term');
+    }
+  };
+
+  /**
+   * SearchResults.
+   *
+   * @param {String} searrchTerm
+   * @return {undefined}
+   */
   Search.prototype.search = function(searchTerm) {
 
     var self = this;
@@ -72,7 +131,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       return;
     }
 
-    // @todo test this event is emitted
     self.emit('start', [searchTerm]);
 
     self.isSearching = true;
@@ -87,7 +145,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
         self.emit('end');
         self.isSearching = false;
 
-        // @todo test this error is emitted
         self.emit('error', [{
           code: 'search.error.search',
           message: 'There was an API error searching for ' + searchTerm
@@ -102,8 +159,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   var render = function(translations, container) {
     var inputEl  = input(translations);
     var submitEl = submit(translations);
+    var clearEl = clear(translations);
 
-    container.append(form().append(wrapEl.append(inputEl)).append(submitEl));
+    container.append(
+      form().append(wrapEl().append(inputEl)).append(submitEl).append(clearEl)
+    );
   };
 
   return Search;

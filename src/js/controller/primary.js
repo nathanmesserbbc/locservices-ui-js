@@ -80,6 +80,9 @@ define([
         $.emit(self.namespace + ':controller:geolocation:available');
         self.container.addClass('ls-ui-ctrl-geolocation');
       },
+      onResultsClear: function() {
+        self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
+      },
       onSearchResults: function() {
         self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
       },
@@ -108,8 +111,10 @@ define([
     self.namespace = options.namespace || 'locservices:ui';
 
     $.on(self.namespace + ':error', events.onActive);
-    $.on(self.namespace + ':component:search:focus', events.onActive);
+    $.on(self.namespace + ':component:auto_complete:clear', events.onResultsClear);
     $.on(self.namespace + ':component:auto_complete:render', events.onSearchResults);
+    $.on(self.namespace + ':component:search:focus', events.onActive);
+    $.on(self.namespace + ':component:search:clear', events.onResultsClear);
     $.on(self.namespace + ':component:search:results', events.onSearchResults);
     $.on(self.namespace + ':component:geolocation:location', events.onLocation);
     $.on(self.namespace + ':component:auto_complete:location', events.onLocation);
