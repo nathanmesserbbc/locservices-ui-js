@@ -31,6 +31,7 @@
     "grunt-karma": "^0.8.3",
     "grunt-open": "~0.2.3",
     "grunt-recess": "~0.6.1",
+    "grunt-spritesmith": "^2.1.1",
     "jscs": "~1.5.6",
     "jscs-jsdoc": "0.0.6",
     "karma": "^0.12.16",
