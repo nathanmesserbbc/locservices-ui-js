@@ -22,9 +22,11 @@ module.exports = function(grunt) {
     copy: require('./build/copy')(grunt),
     cssmin: require('./build/cssmin')(grunt),
     requirejs: require('./build/require')(grunt),
-    imagemin: require('./build/imagemin')(grunt)
+    imagemin: require('./build/imagemin')(grunt),
+    sprite: require('./build/sprites')(grunt)
   });
 
+  grunt.registerTask('sprites', ['sprite', 'imagemin']);
   grunt.registerTask('barlesque', 'Downloads Barlesque templates from API', require('./build/barlesque')(grunt));
   grunt.registerTask('template', 'Generate index.html from templates', require('./build/template')(grunt));
   grunt.registerTask('css', ['less', 'recess']);
