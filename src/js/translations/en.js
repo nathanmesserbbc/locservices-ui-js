@@ -8,10 +8,10 @@ define(function() {
     'user_locations.heading.recent': 'Other locations',
     'user_locations.action.recent': 'Prefer',
     'user_locations.action.remove': 'Remove',
-    'user_locations.dialog.confirm': 'Yes',
-    'user_locations.dialog.cancel': 'No',
+    'user_locations.dialog.confirm': 'Confirm',
+    'user_locations.dialog.cancel': 'Cancel',
     'user_locations.dialog.remove_preferred': 'We will no longer use <strong>{name}</strong> to give you relevant local info across the BBC.',
-    'user_locations.dialog.prefer': 'Would you like us to use <strong>{name}</strong> as your main location to give you relevant local info across the BBC?',
+    'user_locations.dialog.prefer': 'We will now use <strong>{name}</strong> to give you relevant local info across the BBC.',
     'user_locations.message.preferred': 'We\’ll use your location to give you relevant local info across the BBC.',
     'user_locations.message.change_preferred': 'Hit the star next to one of your other locations to make it your main location.',
     'user_locations.error.preferred_location': 'Sorry, we are experiencing technical problems.',
@@ -29,6 +29,8 @@ define(function() {
     'message.results': 'Search results for "{searchTerm}"',
     'message.total_results': 'Showing {current} of {total}',
     'primary.cold_start': 'Would you like us to use <strong>{name}</strong> as your main location to give you relevant local info across the BBC?',
+    'primary.cold_start.confirm': 'Yes',
+    'primary.cold_start.cancel': 'No',
     'primary_search.close': 'Close',
     'test.interpolation': 'Value {a} and value {b}.'
   };
