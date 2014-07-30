@@ -10,6 +10,7 @@ module.exports = function(grunt) {
     var config = grunt.config.data.config;
     var url    = config.barlesque.url;
 
+
     request.get(url, function(err, data) {
       if (err) {
         grunt.fail.fatal('Failed to download Barlesque content');
