@@ -39,6 +39,20 @@ define([
         expect(searchResults.eventNamespace).toBe('locservices:ui:component:search_results');
       });
 
+      it('should listen for search start event and call clear()', function() {
+        var stub;
+        stub = sinon.stub(searchResults, 'clear');
+        $.emit('locservices:ui:component:search:start');
+        expect(stub.calledOnce).toBe(true);
+      });
+
+      it('should listen for search clear event and call clear()', function() {
+        var stub;
+        stub = sinon.stub(searchResults, 'clear');
+        $.emit('locservices:ui:component:search:clear');
+        expect(stub.calledOnce).toBe(true);
+      });
+
       it('should listen for search results event and call render()', function() {
         var stub;
         stub = sinon.stub(searchResults, 'render');

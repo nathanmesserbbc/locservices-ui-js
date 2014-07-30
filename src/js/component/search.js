@@ -46,6 +46,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   function Search(options) {
     var self = this;
+    var supportsTouchEvents;
     options = options || {};
     options.componentId = 'search';
 
@@ -58,17 +59,22 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.isSearching = false;
     self.hasInputLength = false;
 
-    render(self.translations, self.container);
+    // @todo test this
+    supportsTouchEvents = 'ontouchstart' in window;
+    render(self.translations, self.container, supportsTouchEvents);
 
     self.input = self.container.find('input[type=text]')
       .on('keyup', function() {
         self.checkInput();
       });
 
-    self.container.find('.ls-ui-input-clear')
-      .on('click', function() {
-        self.clear();
-      });
+    // @todo test this
+    if (supportsTouchEvents) {
+      self.container.find('.ls-ui-input-clear')
+        .on('click', function() {
+          self.clear();
+        });
+    }
 
     self.form  = self.container.find('form');
 
@@ -93,7 +99,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    * Clear the search input
    */
   Search.prototype.clear = function() {
-    // @todo test this method
     this.input.val('');
     this.checkInput();
     this.emit('clear');
@@ -116,10 +121,9 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   };
 
   /**
-   * SearchResults.
+   * Search
    *
-   * @param {String} searrchTerm
-   * @return {undefined}
+   * @param {String} searchTerm
    */
   Search.prototype.search = function(searchTerm) {
 
@@ -156,14 +160,19 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   /**
    * Renders component into the container element
    */
-  var render = function(translations, container) {
-    var inputEl  = input(translations);
-    var submitEl = submit(translations);
-    var clearEl = clear(translations);
+  var render = function(translations, container, addClearButton) {
+    var element;
 
-    container.append(
-      form().append(wrapEl().append(inputEl)).append(submitEl).append(clearEl)
-    );
+    element = form()
+      .append(wrapEl().append(input(translations)))
+      .append(submit(translations));
+
+    // @todo test this
+    if (addClearButton) {
+      element.append(clear(translations));
+    }
+
+    container.append(element);
   };
 
   return Search;

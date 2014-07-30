@@ -31,6 +31,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.clear();
     });
 
+    // @todo test this
+    $.on(self.eventNamespaceBase + ':component:search:start', function() {
+      self.clear();
+    });
+
     $.on(self.eventNamespaceBase + ':component:search:end', function() {
       self.clear();
     });

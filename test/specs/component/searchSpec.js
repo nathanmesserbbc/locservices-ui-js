@@ -60,6 +60,29 @@ define([
       });
     });
 
+    describe('clear()', function() {
+
+      it('should set the input value to \'\'', function() {
+        search.input.val('foo');
+        search.clear();
+        expect(search.input.val()).toBe('');
+      });
+
+      it('should call checkInput()', function() {
+        var stub = sinon.stub(search, 'checkInput');
+        search.clear();
+        expect(stub.calledOnce).toBe(true);
+      });
+
+      it('should emit a clear event', function() {
+        var stub = sinon.stub(search, 'emit');
+        search.clear();
+        expect(stub.calledOnce).toBe(true);
+        expect(stub.args[0][0]).toBe('clear');
+      });
+
+    });
+
     describe('checkInput', function() {
 
       it('should set hasInputLength to true if there is input value', function() {

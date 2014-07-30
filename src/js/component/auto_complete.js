@@ -120,18 +120,9 @@ define([
 
     var searchTerm = this.prepareSearchTerm(this.input.val());
     var self = this;
-    var isValidSearchTerm = this.isValidSearchTerm(searchTerm);
-    var isTooShort = searchTerm.length < minChars;
 
-    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || isTooShort) {
-
-      // @todo test this (MYLOC-142)
-      if (isTooShort && self.currentSearchTerm) {
-        self.clear();
-        self.currentSearchTerm = '';
-      }
-
-      return;
+    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length < minChars) {
+        return;
     }
 
     clearTimeout(this._timeoutId);
