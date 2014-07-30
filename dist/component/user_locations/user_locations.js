@@ -189,7 +189,7 @@ function(
     this.container.append(this.element);
     this.render();
 
-    this.element.on('click', function(e) {
+    this.element.on('click', 'a', function(e) {
       var target;
       var locationId;
       var action;
@@ -197,7 +197,7 @@ function(
 
       e.preventDefault();
       e.stopPropagation();
-      target = $(e.target);
+      target = $(e.currentTarget);
 
       // convert data-id back to a string as strings that
       // look like a number eg "1243" get converted to type number
@@ -287,8 +287,8 @@ function(
     element.addClass('ls-ui-comp-user_locations-location-with-dialog');
 
     new Dialog({
-      container: element, 
-      message: message, 
+      container: element,
+      message: message,
       confirmLabel: this.translations.get('user_locations.dialog.confirm'),
       cancelLabel: this.translations.get('user_locations.dialog.cancel'),
       confirm: function() {
@@ -296,7 +296,7 @@ function(
         if ('function' === typeof confirmCallback) {
           confirmCallback();
         }
-      }, 
+      },
       cancel: function() {
         resetElement();
       }

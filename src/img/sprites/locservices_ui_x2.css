@@ -1,0 +1,79 @@
+/*
+Icon classes can be used entirely standalone. They are named after their original file names.
+
+```html
+<i class="icon-home"></i>
+```
+*/
+.icon-close_dark_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -90px;
+  width: 88px;
+  height: 88px;
+}
+.icon-close_light_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -540px;
+  width: 88px;
+  height: 88px;
+}
+.icon-delete_dark_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -180px;
+  width: 88px;
+  height: 88px;
+}
+.icon-delete_light_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -270px;
+  width: 88px;
+  height: 88px;
+}
+.icon-detect_dark_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -360px;
+  width: 88px;
+  height: 88px;
+}
+.icon-detect_light_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -450px;
+  width: 88px;
+  height: 88px;
+}
+.icon-main_star_dark_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px 0px;
+  width: 88px;
+  height: 88px;
+}
+.icon-main_star_light_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -630px;
+  width: 88px;
+  height: 88px;
+}
+.icon-other_star_dark_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -720px;
+  width: 88px;
+  height: 88px;
+}
+.icon-other_star_light_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -810px;
+  width: 88px;
+  height: 88px;
+}
+.icon-search_dark_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -900px;
+  width: 88px;
+  height: 88px;
+}
+.icon-search_light_88px {
+  background-image: url(locservices_ui_x2.png);
+  background-position: 0px -990px;
+  width: 88px;
+  height: 88px;
+}

@@ -11,7 +11,7 @@ define([
 ],
   function(SearchResults, En, API, $, responseMultiple, responseMultipleMore, responseWithSingleResult) {
 
-  describe('The search-results', function() {
+  describe('The search_results', function() {
     'use strict';
 
     var searchResults, container;
@@ -90,6 +90,37 @@ define([
         expect(searchResults.list).toBeDefined();
       });
 
+    });
+
+    describe('clicking the more results button', function() {
+      it('does not make an api call when it is already waiting for a response', function() {
+        var apiStub = sinon.stub(searchResults.api, 'search');
+
+        // simulate two clicks
+        searchResults.moreResults.trigger('click');
+        searchResults.moreResults.trigger('click');
+
+        expect(apiStub.calledOnce).toBe(true);
+
+        apiStub.restore();
+      });
+      it('enables searching for more results after response from api', function() {
+        var renderStub = sinon.stub(searchResults, 'render');
+        var apiStub = sinon.stub(searchResults.api, 'search', function(term, options) {
+          options.success({}, {});
+        });
+
+        // first click
+        searchResults.moreResults.trigger('click');
+        expect(apiStub.calledOnce).toBe(true);
+
+        // second click
+        searchResults.moreResults.trigger('click');
+        expect(apiStub.calledTwice).toBe(true);
+
+        renderStub.restore();
+        apiStub.restore();
+      });
     });
 
     describe('render()', function() {
