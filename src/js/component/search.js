@@ -60,7 +60,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.hasInputLength = false;
 
     // @todo test this
-    supportsTouchEvents = 'ontouchstart' in window;
+    supportsTouchEvents = true;//'ontouchstart' in window;
     render(self.translations, self.container, supportsTouchEvents);
 
     self.input = self.container.find('input[type=text]')
@@ -68,7 +68,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
         self.checkInput();
       });
 
-    // @todo test this
+    // @todo test if (supportsTouchEvents) logic
     if (supportsTouchEvents) {
       self.container.find('.ls-ui-input-clear')
         .on('click', function() {
