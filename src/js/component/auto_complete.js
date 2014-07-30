@@ -112,10 +112,15 @@ define([
    */
   AutoComplete.prototype.autoComplete = function() {
 
-    var searchTerm = this.prepareSearchTerm(this.input.val());
     var self = this;
+    var searchTerm = this.prepareSearchTerm(this.input.val());
+    var isTooShort = (undefined === searchTerm) || searchTerm.length < minChars;
 
-    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length < minChars) {
+    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || isTooShort) {
+      if (isTooShort && self.currentSearchTerm) {
+        self.clear();
+        self.currentSearchTerm = '';
+      }
       return;
     }
 

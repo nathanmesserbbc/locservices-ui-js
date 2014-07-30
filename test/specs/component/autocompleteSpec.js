@@ -189,6 +189,24 @@ define([
 
       var autoCompleteDelay = 500;
 
+      it('calls clear if the search term is too short', function() {
+        var stub = sinon.stub(autoComplete, 'clear');
+        inputElement.val('c');
+        autoComplete.currentSearchTerm = 'car';
+        autoComplete.autoComplete();
+        expect(stub.calledOnce).toBe(true);
+        stub.restore();
+      });
+
+      it('sets currentSearchTerm to \'\' if the search term is too short', function() {
+        var stub = sinon.stub(autoComplete, 'clear');
+        inputElement.val('c');
+        autoComplete.currentSearchTerm = 'car';
+        autoComplete.autoComplete();
+        expect(autoComplete.currentSearchTerm).toBe('');
+        stub.restore();
+      });
+
       it('always prepares the search term before using it', function() {
         var stub = sinon.stub(autoComplete, 'prepareSearchTerm');
         autoComplete.autoComplete();
