@@ -60,7 +60,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.hasInputLength = false;
 
     // @todo test this
-    supportsTouchEvents = true;//'ontouchstart' in window;
+    supportsTouchEvents = 'ontouchstart' in window;
     render(self.translations, self.container, supportsTouchEvents);
 
     self.input = self.container.find('input[type=text]')

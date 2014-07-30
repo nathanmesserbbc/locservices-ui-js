@@ -26,12 +26,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.set(error);
     });
 
-    // @todo test this
     $.on(self.eventNamespaceBase + ':component:search:clear', function() {
       self.clear();
     });
 
-    // @todo test this
     $.on(self.eventNamespaceBase + ':component:search:start', function() {
       self.clear();
     });
