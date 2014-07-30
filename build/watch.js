@@ -15,7 +15,7 @@ module.exports = function(grunt) {
     },
     html: {
       files: '<%= config.paths.template %>**/*',
-      tasks: ['clean', 'template']
+      tasks: ['template']
     },
     js: {
       files: [

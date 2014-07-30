@@ -10,9 +10,10 @@ module.exports = function(grunt) {
       browsers: ['Firefox', 'PhantomJS']
     },
     debug: {
-      logLevel: 'DEBUG',
-      singleRun: false,
-      browsers: ['Chrome']
+      logLevel: 'DEBUG'
+      // logLevel: 'DEBUG',
+      // singleRun: true,
+      // browsers: ['Chrome']
     }
   };
 };
