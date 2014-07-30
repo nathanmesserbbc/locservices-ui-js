@@ -12,7 +12,7 @@ define(function() {
     'user_locations.dialog.cancel': 'Cancel',
     'user_locations.dialog.remove_preferred': 'We will no longer use <strong>{name}</strong> to give you relevant local info across the BBC.',
     'user_locations.dialog.prefer': 'We will now use <strong>{name}</strong> to give you relevant local info across the BBC.',
-    'user_locations.message.preferred': 'We\’ll use your location to give you relevant local info across the BBC.',
+    'user_locations.message.preferred': 'We\'ll use your location to give you relevant local info across the BBC.',
     'user_locations.message.change_preferred': 'Hit the star next to one of your other locations to make it your main location.',
     'user_locations.error.preferred_location': 'Sorry, we are experiencing technical problems.',
     'close_button.label': 'Close',
