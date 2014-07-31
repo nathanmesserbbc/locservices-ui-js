@@ -1,10 +1,12 @@
-/*global define */
+/*global define, DocumentTouch */
 
 define(['jquery', 'locservices/ui/component/component'], function($, Component) {
 
   'use strict';
 
-  var wrapEl = $('<div />').addClass('ls-ui-container');
+  var wrapEl = function() {
+    return $('<div />').addClass('ls-ui-container');
+  };
 
   var form = function() {
     return $('<form />')
@@ -21,6 +23,13 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
             .attr('placeholder', translations.get('search.placeholder'));
   };
 
+  var clear = function(translations) {
+    return $('<a />')
+            .attr('href', '#')
+            .attr('class', 'ls-ui-input-clear')
+            .text(translations.get('search.clear'));
+  };
+
   var submit = function(translations) {
     return $('<input />')
               .attr('type', 'submit')
@@ -29,8 +38,15 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
               .attr('title', translations.get('search.submit.title'));
   };
 
+  /**
+   * Search
+   *
+   * @param {Object} options
+   * @constructor
+   */
   function Search(options) {
     var self = this;
+    var supportsTouchEvents;
     options = options || {};
     options.componentId = 'search';
 
@@ -41,9 +57,25 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     }
     self.setComponentOptions(options);
     self.isSearching = false;
-    render(self.translations, self.container);
+    self.hasAValidSearchTerm = false;
 
-    self.input = self.container.find('input[type=text]');
+    // @todo test supportsTouchEvents
+    supportsTouchEvents = ('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch);
+    render(self.translations, self.container, supportsTouchEvents);
+
+    self.input = self.container.find('input[type=text]')
+      .on('keyup', function() {
+        self.checkInput();
+      });
+
+    // @todo test if (supportsTouchEvents) logic
+    if (supportsTouchEvents) {
+      self.container.find('.ls-ui-input-clear')
+        .on('click', function() {
+          self.clear();
+        });
+    }
+
     self.form  = self.container.find('form');
 
     self.form.on('submit', function(e) {
@@ -54,14 +86,56 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.emit('focus');
     });
 
-    self.container.find('input[type=submit]').on('click', function() {
-      self.form.trigger('submit');
-      self.emit('focus');
-    });
+    self.container.find('input[type=submit]')
+      .on('click', function() {
+        self.form.trigger('submit');
+        self.emit('focus');
+      });
   }
   Search.prototype = new Component();
   Search.prototype.constructor = Search;
 
+  /**
+   * Clear the search input
+   */
+  Search.prototype.clear = function() {
+    this.input.val('');
+    this.checkInput();
+    this.emit('clear');
+  };
+
+  /**
+   * Check if the input element value has length and 
+   * add class as necessary.
+   */
+  Search.prototype.checkInput = function() {
+    var value = this.input.val();
+
+    if (0 < value.length) {
+
+      // if there is not already a search term add
+      // a class to the form element
+      if (false === this.hasAValidSearchTerm) {
+        this.hasAValidSearchTerm = true;
+        this.form.addClass('ls-ui-comp-search-with-term');
+      }
+
+    } else if (this.hasAValidSearchTerm) {
+
+      // if we previously had a valid search term then remove
+      // the class from the form element
+      this.hasAValidSearchTerm = false;
+      this.form.removeClass('ls-ui-comp-search-with-term');
+
+    }
+
+  };
+
+  /**
+   * Search
+   *
+   * @param {String} searchTerm
+   */
   Search.prototype.search = function(searchTerm) {
 
     var self = this;
@@ -72,7 +146,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       return;
     }
 
-    // @todo test this event is emitted
     self.emit('start', [searchTerm]);
 
     self.isSearching = true;
@@ -87,7 +160,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
         self.emit('end');
         self.isSearching = false;
 
-        // @todo test this error is emitted
         self.emit('error', [{
           code: 'search.error.search',
           message: 'There was an API error searching for ' + searchTerm
@@ -98,12 +170,24 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   /**
    * Renders component into the container element
+   *
+   * @param {Object} translations
+   * @param {Object} container
+   * @param {Boolean} addClearButton
    */
-  var render = function(translations, container) {
-    var inputEl  = input(translations);
-    var submitEl = submit(translations);
+  var render = function(translations, container, addClearButton) {
+    var element;
 
-    container.append(form().append(wrapEl.append(inputEl)).append(submitEl));
+    element = form()
+      .append(wrapEl().append(input(translations)))
+      .append(submit(translations));
+
+    // @todo test this
+    if (addClearButton) {
+      element.append(clear(translations));
+    }
+
+    container.append(element);
   };
 
   return Search;

@@ -55,6 +55,12 @@ define([
       self._searchSubmitted = true;
     });
 
+    // @todo test this
+    $.on(self.eventNamespaceBase + ':component:search:clear', function() {
+      self.currentSearchTerm = '';
+      self.clear();
+    });
+
     self.input.on('keyup', function(e) {
       var code = e.keyCode;
       if (code !== KEY_CODE.escape && code !== KEY_CODE.enter && code !== KEY_CODE.upArrow && code !== KEY_CODE.downArrow) {

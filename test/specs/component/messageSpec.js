@@ -111,6 +111,18 @@ define([
         expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
+      it('should call clear search start', function() {
+        var stub = sinon.stub(message, 'clear');
+        $.emit('message-test:component:search:start');
+        expect(stub.calledOnce).toBe(true);
+      });
+
+      it('should call clear search clear', function() {
+        var stub = sinon.stub(message, 'clear');
+        $.emit('message-test:component:search:clear');
+        expect(stub.calledOnce).toBe(true);
+      });
+
       it('should remove content on search completes', function() {
         message.set('Detecting your location');
         $.emit('message-test:component:search:end');
