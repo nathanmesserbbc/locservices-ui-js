@@ -58,6 +58,11 @@ define([
         search.input.trigger('keyup');
         expect(stub.callCount).toBe(1);
       });
+
+      it('should set hasAValidSearchTerm to false', function() {
+        expect(search.hasAValidSearchTerm).toBe(false);
+      });
+
     });
 
     describe('clear()', function() {
@@ -85,11 +90,11 @@ define([
 
     describe('checkInput', function() {
 
-      it('should set hasInputLength to true if there is input value', function() {
-        search.hasInputLength = false;
+      it('should set hasAValidSearchTerm to true if there is input value', function() {
+        search.hasAValidSearchTerm = false;
         search.input.val('foo');
         search.checkInput();
-        expect(search.hasInputLength).toBe(true);
+        expect(search.hasAValidSearchTerm).toBe(true);
       });
 
       it('should add \'ls-ui-comp-search-with-term\' class to form if there is input value', function() {
@@ -98,16 +103,16 @@ define([
         expect(search.form.hasClass('ls-ui-comp-search-with-term')).toBe(true);
       });
 
-      it('should set hasInputLength to false if there is no input value', function() {
-        search.hasInputLength = true;
+      it('should set hasAValidSearchTerm to false if there is no input value', function() {
+        search.hasAValidSearchTerm = true;
         search.checkInput();
-        expect(search.hasInputLength).toBe(false);
+        expect(search.hasAValidSearchTerm).toBe(false);
       });
 
       it('should remove \'ls-ui-comp-search-with-term\' class from form if there is no input value', function() {
         search.form.addClass('ls-ui-comp-search-with-term');
         expect(search.form.hasClass('ls-ui-comp-search-with-term')).toBe(true);
-        search.hasInputLength = true;
+        search.hasAValidSearchTerm = true;
         search.checkInput();
         expect(search.form.hasClass('ls-ui-comp-search-with-term')).toBe(false);
       });

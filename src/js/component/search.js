@@ -57,7 +57,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     }
     self.setComponentOptions(options);
     self.isSearching = false;
-    self.hasInputLength = false;
+    self.hasAValidSearchTerm = false;
 
     // @todo test supportsTouchEvents
     supportsTouchEvents = ('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch);
@@ -110,15 +110,25 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   Search.prototype.checkInput = function() {
     var value = this.input.val();
+
     if (0 < value.length) {
-      if (false === this.hasInputLength) {
-        this.hasInputLength = true;
+
+      // if there is not already a search term add
+      // a class to the form element
+      if (false === this.hasAValidSearchTerm) {
+        this.hasAValidSearchTerm = true;
         this.form.addClass('ls-ui-comp-search-with-term');
       }
-    } else if (this.hasInputLength) {
-      this.hasInputLength = false;
+
+    } else if (this.hasAValidSearchTerm) {
+
+      // if we previously had a valid search term then remove
+      // the class from the form element
+      this.hasAValidSearchTerm = false;
       this.form.removeClass('ls-ui-comp-search-with-term');
+
     }
+
   };
 
   /**
