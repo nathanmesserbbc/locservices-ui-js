@@ -143,38 +143,35 @@ define([
     });
 
     describe('prepareSearchTerm()', function() {
+
+      it('returns a string when term is a string', function() {
+        expect(typeof autoComplete.prepareSearchTerm('foo')).toEqual('string');
+      });
+
+      it('returns an empty string when term is null', function() {
+        var result = autoComplete.prepareSearchTerm(null);
+        expect(typeof result).toEqual('string');
+        expect(result).toEqual('');
+      });
+
+      it('returns an empty string when term is undefined', function() {
+        var result = autoComplete.prepareSearchTerm(undefined);
+        expect(typeof result).toEqual('string');
+        expect(result).toEqual('');
+      });
+
+      it('returns a string when term is a number', function() {
+        expect(typeof autoComplete.prepareSearchTerm(123)).toEqual('string');
+      });
+
+      it('returns a string when term is a string', function() {
+        expect(typeof autoComplete.prepareSearchTerm('foo')).toEqual('string');
+      });
+
       it('removes all spaces from the right and left of the search term', function() {
         expect(autoComplete.prepareSearchTerm('  foo  ')).toEqual('foo');
       });
-    });
 
-    describe('isValidSearchTerm()', function() {
-      it('returns false for invalid search terms', function() {
-
-        var terms = [123, true, false, {}, 'C'];
-        var assertionCount = 0;
-
-        $.each(terms, function(i, term) {
-          expect(autoComplete.isValidSearchTerm(term)).toBe(false);
-          assertionCount++;
-        });
-
-        // test all the terms array has been tested
-        expect(assertionCount).toEqual(terms.length);
-      });
-      it('returns true for invalid search terms', function() {
-
-        var terms = ['Cardiff', ' Card  ', 'ca'];
-        var assertionCount = 0;
-
-        $.each(terms, function(i, term) {
-          expect(autoComplete.isValidSearchTerm(term)).toBe(true);
-          assertionCount++;
-        });
-
-        // test all the terms array has been tested
-        expect(assertionCount).toEqual(terms.length);
-      });
     });
 
     describe('highlightTerm()', function() {
@@ -189,8 +186,27 @@ define([
 
       var autoCompleteDelay = 500;
 
+      it('calls clear if the search term is too short', function() {
+        var stub = sinon.stub(autoComplete, 'clear');
+        inputElement.val('c');
+        autoComplete.currentSearchTerm = 'car';
+        autoComplete.autoComplete();
+        expect(stub.calledOnce).toBe(true);
+        stub.restore();
+      });
+
+      it('sets currentSearchTerm to \'\' if the search term is too short', function() {
+        var stub = sinon.stub(autoComplete, 'clear');
+        inputElement.val('c');
+        autoComplete.currentSearchTerm = 'car';
+        autoComplete.autoComplete();
+        expect(autoComplete.currentSearchTerm).toBe('');
+        stub.restore();
+      });
+
       it('always prepares the search term before using it', function() {
         var stub = sinon.stub(autoComplete, 'prepareSearchTerm');
+        stub.returns('');
         autoComplete.autoComplete();
         expect(stub.calledOnce).toBe(true);
         stub.restore();

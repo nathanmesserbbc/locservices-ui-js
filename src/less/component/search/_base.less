@@ -21,6 +21,21 @@
     box-sizing: border-box;
   }
 
+  .ls-ui-input-clear {
+    position: absolute;
+    top: -2px;
+    right: 38px;
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin-top: 2px;
+    text-indent: -10000px;
+    background-image: url("@{sprite-x1}");
+    background-position: 0 -92px;
+    background-repeat: no-repeat;
+  }
+
   .ls-ui-submit {
     position: absolute;
     top: 0;
@@ -44,5 +59,11 @@
       top: 1px;
       right: 1px;
     }
+  }
+}
+
+.ls-ui-comp-search-with-term {
+  .ls-ui-input-clear {
+    display: block;
   }
 }
