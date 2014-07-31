@@ -122,7 +122,7 @@ define([
     var self = this;
 
     if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length < minChars) {
-        return;
+      return;
     }
 
     clearTimeout(this._timeoutId);

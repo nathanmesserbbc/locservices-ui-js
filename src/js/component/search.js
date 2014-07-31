@@ -1,4 +1,4 @@
-/*global define */
+/*global define, DocumentTouch */
 
 define(['jquery', 'locservices/ui/component/component'], function($, Component) {
 
@@ -59,8 +59,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.isSearching = false;
     self.hasInputLength = false;
 
-    // @todo test this
-    supportsTouchEvents = 'ontouchstart' in window;
+    // @todo test supportsTouchEvents
+    supportsTouchEvents = ('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch);
     render(self.translations, self.container, supportsTouchEvents);
 
     self.input = self.container.find('input[type=text]')
@@ -105,7 +105,8 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   };
 
   /**
-   * Check the state of the input element.
+   * Check if the input element value has length and 
+   * add class as necessary.
    */
   Search.prototype.checkInput = function() {
     var value = this.input.val();
@@ -159,6 +160,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
   /**
    * Renders component into the container element
+   *
+   * @param {Object} translations
+   * @param {Object} container
+   * @param {Boolean} addClearButton
    */
   var render = function(translations, container, addClearButton) {
     var element;
