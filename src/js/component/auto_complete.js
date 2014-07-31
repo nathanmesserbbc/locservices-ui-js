@@ -118,10 +118,15 @@ define([
    */
   AutoComplete.prototype.autoComplete = function() {
 
-    var searchTerm = this.prepareSearchTerm(this.input.val());
     var self = this;
+    var searchTerm = this.prepareSearchTerm(this.input.val());
+    var isTooShort = searchTerm.length < minChars;
 
-    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length < minChars) {
+    if (this._waitingForResults || isTooShort) {
+      if (isTooShort && self.currentSearchTerm) {
+        self.clear();
+        self.currentSearchTerm = '';
+      }
       return;
     }
 
@@ -242,28 +247,12 @@ define([
    * @return {String} the prepared string
    */
   AutoComplete.prototype.prepareSearchTerm = function(searchTerm) {
-    return String(searchTerm).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-  };
-
-  /**
-   * Validate a search term
-   *
-   * @param {String} searchTerm the string to validate
-   * @return {Boolean} is the search term valid
-   */
-  AutoComplete.prototype.isValidSearchTerm = function(searchTerm) {
-
-    var value;
-    var hasRequiredLength;
-
-    if ('string' !== typeof searchTerm) {
-      return false;
+    if ('number' === typeof searchTerm) {
+      searchTerm = String(searchTerm);
+    } else if ('string' !== typeof searchTerm) {
+      return '';
     }
-
-    value = this.prepareSearchTerm(searchTerm);
-    hasRequiredLength = value.length >= minChars;
-
-    return hasRequiredLength;
+    return searchTerm.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
   };
 
   /**

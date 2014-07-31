@@ -229,8 +229,8 @@ define([
             name: location.name
           }
         ),
-        confirmLabel: self.translations.get('user_locations.dialog.confirm'),
-        cancelLabel: self.translations.get('user_locations.dialog.cancel'),
+        confirmLabel: self.translations.get('primary.cold_start.confirm'),
+        cancelLabel: self.translations.get('primary.cold_start.cancel'),
         confirm: function() {
           setAsPreferredLocation();
         },
