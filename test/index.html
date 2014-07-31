@@ -6,12 +6,11 @@
 
   <link rel="stylesheet" type="text/css" href="/vendor/jasmine/lib/jasmine-core/jasmine.css">
 
-  <script src="sinon.js"></script>
-
   <script type="text/javascript" src="/vendor/jasmine/lib/jasmine-core/jasmine.js"></script>
   <script type="text/javascript" src="/vendor/jasmine/lib/jasmine-core/jasmine-html.js"></script>
   <script type="text/javascript" src="/vendor/jasmine/lib/jasmine-core/boot.js"></script>
   <script type="text/javascript" src="/vendor/requirejs/require.js"></script>
+  <script src="sinon.js"></script>
 
   <script type="text/javascript">
     var run = window.onload;
@@ -21,12 +20,13 @@
       baseUrl: '/',
       paths: {
         'jquery' : 'vendor/jquery/dist/jquery',
+        'pubsub' : 'vendor/events/pubsub',
         'locservices/ui' : 'js',
         'locservices/core': 'vendor/locservices-core-js/src'
       }
     });
 
-    require(['jquery', 'vendor/events/pubsub'], function($) {
+    require(['jquery', 'pubsub'], function($) {
       require([
         'specs/component/componentSpec',
         'specs/component/searchSpec',
