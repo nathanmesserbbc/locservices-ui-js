@@ -199,6 +199,11 @@ function(
       e.stopPropagation();
       target = $(e.currentTarget);
 
+      // @todo test this
+      if (self._isDisplayingDialog) {
+        return;
+      }
+
       // convert data-id back to a string as strings that
       // look like a number eg "1243" get converted to type number
       locationId = String(target.data('id'));
@@ -208,8 +213,6 @@ function(
       if (!location) {
         return;
       }
-
-      // @todo <location name> interpolation in messages
 
       action = target.data('action');
       if ('location' === action) {
@@ -277,10 +280,19 @@ function(
    * @param {Element} element
    * @param {String} message
    * @param {Function} confirmCallback
+   * @return {Boolean}
    */
   UserLocations.prototype.displayDialog = function(element, message, confirmCallback) {
+    var self = this;
 
-    var resetElement = function() {
+    if (this._isDisplayingDialog) {
+      return false;
+    }
+
+    this._isDisplayingDialog = true;
+
+    var dialogRemoved = function() {
+      self._isDisplayingDialog = false;
       element.removeClass('ls-ui-comp-user_locations-location-with-dialog');
     };
 
@@ -292,16 +304,17 @@ function(
       confirmLabel: this.translations.get('user_locations.dialog.confirm'),
       cancelLabel: this.translations.get('user_locations.dialog.cancel'),
       confirm: function() {
-        resetElement();
+        dialogRemoved();
         if ('function' === typeof confirmCallback) {
           confirmCallback();
         }
       },
       cancel: function() {
-        resetElement();
+        dialogRemoved();
       }
     });
 
+    return true;
   };
 
   /**

@@ -301,6 +301,37 @@ function(
         userLocations.element.append(locationElement);
       });
 
+      it('returns true if a dialog is displayed', function() {
+        var result;
+        result = userLocations.displayDialog(locationElement);
+        expect(result).toBe(true);
+      });
+
+      it('returns false if a dialog is already being displayed', function() {
+        var result;
+        var additionalLocationElement = $('<li></li>');
+        userLocations.element.append(additionalLocationElement);
+        userLocations.displayDialog(locationElement);
+        result = userLocations.displayDialog(additionalLocationElement);
+        expect(result).toBe(false);
+      });
+
+      it('does not display a dialog if one is already being displayed', function() {
+        var additionalLocationElement = $('<li></li>');
+        userLocations.element.append(additionalLocationElement);
+        userLocations.displayDialog(locationElement);
+        expect(
+          locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')
+        ).toBe(true);
+        userLocations.displayDialog(additionalLocationElement);
+        expect(
+          locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')
+        ).toBe(true);
+        expect(
+          userLocations.element.find('.ls-ui-comp-user_locations-location-with-dialog').length
+        ).toBe(1);
+      });
+
       it('adds "ls-ui-comp-user_locations-location-with-dialog" class to element', function() {
         userLocations.displayDialog(locationElement);
         expect(
