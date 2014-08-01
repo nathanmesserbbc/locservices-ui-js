@@ -66,7 +66,7 @@ define(['jquery'], function($) {
     this.cancelLabel = options.cancelLabel || 'Cancel';
 
     var handleClick = function(callback) {
-      self.container.find('.ls-ui-comp-dialog').remove();
+      self.remove();
       if ('function' === typeof callback) {
         callback();
       }
@@ -89,6 +89,14 @@ define(['jquery'], function($) {
         handleClick(options.cancel);
       });
   }
+
+  /**
+   * Clear the message element
+   */
+  Dialog.prototype.remove = function() {
+    // @todo test this
+    this.container.find('.ls-ui-comp-dialog').remove();
+  };
 
   return Dialog;
 });

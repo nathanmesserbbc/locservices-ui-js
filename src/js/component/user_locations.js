@@ -258,6 +258,17 @@ function(
       }
     };
 
+    // @todo test this
+    $.on(this.eventNamespaceBase + ':controller:inactive', function() {
+      self.removeDialog();
+    });
+    $.on(this.eventNamespaceBase + ':component:search:results', function() {
+      self.removeDialog();
+    });
+    $.on(this.eventNamespaceBase + ':component:auto_complete:render', function() {
+      self.removeDialog();
+    });
+
     $.on(this.eventNamespaceBase + ':component:search_results:location', function(location) {
       handleLocationEvent(location);
     });
@@ -290,30 +301,43 @@ function(
     }
 
     this._isDisplayingDialog = true;
-
-    var dialogRemoved = function() {
-      self._isDisplayingDialog = false;
-      element.removeClass('ls-ui-comp-user_locations-location-with-dialog');
-    };
+    this._dialogElement = element;
 
     element.addClass('ls-ui-comp-user_locations-location-with-dialog');
 
-    new Dialog({
+    this._dialog = new Dialog({
       container: element,
       message: message,
       confirmLabel: this.translations.get('user_locations.dialog.confirm'),
       cancelLabel: this.translations.get('user_locations.dialog.cancel'),
       confirm: function() {
-        dialogRemoved();
+        self.removeDialog();
         if ('function' === typeof confirmCallback) {
           confirmCallback();
         }
       },
       cancel: function() {
-        dialogRemoved();
+        self.removeDialog();
       }
     });
 
+    return true;
+  };
+
+  /**
+   * Display a confrm/cancel dialogue
+   *
+   * @return {Boolean}
+   */
+  UserLocations.prototype.removeDialog = function() {
+    if (!this._isDisplayingDialog) {
+      return false;
+    }
+    this._isDisplayingDialog = false;
+    this._dialog.remove();
+    this._dialog = undefined;
+    this._dialogElement.removeClass('ls-ui-comp-user_locations-location-with-dialog');
+    this._dialogElement = undefined;
     return true;
   };
 

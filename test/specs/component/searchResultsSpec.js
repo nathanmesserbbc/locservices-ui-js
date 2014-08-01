@@ -277,17 +277,6 @@ define([
         expect(searchResults._data).toEqual({});
       });
 
-      it('should clear results when auto complete rendered', function() {
-        searchResults._data['123'] = {
-          id: 123,
-          name: 'Cardiff',
-          placeType: 'settlement'
-        };
-        $.emit('locservices:ui:component:auto_complete:render');
-
-        expect(searchResults._data).toEqual({});
-      });
-
     });
 
   });

@@ -83,13 +83,27 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.search(self.input.val());
     });
     self.input.on('focus', function() {
+
+      // @todo test this
+      //this._hasFocus = true;
+
       self.emit('focus');
     });
+
+    // @todo test this
+    //self.input.on('blur', function() {
+    //  this._hasFocus = false;
+    //});
 
     self.container.find('input[type=submit]')
       .on('click', function() {
         self.form.trigger('submit');
-        self.emit('focus');
+
+        // @todo test this
+        //if (!this._hasFocus) {
+          //self.emit('focus');
+        //}
+
       });
   }
   Search.prototype = new Component();

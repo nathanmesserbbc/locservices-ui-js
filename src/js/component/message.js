@@ -34,11 +34,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.clear();
     });
 
-    $.on(self.eventNamespaceBase + ':component:search:end', function() {
-      self.clear();
-    });
-
-    $.on(self.eventNamespaceBase + ':component:search_results:location', function() {
+    $.on(self.eventNamespaceBase + ':component:geolocation:click', function() {
       self.clear();
     });
 
@@ -52,13 +48,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.set(self.translations.get('message.total_results', { current: current, total: metadata.totalResults }));
     });
 
-    $.on(self.eventNamespaceBase + ':component:geolocation:end', function() {
-      self.clear();
-    });
-
-    $.on(this.eventNamespaceBase + ':component:auto_complete:render', function() {
-      self.clear();
-    });
   }
   Message.prototype = new Component();
   Message.prototype.constructor = Message;

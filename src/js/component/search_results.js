@@ -30,15 +30,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.render(results, metadata);
     });
 
-    $.on(this.eventNamespaceBase + ':component:search:start', function() {
+    $.on(self.eventNamespaceBase + ':component:search:clear', function() {
       self.clear();
     });
 
-    $.on(this.eventNamespaceBase + ':component:search:clear', function() {
-      self.clear();
-    });
-
-    $.on(this.eventNamespaceBase + ':component:auto_complete:render', function() {
+    $.on(self.eventNamespaceBase + ':component:search:start', function() {
       self.clear();
     });
 
@@ -54,15 +50,17 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   SearchResults.prototype.setup = function() {
 
-    var internalContainer = $('<div />').addClass('ls-ui-comp-search_results');
+    // @todo test assignment of this.element
+    this.element = $('<div />').addClass('ls-ui-comp-search_results');
+
     this.list = $('<ul />');
     this.moreResults = $('<a />')
                           .attr('href', '')
                           .addClass('ls-ui-comp-search_results-more')
                           .text('Show more results');
 
-    internalContainer.append(this.list).append(this.moreResults);
-    this.container.append(internalContainer);
+    this.element.append(this.list).append(this.moreResults);
+    this.container.append(this.element);
 
     var self = this;
     this.list.on('click', function(evt) {
@@ -107,31 +105,43 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    * @param {Object} metadata
    */
   SearchResults.prototype.render = function(results, metadata) {
-    var i, result, label, html = '';
+    var i, noOfResults, result, label, html = '';
+    noOfResults = results.length;
 
     this.offset = metadata.start || 0;
     this.searchTerm = metadata.search;
 
-    for (i = 0; i < results.length; i++) {
-      result = results[i];
-      this._data[result.id] = result;
-      label = result.name;
-      if (result.container) {
-        label += ', ' + result.container;
+    // @todo test this
+    if (0 === noOfResults) {
+
+      this.element.removeClass('ls-ui-comp-search_results-with_results');
+
+    } else {
+
+      this.element.addClass('ls-ui-comp-search_results-with_results');
+
+      for (i = 0; i < noOfResults; i++) {
+        result = results[i];
+        this._data[result.id] = result;
+        label = result.name;
+        if (result.container) {
+          label += ', ' + result.container;
+        }
+        html += '<li><a href="" data-id="' + result.id + '" data-offset="' + this.offset + '">' + label + '</a></li>';
       }
-      html += '<li><a href="" data-id="' + result.id + '" data-offset="' + this.offset + '">' + label + '</a></li>';
-    }
 
-    if (this.offset === 0) {
-      this.list.html(html);
-    } else {
-      this.list.append(html);
-    }
+      if (this.offset === 0) {
+        this.list.html(html);
+      } else {
+        this.list.append(html);
+      }
 
-    if (metadata.totalResults > 10 && (this.offset + 10) < metadata.totalResults) {
-      this.moreResults.addClass('ls-ui-comp-search_results-active');
-    } else {
-      this.moreResults.removeClass('ls-ui-comp-search_results-active');
+      if (metadata.totalResults > 10 && (this.offset + 10) < metadata.totalResults) {
+        this.moreResults.addClass('ls-ui-comp-search_results-active');
+      } else {
+        this.moreResults.removeClass('ls-ui-comp-search_results-active');
+      }
+
     }
 
     this.emit('results', {

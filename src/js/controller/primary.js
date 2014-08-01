@@ -68,25 +68,37 @@ define([
     var alwaysOpen = options.alwaysOpen || false;
 
     var events = {
-
+      onInputInteractionEnd: function() {
+        if (self.coldStartDialog) {
+          self.coldStartDialog.remove();
+          self.coldStartDialog = undefined;
+        }
+      },
       onLocation: function(location) {
+        self.message.clear();
         self.selectLocation(location);
       },
       onActive: function() {
         $.emit(self.namespace + ':controller:active');
         self.container.addClass('ls-ui-ctrl-active');
       },
-      onGeolocation: function() {
+      onGeolocationAvailable: function() {
         $.emit(self.namespace + ':controller:geolocation:available');
         self.container.addClass('ls-ui-ctrl-geolocation');
-      },
-      onResultsClear: function() {
-        self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
       },
       onSearchResults: function() {
         self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
       },
+      onAutoCompleteResults: function() {
+        self.message.clear();
+        self.results.clear();
+        self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
+      },
+      onResultsClear: function() {
+        self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
+      },
       onClose: function() {
+        self.search.clear();
         self.message.clear();
         self.results.clear();
         self.autoComplete.clear();
@@ -110,17 +122,28 @@ define([
 
     self.namespace = options.namespace || 'locservices:ui';
 
-    $.on(self.namespace + ':error', events.onActive);
-    $.on(self.namespace + ':component:auto_complete:clear', events.onResultsClear);
-    $.on(self.namespace + ':component:auto_complete:render', events.onSearchResults);
+    // @todo test these
     $.on(self.namespace + ':component:search:focus', events.onActive);
-    $.on(self.namespace + ':component:search:clear', events.onResultsClear);
+
+    $.on(self.namespace + ':component:search:clear', events.onInputInteractionEnd);
+    $.on(self.namespace + ':component:search:end', events.onInputInteractionEnd);
+    $.on(self.namespace + ':component:auto_complete:results', events.onInputInteractionEnd);
+
+    // hide user_locations when displaying results
     $.on(self.namespace + ':component:search:results', events.onSearchResults);
+    $.on(self.namespace + ':component:auto_complete:render', events.onAutoCompleteResults);
+
+    // show user_locations when results are cleared
+    $.on(self.namespace + ':component:auto_complete:clear', events.onResultsClear);
+    $.on(self.namespace + ':component:search:clear', events.onResultsClear);
+    
     $.on(self.namespace + ':component:geolocation:location', events.onLocation);
     $.on(self.namespace + ':component:auto_complete:location', events.onLocation);
     $.on(self.namespace + ':component:user_locations:location', events.onLocation);
     $.on(self.namespace + ':component:search_results:location', events.onLocation);
-    $.on(self.namespace + ':component:geolocation:available', events.onGeolocation);
+
+    $.on(self.namespace + ':component:geolocation:available', events.onGeolocationAvailable);
+
     $.on(self.namespace + ':component:close_button:clicked', events.onClose);
 
     self.search = new Search({
@@ -221,7 +244,7 @@ define([
       this.preferredLocation.isValidLocation(location) &&
       this.shouldColdStartDialogBeDisplayed()
     ) {
-      new Dialog({
+      this.coldStartDialog = new Dialog({
         container: outside,
         message: self.translations.get(
           'primary.cold_start',
@@ -232,9 +255,11 @@ define([
         confirmLabel: self.translations.get('primary.cold_start.confirm'),
         cancelLabel: self.translations.get('primary.cold_start.cancel'),
         confirm: function() {
+          self.coldStartDialog = undefined;
           setAsPreferredLocation();
         },
         cancel: function() {
+          self.coldStartDialog = undefined;
           declinePreferredLocation();
         }
       });
