@@ -309,21 +309,52 @@ define([
         controller.container.addClass.restore();
       });
 
-      it('should emit an inactive event when the close button is clicked', function() {
-        var spy = sinon.spy($, 'emit');
+      it('should call close when the close button is clicked', function() {
+        var spy = sinon.spy(controller, 'close');
         $.emit('locservices:ui:component:close_button:clicked');
-        expect(spy.getCall(2).args[0]).toEqual('locservices:ui:controller:inactive');
+        expect(spy.callCount).toEqual(1);
+      });
 
-        $.emit.restore();
+    });
+
+    describe('close()', function() {
+
+      beforeEach(function() {
+        api = new Api();
+        container = $('<div />');
+        translations = new Translations();
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations
+        });
       });
 
       it('should emit an inactive event when the close button is clicked', function() {
         var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:component:close_button:clicked');
-        expect(spy.getCall(2).args[0]).toEqual('locservices:ui:controller:inactive');
-
+        controller.close();
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:inactive');
         $.emit.restore();
       });
+
+      it('clears search', function() {
+        var stub = sinon.stub(controller.search, 'clear');
+        controller.close();
+        expect(stub.callCount).toBe(1);
+      });
+
+      it('clears results', function() {
+        var stub = sinon.stub(controller.results, 'clear');
+        controller.close();
+        expect(stub.callCount).toBe(1);
+      });
+
+      it('clears auto_complete', function() {
+        var stub = sinon.stub(controller.autoComplete, 'clear');
+        controller.close();
+        expect(stub.callCount).toBe(1);
+      });
+
     });
 
     describe('selectLocation()', function() {

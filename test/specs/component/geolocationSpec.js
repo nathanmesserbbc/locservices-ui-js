@@ -67,27 +67,23 @@ define([
         stub.restore();
       });
 
-      it('disables the button', function() {
-        var stub = sinon.stub(geolocation, 'reverseGeocode');
-        geolocation._button.trigger('click');
-
-        expect(geolocation._button.attr('disabled')).toEqual('disabled');
-        expect(geolocation._button.hasClass('ls-ui-comp-geolocation-disabled')).toBe(true);
-        stub.restore();
-      });
-
-      it('emits the click event', function() {
-
-        var geoStub = sinon.stub(geolocation, 'reverseGeocode');
-        var emitStub = sinon.stub(geolocation, 'emit');
-        geolocation.container.find('button').trigger('click');
-        expect(emitStub.calledWith('click')).toBe(true);
-        geoStub.restore();
-        emitStub.restore();
-      });
     });
 
     describe('reverseGeocode()', function() {
+
+      it('disables the button', function() {
+        geolocation.reverseGeocode();
+        expect(geolocation._button.attr('disabled')).toEqual('disabled');
+        expect(geolocation._button.hasClass('ls-ui-comp-geolocation-disabled')).toBe(true);
+      });
+
+      it('emits the click event', function() {
+        var emitStub = sinon.stub(geolocation, 'emit');
+        geolocation.reverseGeocode();
+        expect(emitStub.calledWith('click')).toBe(true);
+        emitStub.restore();
+      });
+
       it('calls geolocation.getCurrentPosition', function() {
         var stub = sinon.stub(geo, 'getCurrentPosition');
         geolocation.reverseGeocode();
@@ -102,7 +98,7 @@ define([
         var emitStub = sinon.stub(geolocation, 'emit');
         geolocation.reverseGeocode();
 
-        expect(emitStub.calledOnce).toBe(true);
+        expect(emitStub.callCount).toBe(2);
         expect(emitStub.calledWith('error')).toBe(true);
         stub.restore();
       });
@@ -118,9 +114,9 @@ define([
 
         geolocation.reverseGeocode();
 
-        expect(emitStub.calledOnce).toBe(true);
+        expect(emitStub.callCount).toBe(2);
 
-        var errorObject = emitStub.args[0][1][0];
+        var errorObject = emitStub.args[1][1][0];
         expect(errorObject.code).toEqual('geolocation.error.http');
 
         geoStub.restore();
@@ -142,9 +138,9 @@ define([
         var emitStub = sinon.stub(geolocation, 'emit');
 
         geolocation.reverseGeocode();
-        expect(emitStub.calledOnce).toBe(true);
+        expect(emitStub.callCount).toBe(2);
 
-        var errorObject = emitStub.args[0][1][0];
+        var errorObject = emitStub.args[1][1][0];
         expect(errorObject.code).toEqual('geolocation.error.outsideContext');
 
         geoStub.restore();
@@ -168,7 +164,7 @@ define([
 
         geolocation.reverseGeocode();
 
-        expect(emitStub.calledOnce).toBe(true);
+        expect(emitStub.callCount).toBe(2);
         expect(emitStub.calledWith('location', [location])).toBe(true);
 
         geoStub.restore();
@@ -187,7 +183,7 @@ define([
         geolocation.reverseGeocode();
 
         expect(geolocation._button.attr('disabled')).toBe(undefined);
-        expect(geolocation._button.hasClass('disabled')).toBe(false);
+        expect(geolocation._button.hasClass('ls-ui-comp-geolocation-disabled')).toBe(false);
 
         geoStub.restore();
         revStub.restore();

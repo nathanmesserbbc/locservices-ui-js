@@ -99,13 +99,7 @@ define([
         self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
       },
       onClose: function() {
-        self.search.clear();
-        self.message.clear();
-        self.results.clear();
-        self.autoComplete.clear();
-        $.emit(self.namespace + ':controller:inactive');
-        self.container.removeClass('ls-ui-ctrl-active');
-        self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
+        self.close();
       }
     };
 
@@ -200,6 +194,23 @@ define([
       $.emit(self.namespace + ':component:search:focus');
     }
   }
+
+  /**
+   * Close the component
+   */
+  Primary.prototype.close = function() {
+    // this results in message.clear, results.clear and autoComplete.clear
+    // being called as they listen for search:clear
+    this.search.clear();
+
+    $.emit(this.namespace + ':controller:inactive');
+
+    // @todo test this
+    this.container.removeClass('ls-ui-ctrl-active');
+
+    // @todo test this
+    this.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
+  };
 
   /**
    * Handle selecting a single location
