@@ -136,10 +136,35 @@ define([
 
       it('should react to search starting', function() {
         expect(autoComplete._searchSubmitted).toBe(false);
-
         $.emit('locservices:ui:component:search:start');
         expect(autoComplete._searchSubmitted).toBe(true);
+        expect(autoComplete.requestedSearchTerm).toBe(undefined);
       });
+
+      it('should reset requestedSearchTerm on search start', function() {
+        autoComplete.requestedSearchTerm = 'foo';
+        $.emit('locservices:ui:component:search:start');
+        expect(autoComplete.requestedSearchTerm).toBe(undefined);
+      });
+
+      it('should reset requestedSearchTerm on search:clear', function() {
+        autoComplete.requestedSearchTerm = 'foo';
+        $.emit('locservices:ui:component:search:clear');
+        expect(autoComplete.requestedSearchTerm).toBe(undefined);
+      });
+
+      it('should reset currentSearchTerm on search:clear', function() {
+        autoComplete.currentSearchTerm = 'foo';
+        $.emit('locservices:ui:component:search:clear');
+        expect(autoComplete.currentSearchTerm).toBe('');
+      });
+
+      it('should call clear on search:clear', function() {
+        var stub = sinon.stub(autoComplete, 'clear');
+        $.emit('locservices:ui:component:search:clear');
+        expect(stub.callCount).toBe(1);
+      });
+
     });
 
     describe('prepareSearchTerm()', function() {
@@ -212,6 +237,15 @@ define([
         stub.restore();
       });
 
+      it('sets currentSearchTerm to the prepared value if term is valid', function() {
+        var expectedValue = 'foo';
+        sinon.stub(autoComplete, 'prepareSearchTerm').returns(expectedValue);
+        inputElement.val(expectedValue);
+        autoComplete.currentSearchTerm = '';
+        autoComplete.autoComplete();
+        expect(autoComplete.currentSearchTerm).toBe(expectedValue);
+      });
+
       it('calls the api after the prefigured delay', function() {
         var stub = sinon.stub(window, 'setTimeout');
         inputElement.val('card');
@@ -220,6 +254,24 @@ define([
 
         expect(stub.calledOnce).toBe(true);
         stub.restore();
+      });
+
+      it('does not call api.autoComplete if a search has been started', function() {
+        var stub = sinon.stub(autoComplete._api, 'autoComplete');
+        inputElement.val('card');
+        autoComplete.autoComplete();
+        autoComplete._searchSubmitted = true;
+        clock.tick(autoCompleteDelay);
+        expect(stub.callCount).toBe(0);
+      });
+
+      it('does not call api.autoComplete if a search term has already been requested', function() {
+        var stub = sinon.stub(autoComplete._api, 'autoComplete');
+        inputElement.val('card');
+        autoComplete.requestedSearchTerm = 'card';
+        autoComplete.autoComplete();
+        clock.tick(autoCompleteDelay);
+        expect(stub.callCount).toBe(0);
       });
 
       it('calls autoComplete on the api with the search term', function() {
@@ -269,10 +321,85 @@ define([
         stub.restore();
       });
 
-      it('sets the internal _waitingForResults before and after call to autoComplete', function() {
+      it('sets the internal _waitingForResults before and after call to autoComplete success', function() {
         var stub = sinon.stub(autoComplete._api, 'autoComplete', function(term, options) {
           expect(autoComplete._waitingForResults).toBe(true);
           options.success({ results: 1, metadata: 1 });
+          expect(autoComplete._waitingForResults).toBe(false);
+        });
+        var emitStub = sinon.stub(autoComplete, 'emit');
+        inputElement.val('card');
+
+        autoComplete.autoComplete();
+        clock.tick(autoCompleteDelay);
+
+        stub.restore();
+        emitStub.restore();
+      });
+
+      it('sets requestedSearchTerm to undefined on autoComplete success', function() {
+        sinon.stub(autoComplete._api, 'autoComplete', function(term, options) {
+          options.success({ results: 1, metadata: 1 });
+        });
+        autoComplete.requestedSearchTerm = 'foo';
+        inputElement.val('card');
+        autoComplete.autoComplete();
+        clock.tick(autoCompleteDelay);
+        expect(autoComplete.requestedSearchTerm).toBe(undefined);
+      });
+
+      it('sets requestedSearchTerm to undefined on autoComplete success', function() {
+        sinon.stub(autoComplete._api, 'autoComplete', function(term, options) {
+          options.error({ results: 1, metadata: 1 });
+        });
+        autoComplete.requestedSearchTerm = 'foo';
+        inputElement.val('card');
+        autoComplete.autoComplete();
+        clock.tick(autoCompleteDelay);
+        expect(autoComplete.requestedSearchTerm).toBe(undefined);
+      });
+
+      it('does not emit results on success if _searchSubmitted is true', function() {
+        sinon.stub(autoComplete._api, 'autoComplete', function(term, options) {
+          options.success({ results: 1, metadata: 1 });
+        });
+        var emitStub = sinon.stub(autoComplete, 'emit');
+        inputElement.val('card');
+        autoComplete.autoComplete();
+        autoComplete._searchSubmitted = true;
+        clock.tick(autoCompleteDelay);
+
+        expect(emitStub.callCount).toBe(0);
+      });
+
+      it('does not emit results on success if currentSearchTerm !== requestedSearchTerm', function() {
+        sinon.stub(autoComplete._api, 'autoComplete', function(term, options) {
+          options.success({ results: 1, metadata: 1 });
+        });
+        var emitStub = sinon.stub(autoComplete, 'emit');
+        inputElement.val('foo');
+        autoComplete.autoComplete();
+        autoComplete.currentSearchTerm = 'bar';
+        clock.tick(autoCompleteDelay);
+
+        expect(emitStub.callCount).toBe(0);
+      });
+
+      it('emits results on success is not searching and input value is unchanged', function() {
+        sinon.stub(autoComplete._api, 'autoComplete', function(term, options) {
+          options.success({ results: 1, metadata: 1 });
+        });
+        var emitStub = sinon.stub(autoComplete, 'emit');
+        inputElement.val('foo');
+        autoComplete.autoComplete();
+        clock.tick(autoCompleteDelay);
+        expect(emitStub.callCount).toBe(1);
+      });
+
+      it('sets the internal _waitingForResults before and after call to autoComplete error', function() {
+        var stub = sinon.stub(autoComplete._api, 'autoComplete', function(term, options) {
+          expect(autoComplete._waitingForResults).toBe(true);
+          options.error();
           expect(autoComplete._waitingForResults).toBe(false);
         });
         var emitStub = sinon.stub(autoComplete, 'emit');
@@ -302,7 +429,8 @@ define([
       });
     });
 
-    describe('clearSearchResults()', function() {
+    describe('clear()', function() {
+
       it('removes the markup from the dom', function() {
         autoComplete.searchResults = $('<div />');
         var stub = sinon.stub(autoComplete.searchResults, 'empty');
@@ -310,6 +438,19 @@ define([
         expect(stub.calledOnce).toBe(true);
         stub.restore();
       });
+
+      it('does not emit an event by default', function() {
+        var stub = sinon.stub(autoComplete, 'emit');
+        autoComplete.clear();
+        expect(stub.callCount).toBe(0);
+      });
+
+      it('emit an event if emitEvent is true', function() {
+        var stub = sinon.stub(autoComplete, 'emit');
+        autoComplete.clear(true);
+        expect(stub.callCount).toBe(1);
+      });
+
     });
 
     describe('render()', function() {

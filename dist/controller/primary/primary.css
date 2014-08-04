@@ -45,7 +45,7 @@
   position: absolute;
   top: -54px;
   display: block;
-  margin-bottom: 8px;
+  /*margin-bottom: 8px;*/
 }
 .ls-ui-ctrl-geolocation .ls-ui-comp-close_button {
   top: -112px;

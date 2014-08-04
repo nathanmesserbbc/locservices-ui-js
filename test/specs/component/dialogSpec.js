@@ -100,6 +100,20 @@ define([
 
     }); // render
 
+    describe('remove()', function() {
+
+      it('removes the dialog from the container', function() {
+        var dialog = new Dialog({
+          container: element,
+          message: 'Test'
+        });
+        expect(element.find('.ls-ui-comp-dialog').length).toBe(1);
+        dialog.remove();
+        expect(element.find('.ls-ui-comp-dialog').length).toBe(0);
+      });
+
+    }); // remove
+
   }); // component
 
 });

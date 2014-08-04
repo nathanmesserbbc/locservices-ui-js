@@ -51,8 +51,15 @@ define([
     });
 
     $.on(self.eventNamespaceBase + ':component:search:start', function() {
-      self.currentSearchTerm = self.prepareSearchTerm(self.input.val());
       self._searchSubmitted = true;
+      self.requestedSearchTerm = undefined;
+      self.currentSearchTerm = self.prepareSearchTerm(self.input.val());
+    });
+
+    $.on(self.eventNamespaceBase + ':component:search:clear', function() {
+      self.requestedSearchTerm = undefined;
+      self.currentSearchTerm = '';
+      self.clear();
     });
 
     self.input.on('keyup', function(e) {
@@ -112,39 +119,53 @@ define([
    */
   AutoComplete.prototype.autoComplete = function() {
 
-    var searchTerm = this.prepareSearchTerm(this.input.val());
     var self = this;
+    var searchTerm = this.prepareSearchTerm(this.input.val());
+    var isTooShort = searchTerm.length < minChars;
 
-    if (this._waitingForResults || !this.isValidSearchTerm(searchTerm) || searchTerm.length < minChars) {
+    if (this._waitingForResults || isTooShort) {
+      if (isTooShort && self.currentSearchTerm) {
+        self.clear(true);
+        self.currentSearchTerm = '';
+      }
       return;
     }
+
+    self.currentSearchTerm = searchTerm;
 
     clearTimeout(this._timeoutId);
 
     this._timeoutId = setTimeout(function() {
 
-      if (true === self._searchSubmitted || searchTerm === self.currentSearchTerm) {
+      if (true === self._searchSubmitted || searchTerm === self.requestedSearchTerm) {
         return;
       }
       self._waitingForResults = true;
-      self.currentSearchTerm = searchTerm;
+
+      self.requestedSearchTerm = searchTerm;
 
       self._api.autoComplete(searchTerm, {
         success: function(data) {
           self._waitingForResults = false;
-          if (true === self._searchSubmitted) {
-            return;
+          if (false === self._searchSubmitted && self.currentSearchTerm === self.requestedSearchTerm) {
+            self.emit('results', [data.results, data.metadata]);
           }
-          self.emit('results', [data.results, data.metadata]);
+          self.requestedSearchTerm = undefined;
         },
         error: function() {
-          if (true === self._searchSubmitted) {
-            return;
+          self._waitingForResults = false;
+
+          // @todo test this
+          if (false === self._searchSubmitted && self.currentSearchTerm === self.requestedSearchTerm) {
+            // @todo should we actualy display this ? 
+            // or just fail siliently
+            self.emit('error', [{
+              code: 'auto_complete.error.search',
+              message: 'There was a problem searching for the search term'
+            }]);
           }
-          self.emit('error', [{
-            code: 'auto_complete.error.search',
-            message: 'There was a problem searching for the search term'
-          }]);
+
+          self.requestedSearchTerm = undefined;
         }
       });
     }, inputDelay);
@@ -155,12 +176,15 @@ define([
   /**
    * Clear rendered search results from the DOM
    */
-  AutoComplete.prototype.clear = function() {
+  AutoComplete.prototype.clear = function(emitEvent) {
 
     this.searchResultsData = null;
     this._highlightedSearchResultIndex = null;
     this.searchResults.empty();
-    this.emit('clear');
+
+    if (emitEvent) {
+      this.emit('clear');
+    }
   };
 
   /**
@@ -204,13 +228,16 @@ define([
   /**
    * Handle an escape key event. Clear any displyaed results and reset the
    * input field text if required.
+   *
+   * @todo test this method
    */
   AutoComplete.prototype.escapeKeyHandler = function() {
-
-    if (null !== this._highlightedSearchResultIndex) {
-      this.input.val(this.currentSearchTerm);
+    if (this.searchResultsData) {
+      if (null !== this._highlightedSearchResultIndex) {
+        this.input.val(this.currentSearchTerm);
+      }
+      this.clear(true);
     }
-    this.clear();
   };
 
   /**
@@ -236,28 +263,12 @@ define([
    * @return {String} the prepared string
    */
   AutoComplete.prototype.prepareSearchTerm = function(searchTerm) {
-    return String(searchTerm).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-  };
-
-  /**
-   * Validate a search term
-   *
-   * @param {String} searchTerm the string to validate
-   * @return {Boolean} is the search term valid
-   */
-  AutoComplete.prototype.isValidSearchTerm = function(searchTerm) {
-
-    var value;
-    var hasRequiredLength;
-
-    if ('string' !== typeof searchTerm) {
-      return false;
+    if ('number' === typeof searchTerm) {
+      searchTerm = String(searchTerm);
+    } else if ('string' !== typeof searchTerm) {
+      return '';
     }
-
-    value = this.prepareSearchTerm(searchTerm);
-    hasRequiredLength = value.length >= minChars;
-
-    return hasRequiredLength;
+    return searchTerm.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
   };
 
   /**

@@ -84,6 +84,19 @@ function(
         window.bbccookies = undefined;
       });
 
+      it('returns early when handling click events if displaying a dialog', function() {
+        var stub;
+        stub = sinon.stub(userLocations, 'selectLocationById');
+        userLocations.element.empty();
+        userLocations.element.append(
+          '<li><a class="ls-ui-comp-user_locations-name" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="location"><strong>Location</strong>, Container</a></li>'
+        );
+        userLocations._isDisplayingDialog = true;
+        userLocations.element.find('.ls-ui-comp-user_locations-name strong').trigger('click');
+
+        expect(stub.callCount).toBe(0);
+      });
+
       it('calls this.selectLocationById location event when clicking on a location name', function() {
         var stub;
         stub = sinon.stub(userLocations, 'selectLocationById');
@@ -268,6 +281,50 @@ function(
         emitStub.restore();
         addStub.restore();
       });
+
+      it('calls removeDialog on controller:inactive', function() {
+        var stub = sinon.stub(userLocations, 'removeDialog');
+        $.emit('locservices:ui:controller:inactive');
+        expect(stub.callCount).toBe(1);
+      });
+
+      it('calls removeDialog on search:results', function() {
+        var stub = sinon.stub(userLocations, 'removeDialog');
+        $.emit('locservices:ui:component:search:results', [[], {}]);
+        expect(stub.callCount).toBe(1);
+      });
+
+      it('calls removeDialog on auto_complete:render', function() {
+        var stub = sinon.stub(userLocations, 'removeDialog');
+        $.emit('locservices:ui:component:auto_complete:render');
+        expect(stub.callCount).toBe(1);
+      });
+
+    });
+
+    describe('removeDialog()', function() {
+
+      it('calls _dialog.remove()', function() {
+        userLocations._isDisplayingDialog = true;
+        userLocations._dialog = { remove: function() {}};
+        userLocations._dialogElement = container;
+        var stub = sinon.stub(userLocations._dialog, 'remove');
+        userLocations.removeDialog();
+        expect(stub.callCount).toEqual(1);
+      });
+
+      it('remove class from _dialogElement', function() {
+        userLocations._dialog = { remove: function() {}};
+        sinon.stub(userLocations._dialog, 'remove');
+        userLocations._isDisplayingDialog = true;
+        userLocations._dialogElement = container;
+        container.addClass('ls-ui-comp-user_locations-location-with-dialog');
+        userLocations.removeDialog();
+        expect(
+          container.hasClass('ls-ui-comp-user_locations-location-with-dialog')
+        ).toEqual(false);
+      });
+
     });
 
     describe('selectLocationById()', function() {
@@ -299,6 +356,37 @@ function(
       beforeEach(function() {
         locationElement = $('<li></li>');
         userLocations.element.append(locationElement);
+      });
+
+      it('returns true if a dialog is displayed', function() {
+        var result;
+        result = userLocations.displayDialog(locationElement);
+        expect(result).toBe(true);
+      });
+
+      it('returns false if a dialog is already being displayed', function() {
+        var result;
+        var additionalLocationElement = $('<li></li>');
+        userLocations.element.append(additionalLocationElement);
+        userLocations.displayDialog(locationElement);
+        result = userLocations.displayDialog(additionalLocationElement);
+        expect(result).toBe(false);
+      });
+
+      it('does not display a dialog if one is already being displayed', function() {
+        var additionalLocationElement = $('<li></li>');
+        userLocations.element.append(additionalLocationElement);
+        userLocations.displayDialog(locationElement);
+        expect(
+          locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')
+        ).toBe(true);
+        userLocations.displayDialog(additionalLocationElement);
+        expect(
+          locationElement.hasClass('ls-ui-comp-user_locations-location-with-dialog')
+        ).toBe(true);
+        expect(
+          userLocations.element.find('.ls-ui-comp-user_locations-location-with-dialog').length
+        ).toBe(1);
       });
 
       it('adds "ls-ui-comp-user_locations-location-with-dialog" class to element', function() {

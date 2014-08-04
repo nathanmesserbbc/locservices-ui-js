@@ -112,7 +112,6 @@ function(
 
       var li = $('<li />');
 
-      // @todo test this class is added
       li.addClass('ls-ui-comp-user_locations-location');
 
       if (location.isPreferred) {
@@ -199,6 +198,10 @@ function(
       e.stopPropagation();
       target = $(e.currentTarget);
 
+      if (self._isDisplayingDialog) {
+        return;
+      }
+
       // convert data-id back to a string as strings that
       // look like a number eg "1243" get converted to type number
       locationId = String(target.data('id'));
@@ -208,8 +211,6 @@ function(
       if (!location) {
         return;
       }
-
-      // @todo <location name> interpolation in messages
 
       action = target.data('action');
       if ('location' === action) {
@@ -255,6 +256,18 @@ function(
       }
     };
 
+    $.on(this.eventNamespaceBase + ':controller:inactive', function() {
+      self.removeDialog();
+    });
+
+    $.on(this.eventNamespaceBase + ':component:search:results', function() {
+      self.removeDialog();
+    });
+
+    $.on(this.eventNamespaceBase + ':component:auto_complete:render', function() {
+      self.removeDialog();
+    });
+
     $.on(this.eventNamespaceBase + ':component:search_results:location', function(location) {
       handleLocationEvent(location);
     });
@@ -277,31 +290,50 @@ function(
    * @param {Element} element
    * @param {String} message
    * @param {Function} confirmCallback
+   * @return {Boolean}
    */
   UserLocations.prototype.displayDialog = function(element, message, confirmCallback) {
+    var self = this;
 
-    var resetElement = function() {
-      element.removeClass('ls-ui-comp-user_locations-location-with-dialog');
-    };
+    if (this._isDisplayingDialog) {
+      return false;
+    }
+
+    this._isDisplayingDialog = true;
+    this._dialogElement = element;
 
     element.addClass('ls-ui-comp-user_locations-location-with-dialog');
 
-    new Dialog({
+    this._dialog = new Dialog({
       container: element,
       message: message,
       confirmLabel: this.translations.get('user_locations.dialog.confirm'),
       cancelLabel: this.translations.get('user_locations.dialog.cancel'),
       confirm: function() {
-        resetElement();
+        self.removeDialog();
         if ('function' === typeof confirmCallback) {
           confirmCallback();
         }
       },
       cancel: function() {
-        resetElement();
+        self.removeDialog();
       }
     });
 
+    return true;
+  };
+
+  /**
+   * Display a confrm/cancel dialogue
+   */
+  UserLocations.prototype.removeDialog = function() {
+    if (this._isDisplayingDialog && this._dialog && this._dialogElement) {
+      this._dialog.remove();
+      this._dialogElement.removeClass('ls-ui-comp-user_locations-location-with-dialog');
+    }
+    this._isDisplayingDialog = false;
+    this._dialog = undefined;
+    this._dialogElement = undefined;
   };
 
   /**

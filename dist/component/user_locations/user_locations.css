@@ -13,9 +13,6 @@
   list-style-type: none;
   border-bottom: 1px solid #e6e6e6;
 }
-.ls-ui-comp-user_locations li:last-child {
-  border-bottom: 0 solid #e6e6e6;
-}
 .ls-ui-comp-user_locations-message,
 .ls-ui-comp-user_locations-heading {
   font-size: 1.4em;

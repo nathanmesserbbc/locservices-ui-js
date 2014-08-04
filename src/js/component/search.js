@@ -89,7 +89,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.container.find('input[type=submit]')
       .on('click', function() {
         self.form.trigger('submit');
-        self.emit('focus');
       });
   }
   Search.prototype = new Component();

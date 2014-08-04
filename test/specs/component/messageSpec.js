@@ -107,41 +107,20 @@ define([
       it('should set content on when search results returns nothing', function() {
         message.set('');
         $.emit('message-test:component:search_results:results', [{ searchTerm: 'Cardiff', totalResults: 0 }]);
-        expect(message.element.text()).toBe('We could not find any results for "Cardiff"');
+        expect(message.element.text()).toBe('We couldn\'t find any results for "Cardiff"');
         expect(message.element.hasClass('ls-ui-active')).toBe(true);
       });
 
-      it('should call clear search start', function() {
+      it('should call clear on search:start', function() {
         var stub = sinon.stub(message, 'clear');
         $.emit('message-test:component:search:start');
         expect(stub.calledOnce).toBe(true);
       });
 
-      it('should call clear search clear', function() {
+      it('should call clear on geolocation:click', function() {
         var stub = sinon.stub(message, 'clear');
-        $.emit('message-test:component:search:clear');
+        $.emit('message-test:component:geolocation:click');
         expect(stub.calledOnce).toBe(true);
-      });
-
-      it('should remove content on search completes', function() {
-        message.set('Detecting your location');
-        $.emit('message-test:component:search:end');
-        expect(message.element.text()).toBe('');
-        expect(message.element.hasClass('ls-ui-active')).toBe(false);
-      });
-
-      it('should remove content on geolocation end', function() {
-        message.set('');
-        $.emit('message-test:component:search:end');
-        expect(message.element.text()).toBe('');
-        expect(message.element.hasClass('ls-ui-active')).toBe(false);
-      });
-
-      it('should remove content on auto complete rendering results', function() {
-        message.set('Detecting your location');
-        $.emit('message-test:component:auto_complete:render');
-        expect(message.element.text()).toBe('');
-        expect(message.element.hasClass('ls-ui-active')).toBe(false);
       });
 
     });

@@ -68,22 +68,38 @@ define([
     var alwaysOpen = options.alwaysOpen || false;
 
     var events = {
-
+      onInputInteractionEnd: function() {
+        if (self.coldStartDialog) {
+          self.coldStartDialog.remove();
+          self.coldStartDialog = undefined;
+        }
+      },
       onLocation: function(location) {
+        self.message.clear();
+        self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
         self.selectLocation(location);
       },
       onActive: function() {
         $.emit(self.namespace + ':controller:active');
         self.container.addClass('ls-ui-ctrl-active');
       },
-      onGeolocation: function() {
+      onGeolocationAvailable: function() {
         $.emit(self.namespace + ':controller:geolocation:available');
         self.container.addClass('ls-ui-ctrl-geolocation');
       },
       onSearchResults: function() {
         self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
       },
+      onAutoCompleteResults: function() {
+        self.message.clear();
+        self.results.clear();
+        self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
+      },
+      onResultsClear: function() {
+        self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
+      },
       onClose: function() {
+        self.search.clear();
         self.message.clear();
         self.results.clear();
         self.autoComplete.clear();
@@ -107,15 +123,26 @@ define([
 
     self.namespace = options.namespace || 'locservices:ui';
 
-    $.on(self.namespace + ':error', events.onActive);
     $.on(self.namespace + ':component:search:focus', events.onActive);
-    $.on(self.namespace + ':component:auto_complete:render', events.onSearchResults);
+    $.on(self.namespace + ':component:geolocation:click', events.onActive);
+
+    $.on(self.namespace + ':component:search:clear', events.onInputInteractionEnd);
+    $.on(self.namespace + ':component:search:end', events.onInputInteractionEnd);
+    $.on(self.namespace + ':component:auto_complete:results', events.onInputInteractionEnd);
+
     $.on(self.namespace + ':component:search:results', events.onSearchResults);
+    $.on(self.namespace + ':component:auto_complete:render', events.onAutoCompleteResults);
+
+    $.on(self.namespace + ':component:auto_complete:clear', events.onResultsClear);
+    $.on(self.namespace + ':component:search:clear', events.onResultsClear);
+    
     $.on(self.namespace + ':component:geolocation:location', events.onLocation);
     $.on(self.namespace + ':component:auto_complete:location', events.onLocation);
     $.on(self.namespace + ':component:user_locations:location', events.onLocation);
     $.on(self.namespace + ':component:search_results:location', events.onLocation);
-    $.on(self.namespace + ':component:geolocation:available', events.onGeolocation);
+
+    $.on(self.namespace + ':component:geolocation:available', events.onGeolocationAvailable);
+
     $.on(self.namespace + ':component:close_button:clicked', events.onClose);
 
     self.search = new Search({
@@ -216,7 +243,7 @@ define([
       this.preferredLocation.isValidLocation(location) &&
       this.shouldColdStartDialogBeDisplayed()
     ) {
-      new Dialog({
+      this.coldStartDialog = new Dialog({
         container: outside,
         message: self.translations.get(
           'primary.cold_start',
@@ -224,12 +251,14 @@ define([
             name: location.name
           }
         ),
-        confirmLabel: self.translations.get('user_locations.dialog.confirm'),
-        cancelLabel: self.translations.get('user_locations.dialog.cancel'),
+        confirmLabel: self.translations.get('primary.cold_start.confirm'),
+        cancelLabel: self.translations.get('primary.cold_start.cancel'),
         confirm: function() {
+          self.coldStartDialog = undefined;
           setAsPreferredLocation();
         },
         cancel: function() {
+          self.coldStartDialog = undefined;
           declinePreferredLocation();
         }
       });
