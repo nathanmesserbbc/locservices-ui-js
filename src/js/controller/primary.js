@@ -122,18 +122,14 @@ define([
 
     self.namespace = options.namespace || 'locservices:ui';
 
-    // @todo test these
     $.on(self.namespace + ':component:search:focus', events.onActive);
-
     $.on(self.namespace + ':component:search:clear', events.onInputInteractionEnd);
     $.on(self.namespace + ':component:search:end', events.onInputInteractionEnd);
     $.on(self.namespace + ':component:auto_complete:results', events.onInputInteractionEnd);
 
-    // hide user_locations when displaying results
     $.on(self.namespace + ':component:search:results', events.onSearchResults);
     $.on(self.namespace + ':component:auto_complete:render', events.onAutoCompleteResults);
 
-    // show user_locations when results are cleared
     $.on(self.namespace + ':component:auto_complete:clear', events.onResultsClear);
     $.on(self.namespace + ':component:search:clear', events.onResultsClear);
     

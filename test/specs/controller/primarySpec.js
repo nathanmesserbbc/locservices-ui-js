@@ -148,28 +148,77 @@ define([
         $.emit.restore();
       });
 */
-      it('should emit on geolocation active event when it becomes available', function() {
-        var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:component:geolocation:available');
-        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:geolocation:available');
-
-        $.emit.restore();
-      });
-
-      it('should update itself if geolocation is available', function() {
-        var spy = sinon.spy(controller.container, 'addClass');
-        $.emit('locservices:ui:component:geolocation:available');
-        expect(spy.getCall(0).args[0]).toEqual('ls-ui-ctrl-geolocation');
-
-        controller.container.addClass.restore();
-      });
-
       it('should emit an active event when search becomes focused', function() {
         var spy = sinon.spy($, 'emit');
         $.emit('locservices:ui:component:search:focus');
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:active');
 
         $.emit.restore();
+      });
+
+      it('should add an active class when search becomes focused', function() {
+        $.emit('locservices:ui:component:search:focus');
+        expect(container.hasClass('ls-ui-ctrl-active')).toEqual(true);
+      });
+
+      it('should remove cold start dialog when search is cleared', function() {
+        controller.coldStartDialog = { remove: function() {}};
+        var stub = sinon.stub(controller.coldStartDialog, 'remove');
+        $.emit('locservices:ui:component:search:clear');
+        expect(stub.callCount).toEqual(1);
+        expect(controller.coldStartDialog).toEqual(undefined);
+      });
+
+      it('should remove cold start dialog when search ends', function() {
+        controller.coldStartDialog = { remove: function() {}};
+        var stub = sinon.stub(controller.coldStartDialog, 'remove');
+        $.emit('locservices:ui:component:search:end');
+        expect(stub.callCount).toEqual(1);
+        expect(controller.coldStartDialog).toEqual(undefined);
+      });
+
+      it('should remove cold start dialog on auto_complete results', function() {
+        controller.coldStartDialog = { remove: function() {}};
+        var stub = sinon.stub(controller.coldStartDialog, 'remove');
+        $.emit('locservices:ui:component:auto_complete:results', [[]]);
+        expect(stub.callCount).toEqual(1);
+        expect(controller.coldStartDialog).toEqual(undefined);
+      });
+
+      it('should hide user_locations on search results', function() {
+        $.emit('locservices:ui:component:search:results', [[], {}]);
+        expect(controller.userLocations.element.hasClass('ls-ui-hidden')).toEqual(true);
+      });
+
+      it('should hide user_locations on auto_complete render', function() {
+        $.emit('locservices:ui:component:auto_complete:render');
+        expect(controller.userLocations.element.hasClass('ls-ui-hidden')).toEqual(true);
+      });
+
+      it('should clear message on auto_complete render', function() {
+        var stub = sinon.stub(controller.message, 'clear');
+        $.emit('locservices:ui:component:auto_complete:render');
+        expect(stub.callCount).toEqual(1);
+      });
+
+      it('should clear results on auto_complete render', function() {
+        var stub = sinon.stub(controller.results, 'clear');
+        $.emit('locservices:ui:component:auto_complete:render');
+        expect(stub.callCount).toEqual(1);
+      });
+
+      it('should show user_locations on search clear', function() {
+        controller.userLocations.element.addClass('ls-ui-hidden');
+        expect(controller.userLocations.element.hasClass('ls-ui-hidden')).toEqual(true);
+        $.emit('locservices:ui:component:search:clear');
+        expect(controller.userLocations.element.hasClass('ls-ui-hidden')).toEqual(false);
+      });
+
+      it('should show user_locations on auto_complete clear', function() {
+        controller.userLocations.element.addClass('ls-ui-hidden');
+        expect(controller.userLocations.element.hasClass('ls-ui-hidden')).toEqual(true);
+        $.emit('locservices:ui:component:auto_complete:clear');
+        expect(controller.userLocations.element.hasClass('ls-ui-hidden')).toEqual(false);
       });
 
       it('should call setLocation when a location is selected via search results', function() {
@@ -200,14 +249,6 @@ define([
         expect(stub.args[0][0]).toEqual(location);
       });
 
-      it('should emit an inactive event when the close button is clicked', function() {
-        var spy = sinon.spy($, 'emit');
-        $.emit('locservices:ui:component:close_button:clicked');
-        expect(spy.getCall(2).args[0]).toEqual('locservices:ui:controller:inactive');
-
-        $.emit.restore();
-      });
-
       it('should emit a location when located using geolocation', function() {
         var spy = sinon.spy($, 'emit');
         $.emit('locservices:ui:component:geolocation:location', [{}]);
@@ -236,6 +277,30 @@ define([
         var spy = sinon.spy($, 'emit');
         $.emit('locservices:ui:component:user_locations:location', [{}]);
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+
+        $.emit.restore();
+      });
+
+      it('should emit on geolocation active event when it becomes available', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:geolocation:available');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:geolocation:available');
+
+        $.emit.restore();
+      });
+
+      it('should update itself if geolocation is available', function() {
+        var spy = sinon.spy(controller.container, 'addClass');
+        $.emit('locservices:ui:component:geolocation:available');
+        expect(spy.getCall(0).args[0]).toEqual('ls-ui-ctrl-geolocation');
+
+        controller.container.addClass.restore();
+      });
+
+      it('should emit an inactive event when the close button is clicked', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:close_button:clicked');
+        expect(spy.getCall(2).args[0]).toEqual('locservices:ui:controller:inactive');
 
         $.emit.restore();
       });

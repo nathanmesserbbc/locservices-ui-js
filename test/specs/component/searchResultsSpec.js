@@ -125,6 +125,17 @@ define([
 
     describe('render()', function() {
 
+      it('should add with_results class is there are results', function() {
+        searchResults.render(responseMultiple.results, responseMultiple.metadata);
+        expect(searchResults.element.hasClass('ls-ui-comp-search_results-with_results')).toBe(true);
+      });
+
+      it('should remove with_results class is there are no results', function() {
+        searchResults.element.addClass('ls-ui-comp-search_results-with_results');
+        searchResults.render(responseMultiple.results, responseMultiple.metadata);
+        expect(searchResults.element.hasClass('ls-ui-comp-search_results-with_results')).toBe(true);
+      });
+
       it('should render results to unordered list', function() {
         searchResults.render(responseMultiple.results, responseMultiple.metadata);
         expect(container.find('li').length).toEqual(responseMultiple.results.length);

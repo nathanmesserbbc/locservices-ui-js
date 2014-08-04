@@ -112,7 +112,6 @@ function(
 
       var li = $('<li />');
 
-      // @todo test this class is added
       li.addClass('ls-ui-comp-user_locations-location');
 
       if (location.isPreferred) {
@@ -199,7 +198,6 @@ function(
       e.stopPropagation();
       target = $(e.currentTarget);
 
-      // @todo test this
       if (self._isDisplayingDialog) {
         return;
       }
@@ -258,13 +256,14 @@ function(
       }
     };
 
-    // @todo test this
     $.on(this.eventNamespaceBase + ':controller:inactive', function() {
       self.removeDialog();
     });
+
     $.on(this.eventNamespaceBase + ':component:search:results', function() {
       self.removeDialog();
     });
+
     $.on(this.eventNamespaceBase + ':component:auto_complete:render', function() {
       self.removeDialog();
     });
@@ -326,19 +325,15 @@ function(
 
   /**
    * Display a confrm/cancel dialogue
-   *
-   * @return {Boolean}
    */
   UserLocations.prototype.removeDialog = function() {
-    if (!this._isDisplayingDialog) {
-      return false;
+    if (this._isDisplayingDialog && this._dialog && this._dialogElement) {
+      this._dialog.remove();
+      this._dialogElement.removeClass('ls-ui-comp-user_locations-location-with-dialog');
     }
     this._isDisplayingDialog = false;
-    this._dialog.remove();
     this._dialog = undefined;
-    this._dialogElement.removeClass('ls-ui-comp-user_locations-location-with-dialog');
     this._dialogElement = undefined;
-    return true;
   };
 
   /**

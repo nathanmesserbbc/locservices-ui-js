@@ -50,7 +50,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   SearchResults.prototype.setup = function() {
 
-    // @todo test assignment of this.element
     this.element = $('<div />').addClass('ls-ui-comp-search_results');
 
     this.list = $('<ul />');
@@ -111,7 +110,6 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     this.offset = metadata.start || 0;
     this.searchTerm = metadata.search;
 
-    // @todo test this
     if (0 === noOfResults) {
 
       this.element.removeClass('ls-ui-comp-search_results-with_results');
