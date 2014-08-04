@@ -76,6 +76,7 @@ define([
       },
       onLocation: function(location) {
         self.message.clear();
+        self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
         self.selectLocation(location);
       },
       onActive: function() {
@@ -123,6 +124,8 @@ define([
     self.namespace = options.namespace || 'locservices:ui';
 
     $.on(self.namespace + ':component:search:focus', events.onActive);
+    $.on(self.namespace + ':component:geolocation:click', events.onActive);
+
     $.on(self.namespace + ':component:search:clear', events.onInputInteractionEnd);
     $.on(self.namespace + ':component:search:end', events.onInputInteractionEnd);
     $.on(self.namespace + ':component:auto_complete:results', events.onInputInteractionEnd);

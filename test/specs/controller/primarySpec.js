@@ -161,6 +161,18 @@ define([
         expect(container.hasClass('ls-ui-ctrl-active')).toEqual(true);
       });
 
+      it('should emit an active event when clicking on geolocation', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:geolocation:click');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:active');
+        $.emit.restore();
+      });
+
+      it('should add an active class when clicking on geolocation', function() {
+        $.emit('locservices:ui:component:geolocation:click');
+        expect(container.hasClass('ls-ui-ctrl-active')).toEqual(true);
+      });
+
       it('should remove cold start dialog when search is cleared', function() {
         controller.coldStartDialog = { remove: function() {}};
         var stub = sinon.stub(controller.coldStartDialog, 'remove');
