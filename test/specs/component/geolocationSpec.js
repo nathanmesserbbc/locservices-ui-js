@@ -72,7 +72,7 @@ define([
         geolocation._button.trigger('click');
 
         expect(geolocation._button.attr('disabled')).toEqual('disabled');
-        expect(geolocation._button.hasClass('disabled')).toBe(true);
+        expect(geolocation._button.hasClass('ls-ui-comp-geolocation-disabled')).toBe(true);
         stub.restore();
       });
 

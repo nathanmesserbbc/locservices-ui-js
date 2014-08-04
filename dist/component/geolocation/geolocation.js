@@ -56,7 +56,7 @@ define([
 
     this._button.on('click', function(e) {
       e.preventDefault();
-      $(this).attr('disabled', 'disabled').addClass('disabled');
+      $(this).attr('disabled', 'disabled').addClass('ls-ui-comp-geolocation-disabled');
       self.emit('click');
       self.reverseGeocode();
     });
@@ -90,7 +90,7 @@ define([
               message: 'Your location is not currently supported by this application'
             }]);
           } else {
-            self._button.removeAttr('disabled').removeClass('disabled');
+            self._button.removeAttr('disabled').removeClass('ls-ui-comp-geolocation-disabled');
             self.emit('location', [location]);
           }
         },

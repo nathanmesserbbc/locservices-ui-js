@@ -70,6 +70,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     // @todo test if (supportsTouchEvents) logic
     if (supportsTouchEvents) {
+      this.hasClearControl = true;
       self.container.find('.ls-ui-input-clear')
         .on('click', function() {
           self.clear();
@@ -117,6 +118,12 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       if (false === this.hasAValidSearchTerm) {
         this.hasAValidSearchTerm = true;
         this.form.addClass('ls-ui-comp-search-with-term');
+
+        // @todo test this
+        if (this.hasClearControl) {
+          this.form.addClass('ls-ui-comp-search-with-clear');
+        }
+
       }
 
     } else if (this.hasAValidSearchTerm) {
@@ -125,6 +132,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       // the class from the form element
       this.hasAValidSearchTerm = false;
       this.form.removeClass('ls-ui-comp-search-with-term');
+
+      // @todo test this
+      if (this.hasClearControl) {
+        this.form.removeClass('ls-ui-comp-search-with-clear');
+      }
 
     }
 

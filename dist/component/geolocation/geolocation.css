@@ -6,7 +6,7 @@
   font-size: 1em;
   text-align: left;
   cursor: pointer;
-  background: #404040;
+  background-color: #333635;
   border: 0 none;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -30,6 +30,9 @@
   font-size: 1.3em;
   line-height: 44px;
   color: #ffffff;
+}
+.ls-ui-comp-geolocation-disabled {
+  background-color: #525553;
 }
 .ls-ui-comp-geolocation::-moz-focus-inner {
   padding: 0;

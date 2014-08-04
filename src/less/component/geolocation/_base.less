@@ -6,7 +6,7 @@
   font-size: @font10;
   text-align: left;
   cursor: pointer;
-  background: @bg-color;
+  background-color: @geolocation-active-bg-color;
   border: 0 none;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -32,6 +32,10 @@
     line-height: @button-height;
     color: @text-light-colour;
   }
+}
+
+.ls-ui-comp-geolocation-disabled {
+  background-color: @geolocation-disabled-bg-color;
 }
 
 .ls-ui-comp-geolocation::-moz-focus-inner {
