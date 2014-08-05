@@ -62,7 +62,7 @@ define([
   var locservCookie = preferredLocation.get();
   var recentLocations = new RecentLocations();
   var recentLocationsIsSupported = recentLocations.isSupported();
-  var allRecentLocations = recentLocations.all();
+  var allRecentLocations = recentLocationsIsSupported ? recentLocations.all() : [];
 
   var caps = {
     'capability_geolocation': geolocation.isSupported,
