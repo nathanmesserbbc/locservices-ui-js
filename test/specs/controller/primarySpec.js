@@ -29,6 +29,19 @@ define([
         });
       });
 
+      it('passes the configured namespace to the stats module', function() {
+        var echoClient = { userActionEvent: sinon.spy() };
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations,
+          echoClient: echoClient,
+          namespace: 'foo'
+        });
+        $.emit('foo:component:geolocation:click', []);
+        expect(echoClient.userActionEvent.getCall(0).calledWith('geolocation_click')).toBe(true);
+      });
+
       it('does not create a new instance of Stats if echoClient is not defined', function() {
         expect(controller._stats).toBeUndefined();
       });

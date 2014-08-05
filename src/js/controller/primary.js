@@ -60,8 +60,12 @@ define([
 
     verify(options);
 
+    this.namespace = options.namespace || 'locservices:ui';
+
     if (typeof options.echoClient === 'object') {
-      this._stats = new Stats(options.echoClient);
+      this._stats = new Stats(options.echoClient, {
+        namespace: this.namespace
+      });
     }
 
     var self = this;
@@ -114,8 +118,6 @@ define([
 
     self.container.addClass('ls-ui-ctrl-primary')
                   .append(outside.append(searchEl));
-
-    self.namespace = options.namespace || 'locservices:ui';
 
     $.on(self.namespace + ':component:search:focus', events.onActive);
     $.on(self.namespace + ':component:geolocation:click', events.onActive);
