@@ -250,7 +250,8 @@ function(
     });
 
     var handleLocationEvent = function(location) {
-      if (self.recentLocations.add(location)) {
+      // @todo test this.recentLocations.isSupported()
+      if (self.recentLocations.isSupported() && self.recentLocations.add(location)) {
         self.emit('location_add', [location]);
         self.render();
       }
@@ -358,11 +359,17 @@ function(
     var self;
     var location;
     var preferredLocation;
+    var supportsRecentLocations;
     self = this;
+    supportsRecentLocations = this.recentLocations.isSupported();
     location = this._locations[locationId];
+
     if (location && this.preferredLocation.isValidLocation(location)) {
 
-      this.recentLocations.remove(locationId);
+      // @todo test supportsRecentLocations
+      if (supportsRecentLocations) {
+        this.recentLocations.remove(locationId);
+      }
 
       // @todo test this ?
       this.element.find('.ls-ui-comp-user_locations-location-preferred').removeClass('ls-ui-comp-user_locations-location-preferred');
@@ -371,8 +378,11 @@ function(
       if (this.preferredLocation.isSet()) {
         preferredLocation = this.preferredLocation.get();
 
-        // @todo what if this returns false?
-        this.recentLocations.add(preferredLocation);
+        // @todo test supportsRecentLocations
+        if (supportsRecentLocations) {
+          // @todo what if this returns false?
+          this.recentLocations.add(preferredLocation);
+        }
       }
 
       this.preferredLocation.set(location.id, {
@@ -404,9 +414,12 @@ function(
     if (location) {
       if (location.isPreferred) {
         this.preferredLocation.unset();
-      } else {
+
+      // @todo test this.recentLocations.isSupported
+      } else if (this.recentLocations.isSupported()) {
         this.recentLocations.remove(locationId);
       }
+
       this.render();
       this.emit('location_remove', [location]);
     }
