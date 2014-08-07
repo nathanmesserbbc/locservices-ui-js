@@ -616,7 +616,7 @@ function(
         expect(stub.calledOnce).toEqual(true);
       });
 
-      it('calls this.recentLocations.remove() with locationId if location is recent', function() {
+      it('calls this.recentLocations.remove() with locationId', function() {
         var stub;
         stub = sinon.stub(userLocations.recentLocations, 'remove');
         sinon.stub(userLocations, 'render');

@@ -412,11 +412,13 @@ function(
     location = this._locations[locationId];
 
     if (location) {
+
       if (location.isPreferred) {
         this.preferredLocation.unset();
+      } 
 
       // @todo test this.recentLocations.isSupported
-      } else if (this.recentLocations.isSupported()) {
+      if (this.recentLocations.isSupported()) {
         this.recentLocations.remove(locationId);
       }
 
