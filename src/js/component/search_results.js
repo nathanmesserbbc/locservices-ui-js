@@ -53,8 +53,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     this.element = $('<div />').addClass('ls-ui-comp-search_results');
 
     this.list = $('<ul />');
-    this.moreResults = $('<a />')
-                          .attr('href', '')
+    this.moreResults = $('<button />')
                           .addClass('ls-ui-comp-search_results-more')
                           .text('Show more results');
 
@@ -138,6 +137,11 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
         this.moreResults.addClass('ls-ui-comp-search_results-active');
       } else {
         this.moreResults.removeClass('ls-ui-comp-search_results-active');
+      }
+
+      // @todo test this
+      if (0 < this.offset) {
+        this.list.find('li:nth-child(' + (this.offset + 1) + ') a').focus();
       }
 
     }

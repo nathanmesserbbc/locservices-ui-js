@@ -25,12 +25,15 @@
   cursor: pointer;
 }
 .ls-ui-comp-search_results a:hover,
-.ls-ui-comp-search_results a:focus {
+.ls-ui-comp-search_results button:hover,
+.ls-ui-comp-search_results a:focus,
+.ls-ui-comp-search_results button:focus {
   color: #ffffff;
   background: #323232;
 }
 .ls-ui-comp-search_results .ls-ui-comp-search_results-more {
   display: none;
+  width: 100%;
   padding: 0;
   font-size: 1.4em;
   font-weight: bold;
