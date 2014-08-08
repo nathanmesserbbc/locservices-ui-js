@@ -52,14 +52,25 @@ define([
       });
     });
 
-    describe('setComponentOptions()', function() {
+    describe('setNamespaceOptions()', function() {
 
       beforeEach(function() {
         translations = new En();
-        component.setComponentOptions({
-          translations: translations,
-          container: null
+        component.setNamespaceOptions();
+      });
+
+      // componentId
+
+      it('should default this.componentId to "component"', function() {
+        expect(component.componentId).toBe('component');
+      });
+
+      it('should set this.componentId from options.componentId', function() {
+        var expectedValue = 'foo';
+        component.setNamespaceOptions({
+          componentId: expectedValue
         });
+        expect(component.componentId).toBe(expectedValue);
       });
 
       // event namespace
@@ -70,10 +81,8 @@ define([
 
       it('should set eventNamespaceBase from options.eventNamespace', function() {
         var eventNamespace = 'foo:bar';
-        component.setComponentOptions({
-          translations: translations,
-          eventNamespace: eventNamespace,
-          container: null
+        component.setNamespaceOptions({
+          eventNamespace: eventNamespace
         });
         expect(component.eventNamespaceBase).toBe(eventNamespace);
       });
@@ -85,28 +94,24 @@ define([
       it('should set eventNamespace from options.eventNamespace', function() {
         var eventNamespace = 'foo:bar';
         var expectedValue = eventNamespace + ':component:component';
-        component.setComponentOptions({
-          translations: translations,
-          eventNamespace: eventNamespace,
-          container: null
+        component.setNamespaceOptions({
+          eventNamespace: eventNamespace
         });
         expect(component.eventNamespace).toBe(expectedValue);
       });
 
-      // componentId
+    });
 
-      it('should default this.componentId to "component"', function() {
-        expect(component.componentId).toBe('component');
-      });
+    describe('setComponentOptions()', function() {
 
-      it('should set this.componentId from options.componentId', function() {
-        var expectedValue = 'foo';
+      var translations;
+
+      beforeEach(function() {
+        translations = new En();
         component.setComponentOptions({
           translations: translations,
-          componentId: expectedValue,
           container: null
         });
-        expect(component.componentId).toBe(expectedValue);
       });
 
       // translations
@@ -133,6 +138,20 @@ define([
           });
         };
         expect(failure).toThrow(new Error('Component requires container parameter.'));
+      });
+
+      // setNamespaceOptions
+
+      it('should call setNamespaceOptions() passing options', function() {
+        var expectedOptions = {
+          translations: new En(),
+          componentId: 'foo',
+          container: null
+        };
+        var stub = sinon.stub(component, 'setNamespaceOptions');
+        component.setComponentOptions(expectedOptions);
+        expect(stub.callCount).toEqual(1);
+        expect(stub.args[0][0]).toEqual(expectedOptions);
       });
 
     });

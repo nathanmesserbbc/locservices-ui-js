@@ -2,8 +2,9 @@
 
 define([
   'jquery',
-  'locservices/ui/component/dialog'
-], function($, Dialog) {
+  'locservices/ui/component/dialog',
+  'locservices/ui/component/component'
+], function($, Dialog, Component) {
 
   describe('The dialog component', function() {
     'use strict';
@@ -15,6 +16,19 @@ define([
     });
 
     describe('constructor', function() {
+
+      it('calls setNamespaceOptions()', function() {
+        var setNamespaceOptions = sinon.spy(Component.prototype, 'setNamespaceOptions');
+        var expectedOptions = {
+          container: element,
+          message: 'A message.',
+          componentId: 'foo'
+        };
+        new Dialog(expectedOptions);
+        expect(setNamespaceOptions.callCount).toBe(1);
+        expect(setNamespaceOptions.args[0][0]).toBe(expectedOptions);
+        Component.prototype.setNamespaceOptions.restore();
+      });
 
       it('displays the expected message', function() {
         var expectedMessage = 'This is a test message.';

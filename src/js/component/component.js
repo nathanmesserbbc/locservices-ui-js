@@ -22,14 +22,17 @@ define(['jquery'], function($) {
       this.container = options.container;
     }
 
-    this.componentId = options.componentId || 'component';
+    this.setNamespaceOptions(options);
+  };
 
+  Component.prototype.setNamespaceOptions = function(options) {
+    options = options || {};
+    this.componentId = options.componentId || 'component';
     this.eventNamespaceBase = 'locservices:ui';
     if (options.eventNamespace) {
       this.eventNamespaceBase = options.eventNamespace;
     }
     this.eventNamespace = this.eventNamespaceBase + ':component:' + this.componentId;
-
   };
 
   /**

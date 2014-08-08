@@ -1,6 +1,9 @@
 /*global define */
 
-define(['jquery'], function($) {
+define([
+  'jquery',
+  'locservices/ui/component/component'
+], function($, Component) {
 
   'use strict';
 
@@ -14,10 +17,15 @@ define(['jquery'], function($) {
      * @param {String} cancelLabel
      * @return {Object}
      */
-    dialog: function(messageText, confirmLabel, cancelLabel) {
+    dialog: function(messageText, confirmLabel, cancelLabel, ariaIdPrefix) {
+      var ariaIdLabel = ariaIdPrefix + '-dialog-label';
       var div = $('<div/>')
+        .attr('role', 'dialog')
+        .attr('aria-labelledby', ariaIdLabel)
         .addClass('ls-ui-comp-dialog');
-      var message = $('<p/>').html(messageText);
+      var message = $('<p/>')
+        .attr('id', ariaIdLabel)
+        .html(messageText);
       var buttons = $('<div/>').addClass('ls-ui-comp-dialog-buttons');
       buttons.append(
         templates.button(
@@ -61,6 +69,8 @@ define(['jquery'], function($) {
   function Dialog(options) {
     var self = this;
     options = options || {};
+    this.setNamespaceOptions(options);
+
     this.container = options.container; 
     this.confirmLabel = options.confirmLabel || 'Confirm';
     this.cancelLabel = options.cancelLabel || 'Cancel';
@@ -71,24 +81,32 @@ define(['jquery'], function($) {
         callback();
       }
     };
+
     this.container.append(
       templates.dialog(
         options.message,
         this.confirmLabel,
-        this.cancelLabel
+        this.cancelLabel,
+        this.eventNamespaceBase
       )
     );
+
     this.container
       .find('.ls-ui-comp-dialog-confirm button')
       .on('click', function() {
         handleClick(options.confirm);
-      });
+      })
+      .focus();
+
     this.container
       .find('.ls-ui-comp-dialog-cancel button')
       .on('click', function() {
         handleClick(options.cancel);
       });
   }
+
+  Dialog.prototype = new Component();
+  Dialog.prototype.constructor = Dialog;
 
   /**
    * Clear the message element
