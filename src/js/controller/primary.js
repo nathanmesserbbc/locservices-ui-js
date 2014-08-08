@@ -72,7 +72,15 @@ define([
     var alwaysOpen = options.alwaysOpen || false;
 
     var events = {
+      onError: function() {
+
+        // @todo test this
+        self.autoComplete.clear();
+        self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
+
+      },
       onInputInteractionEnd: function() {
+console.log('onInputInteractionEnd');
         if (self.coldStartDialog) {
           self.coldStartDialog.remove();
           self.coldStartDialog = undefined;
@@ -84,6 +92,7 @@ define([
         self.selectLocation(location);
       },
       onActive: function() {
+console.log('onActive');
         $.emit(self.namespace + ':controller:active');
         self.container.addClass('ls-ui-ctrl-active');
       },
@@ -100,6 +109,10 @@ define([
         self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
       },
       onResultsClear: function() {
+
+        // @todo test this 
+        self.message.clear();
+
         self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
       },
       onClose: function() {
@@ -118,6 +131,9 @@ define([
 
     self.container.addClass('ls-ui-ctrl-primary')
                   .append(outside.append(searchEl));
+
+    // @todo test this
+    $.on(self.namespace + ':error', events.onError);
 
     $.on(self.namespace + ':component:search:focus', events.onActive);
     $.on(self.namespace + ':component:geolocation:click', events.onActive);

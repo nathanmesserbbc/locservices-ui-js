@@ -11,6 +11,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   function Message(options) {
     var self = this;
+    var errorMessage;
     options = options || {};
     options.componentId = 'message';
 
@@ -19,8 +20,12 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.element = self.container.find('p');
 
     self.on('error', function(error) {
+console.log('error', error);
       if (typeof error === 'object') {
-        self.set(self.translations.get(error.code));
+        errorMessage = self.translations.get(error.code);
+        if (errorMessage) {
+          self.set(errorMessage);  
+        }
         return;
       }
       self.set(error);
