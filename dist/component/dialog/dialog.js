@@ -69,9 +69,8 @@ define([
   function Dialog(options) {
     var self = this;
     options = options || {};
-    this.setNamespaceOptions(options);
+    this.setComponentOptions(options);
 
-    this.container = options.container; 
     this.confirmLabel = options.confirmLabel || 'Confirm';
     this.cancelLabel = options.cancelLabel || 'Cancel';
 

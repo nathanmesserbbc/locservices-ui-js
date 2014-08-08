@@ -3,13 +3,15 @@
 define([
   'jquery',
   'locservices/ui/component/dialog',
-  'locservices/ui/component/component'
-], function($, Dialog, Component) {
+  'locservices/ui/component/component',
+  'locservices/ui/translations/en'
+], function($, Dialog, Component, En) {
 
   describe('The dialog component', function() {
     'use strict';
 
     var element;
+    var translations = new En();
 
     beforeEach(function() {
       element = $('<div/>');
@@ -17,23 +19,25 @@ define([
 
     describe('constructor', function() {
 
-      it('calls setNamespaceOptions()', function() {
-        var setNamespaceOptions = sinon.spy(Component.prototype, 'setNamespaceOptions');
+      it('calls setComponentOptions()', function() {
+        var setComponentOptions = sinon.spy(Component.prototype, 'setComponentOptions');
         var expectedOptions = {
           container: element,
+          translations: translations,
           message: 'A message.',
           componentId: 'foo'
         };
         new Dialog(expectedOptions);
-        expect(setNamespaceOptions.callCount).toBe(1);
-        expect(setNamespaceOptions.args[0][0]).toBe(expectedOptions);
-        Component.prototype.setNamespaceOptions.restore();
+        expect(setComponentOptions.callCount).toBe(1);
+        expect(setComponentOptions.args[0][0]).toBe(expectedOptions);
+        Component.prototype.setComponentOptions.restore();
       });
 
       it('displays the expected message', function() {
         var expectedMessage = 'This is a test message.';
         new Dialog({
           container: element,
+          translations: translations,
           message: expectedMessage
         });
         expect(element.find('p').text()).toBe(expectedMessage);
@@ -43,6 +47,7 @@ define([
         var expectedMessage = 'This is a <strong>html</strong> test message.';
         new Dialog({
           container: element,
+          translations: translations,
           message: expectedMessage
         });
         expect(element.find('p').children().length).toBe(1);
@@ -52,6 +57,7 @@ define([
         var expectedLabel = 'Foo';
         new Dialog({
           container: element,
+          translations: translations,
           confirmLabel: expectedLabel
         });
         expect(element.find('.ls-ui-comp-dialog-confirm button').text()).toBe(expectedLabel);
@@ -61,6 +67,7 @@ define([
         var expectedLabel = 'Bar';
         new Dialog({
           container: element,
+          translations: translations,
           cancelLabel: expectedLabel
         });
         expect(element.find('.ls-ui-comp-dialog-cancel button').text()).toBe(expectedLabel);
@@ -70,6 +77,7 @@ define([
         var hasCalledCallback;
         new Dialog({
           container: element,
+          translations: translations,
           message: 'Test', 
           confirm: function() {
             hasCalledCallback = true;
@@ -83,6 +91,7 @@ define([
         var hasCalledCallback;
         new Dialog({
           container: element,
+          translations: translations,
           message: 'Test',
           cancel: function() {
             hasCalledCallback = true;
@@ -95,6 +104,7 @@ define([
       it('clicking confirm removes dialog', function() {
         new Dialog({
           container: element,
+          translations: translations,
           message: 'Test'
         });
         expect(element.find('.ls-ui-comp-dialog').length).toBe(1);
@@ -105,6 +115,7 @@ define([
       it('clicking cancel removes dialog', function() {
         new Dialog({
           container: element,
+          translations: translations,
           message: 'Test'
         });
         expect(element.find('.ls-ui-comp-dialog').length).toBe(1);
@@ -119,6 +130,7 @@ define([
       it('removes the dialog from the container', function() {
         var dialog = new Dialog({
           container: element,
+          translations: translations,
           message: 'Test'
         });
         expect(element.find('.ls-ui-comp-dialog').length).toBe(1);
