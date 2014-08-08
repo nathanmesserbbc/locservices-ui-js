@@ -123,7 +123,24 @@ define([
         expect(element.find('.ls-ui-comp-dialog').length).toBe(0);
       });
 
-    }); // render
+      /*
+
+      // @todo fix this (does not pass in phantomjs)
+
+      it('sets focus to the confirm button', function() {
+        element.addClass('test-attached-to-dom');
+        $('body').append(element);
+        new Dialog({
+          container: element,
+          translations: translations,
+          message: 'Test'
+        });
+        expect(element.find('.ls-ui-comp-dialog-confirm button').is(':focus')).toBe(true);
+        $('.test-attached-to-dom').detach();
+      });
+      */
+
+    }); // constructor
 
     describe('remove()', function() {
 
