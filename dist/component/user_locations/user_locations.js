@@ -307,6 +307,7 @@ function(
 
     this._dialog = new Dialog({
       container: element,
+      translations: this.translations,
       message: message,
       confirmLabel: this.translations.get('user_locations.dialog.confirm'),
       cancelLabel: this.translations.get('user_locations.dialog.cancel'),
