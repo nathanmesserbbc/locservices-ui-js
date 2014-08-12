@@ -20,7 +20,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.element = self.container.find('p');
 
     self.on('error', function(error) {
-console.log('error', error);
+
       if (typeof error === 'object') {
         errorMessage = self.translations.get(error.code);
         if (errorMessage) {
