@@ -75,12 +75,12 @@ define([
       onError: function() {
 
         // @todo test this
+        self.results.clear();
         self.autoComplete.clear();
         self.container.find('.ls-ui-comp-user_locations').addClass('ls-ui-hidden');
 
       },
       onInputInteractionEnd: function() {
-console.log('onInputInteractionEnd');
         if (self.coldStartDialog) {
           self.coldStartDialog.remove();
           self.coldStartDialog = undefined;
@@ -92,7 +92,6 @@ console.log('onInputInteractionEnd');
         self.selectLocation(location);
       },
       onActive: function() {
-console.log('onActive');
         $.emit(self.namespace + ':controller:active');
         self.container.addClass('ls-ui-ctrl-active');
       },

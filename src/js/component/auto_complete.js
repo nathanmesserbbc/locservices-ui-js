@@ -123,7 +123,8 @@ define([
     var searchTerm = this.prepareSearchTerm(this.input.val());
     var isTooShort = searchTerm.length < minChars;
 
-    if (this._waitingForResults || isTooShort) {
+    // @todo test searchTerm === self.currentSearchTerm
+    if (this._waitingForResults || isTooShort || searchTerm === self.currentSearchTerm) {
       if (isTooShort && self.currentSearchTerm) {
         self.clear(true);
         self.currentSearchTerm = '';
@@ -136,7 +137,7 @@ define([
     clearTimeout(this._timeoutId);
 
     this._timeoutId = setTimeout(function() {
-
+ 
       if (true === self._searchSubmitted || searchTerm === self.requestedSearchTerm) {
         return;
       }
