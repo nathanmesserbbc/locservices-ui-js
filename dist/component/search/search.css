@@ -11,7 +11,7 @@
   height: 44px;
   padding: 10px 8px;
   margin: 0 44px 0 0;
-  font-size: 1.4em;
+  font-size: 1.6em;
   background: #e6e6e6;
   border: none;
   -webkit-border-radius: 0;
@@ -63,6 +63,11 @@
 }
 .ls-ui-ctrl-active .ls-ui-comp-search-with-clear .ls-ui-submit {
   background-color: #A0A0A0;
+}
+@media (min-width: 600px) {
+  .ls-ui-comp-search .ls-ui-input {
+    font-size: 1.4em;
+  }
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 4/3), only screen and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 1.3dppx) {
   .ls-ui-comp-search .ls-ui-submit {

@@ -91,6 +91,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       .on('click', function() {
         self.form.trigger('submit');
       });
+
   }
   Search.prototype = new Component();
   Search.prototype.constructor = Search;
