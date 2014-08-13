@@ -273,6 +273,7 @@ define([
     ) {
       this.coldStartDialog = new Dialog({
         container: outside,
+        translations: this.translations,
         message: self.translations.get(
           'primary.cold_start',
           {
