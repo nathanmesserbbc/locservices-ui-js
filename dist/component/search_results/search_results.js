@@ -55,7 +55,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     this.list = $('<ul />');
     this.moreResults = $('<button />')
                           .addClass('ls-ui-comp-search_results-more')
-                          .text('Show more results');
+                          .text(this.translations.get('search_results.more'));
 
     this.element.append(this.list).append(this.moreResults);
     this.container.append(this.element);

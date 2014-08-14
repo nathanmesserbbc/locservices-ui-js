@@ -21,6 +21,7 @@ define(function() {
     'search.clear': 'Clear input.',
     'search.submit': 'Search',
     'search.submit.title': 'Search for a location',
+    'search_results.more': 'Show more results',
     'geolocation.button.label': 'Use my current location',
     'geolocation.error.http': 'We are unable to use your location.',
     'geolocation.error.browser': 'We are unable to use your location.',
