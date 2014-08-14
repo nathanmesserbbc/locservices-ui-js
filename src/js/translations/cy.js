@@ -23,7 +23,7 @@ define(function() {
     'geolocation.button.label': 'Defnyddiwch fy lleoliad',
     'geolocation.error.http': 'Nid oes modd i ni ddefnyddio eich lleoliad.',
     'geolocation.error.browser': 'Nid oes modd i ni ddefnyddio eich lleoliad.',
-    'geolocation.error.browser.permission': 'Rhaid galluogi\’r Gwasanaethau Lleoliad ymlaen yng ngosodiadau eich dyfais neu\’r porwr.',
+    'geolocation.error.browser.permission': 'Rhaid galluogi\'r Gwasanaethau Lleoliad ymlaen yng ngosodiadau eich dyfais neu\'r porwr.',
     'geolocation.error.outsideContext': 'Dyw\'r system ddim yn medru defnyddio\'r lleoliad yma',
     'message.geolocation.detect': 'Dod o hyd i\'ch lleoliad',
     'message.no_results': 'Wedi methu dod o hyd i ganlyniadau ar gyfer "{searchTerm}"',
