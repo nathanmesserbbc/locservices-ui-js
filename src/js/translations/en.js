@@ -17,6 +17,7 @@ define(function() {
     'user_locations.error.preferred_location': 'Sorry, we are experiencing technical problems.',
     'close_button.label': 'Close',
     'search.placeholder': 'Enter a town, city or UK postcode',
+    'search.error.search': 'Sorry, we are experiencing technical problems.',
     'search.clear': 'Clear input.',
     'search.submit': 'Search',
     'search.submit.title': 'Search for a location',
