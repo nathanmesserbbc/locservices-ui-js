@@ -16,7 +16,7 @@ define(function() {
     'user_locations.message.change_preferred': 'I newid eich prif leoliad, defnyddiwch y seren i ddewis un o\'ch lleoliadau eraill',
     'user_locations.error.preferred_location': 'Mae\'n ddrwg gennym, mae yna broblemau technegol ar hyn o bryd.',
     'close_button.label': 'Cau',
-    'search.placeholder': 'Rhowch dref, sir neu god post yn y DU yma',
+    'search.placeholder': 'Rhowch dref, ddinas neu god post yn y DU yma',
     'search.clear': 'Clirio',
     'search.submit': 'Chwilio',
     'search.submit.title': 'Chwilio am leoliad',
