@@ -96,21 +96,21 @@ define([
         stub.restore();
       });
 
-      // @todo complete these - it should test the case statement in the constructor
-//      it('for the up arrow', function() {
-//        var stub = sinon.stub(autoComplete, 'highlightPrevSearchResult');
-//        var event = $.Event('keydown', { keyCode: 38 });
-//        $(document).trigger(event);
-//        expect(stub.calledOnce).toBe(true);
-//        stub.restore();
-//      });
-//      it('for the down arrow', function() {
-//        var stub = sinon.stub(autoComplete, 'highlightNextSearchResult');
-//        var event = $.Event('keydown', { keyCode: 40 });
-//        $(document).trigger(event);
-//        expect(stub.calledOnce).toBe(true);
-//        stub.restore();
-//      });
+      it('for the up arrow', function() {
+        var stub = sinon.stub(autoComplete, 'highlightPrevSearchResult');
+        var event = $.Event('keydown', { keyCode: 38 });
+        $(document).trigger(event);
+        expect(stub.calledOnce).toBe(true);
+        stub.restore();
+      });
+
+      it('for the down arrow', function() {
+        var stub = sinon.stub(autoComplete, 'highlightNextSearchResult');
+        var event = $.Event('keydown', { keyCode: 40 });
+        $(document).trigger(event);
+        expect(stub.calledOnce).toBe(true);
+        stub.restore();
+      });
     });
 
     describe('search results', function() {
@@ -289,7 +289,7 @@ define([
       it('should not be called unless input value changes', function() {
         var stub = sinon.stub(autoComplete._api, 'autoComplete');
         inputElement.val('card');
-        
+
         autoComplete.autoComplete();
         clock.tick(autoCompleteDelay);
         autoComplete._waitingForResults = false;
