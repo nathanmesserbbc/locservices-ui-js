@@ -52,7 +52,7 @@ define([
     var label = this.translations.get('geolocation.button.label');
     this.container.append(template.replace('{text}', label));
 
-    this._button = this.container.find('button');
+    this._button = this.container.find('button.ls-ui-comp-geolocation');
 
     this._button.on('click', function(e) {
       e.preventDefault();
