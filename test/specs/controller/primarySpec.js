@@ -359,7 +359,7 @@ define([
       it('clears results', function() {
         var stub = sinon.stub(controller.results, 'clear');
         controller.close();
-        expect(stub.callCount).toBe(1);
+        expect(stub.callCount).toBe(2);
       });
 
       it('clears auto_complete', function() {

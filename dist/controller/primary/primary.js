@@ -111,6 +111,7 @@ define([
 
         // @todo test this 
         self.message.clear();
+        self.results.clear();
 
         self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
       },
