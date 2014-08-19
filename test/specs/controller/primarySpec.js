@@ -171,11 +171,25 @@ define([
         $.emit.restore();
       });
 */
+
+      it('should not transition to active state if already active', function() {
+        controller.isActive = true;
+        $.emit('locservices:ui:component:search:focus');
+        expect(controller.container.hasClass('ls-ui-ctrl-active')).toEqual(false);
+      });
+
       it('should emit an active event when search becomes focused', function() {
         var spy = sinon.spy($, 'emit');
         $.emit('locservices:ui:component:search:focus');
         expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:active');
 
+        $.emit.restore();
+      });
+
+      it('should emit an active event when search starts', function() {
+        var spy = sinon.spy($, 'emit');
+        $.emit('locservices:ui:component:search:start');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:active');
         $.emit.restore();
       });
 
@@ -351,6 +365,15 @@ define([
           container: container,
           translations: translations
         });
+        controller.isActive = true;
+      });
+
+      it('should not emit an inactive event if the controller is already inactive', function() {
+        var spy = sinon.spy($, 'emit');
+        controller.isActive = false;
+        controller.close();
+        expect(spy.callCount).toEqual(0);
+        $.emit.restore();
       });
 
       it('should emit an inactive event when the close button is clicked', function() {

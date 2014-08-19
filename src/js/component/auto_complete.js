@@ -39,7 +39,7 @@ define([
     self._highlightedSearchResultIndex = null;
     self._api = options.api;
     self.input = options.element.attr('autocomplete', 'off');
-    self.searchResultsData = null;
+    self.searchResultsData = [];
     self.currentSearchTerm = '';
     self.setComponentOptions(options);
 
@@ -137,7 +137,7 @@ define([
     clearTimeout(this._timeoutId);
 
     this._timeoutId = setTimeout(function() {
- 
+
       if (true === self._searchSubmitted || searchTerm === self.requestedSearchTerm) {
         return;
       }
@@ -158,7 +158,7 @@ define([
 
           // @todo test this
           if (false === self._searchSubmitted && self.currentSearchTerm === self.requestedSearchTerm) {
-            // @todo should we actualy display this ? 
+            // @todo should we actualy display this ?
             // or just fail siliently
             self.emit('error', [{
               code: 'auto_complete.error.search',
@@ -179,7 +179,7 @@ define([
    */
   AutoComplete.prototype.clear = function(emitEvent) {
 
-    this.searchResultsData = null;
+    this.searchResultsData = [];
     this._highlightedSearchResultIndex = null;
     this.searchResults.empty();
 
@@ -296,6 +296,9 @@ define([
    */
   AutoComplete.prototype.highlightNextSearchResult = function() {
 
+    if (this.searchResultsData.length === 0) {
+      return;
+    }
     var index = this._highlightedSearchResultIndex;
 
     if (null === index) {
@@ -316,6 +319,9 @@ define([
    */
   AutoComplete.prototype.highlightPrevSearchResult = function() {
 
+    if (this.searchResultsData.length === 0) {
+      return;
+    }
     var index = this._highlightedSearchResultIndex;
 
     if (null === index) {

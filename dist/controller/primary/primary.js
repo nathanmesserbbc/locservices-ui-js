@@ -92,8 +92,11 @@ define([
         self.selectLocation(location);
       },
       onActive: function() {
-        $.emit(self.namespace + ':controller:active');
-        self.container.addClass('ls-ui-ctrl-active');
+        if (!self.isActive) {
+          self.isActive = true;
+          $.emit(self.namespace + ':controller:active');
+          self.container.addClass('ls-ui-ctrl-active');
+        }
       },
       onGeolocationAvailable: function() {
         $.emit(self.namespace + ':controller:geolocation:available');
@@ -132,10 +135,13 @@ define([
     self.container.addClass('ls-ui-ctrl-primary')
                   .append(outside.append(searchEl));
 
+    self.isActive = alwaysOpen;
+
     // @todo test this
     $.on(self.namespace + ':error', events.onError);
 
     $.on(self.namespace + ':component:search:focus', events.onActive);
+    $.on(self.namespace + ':component:search:start', events.onActive);
     $.on(self.namespace + ':component:geolocation:click', events.onActive);
 
     $.on(self.namespace + ':component:search:clear', events.onInputInteractionEnd);
@@ -218,17 +224,23 @@ define([
    * Close the component
    */
   Primary.prototype.close = function() {
-    // this results in message.clear, results.clear and autoComplete.clear
-    // being called as they listen for search:clear
-    this.search.clear();
+    if (this.isActive) {
 
-    $.emit(this.namespace + ':controller:inactive');
+      this.isActive = false;
 
-    // @todo test this
-    this.container.removeClass('ls-ui-ctrl-active');
+      // this results in message.clear, results.clear and autoComplete.clear
+      // being called as they listen for search:clear
+      this.search.clear();
 
-    // @todo test this
-    this.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
+      $.emit(this.namespace + ':controller:inactive');
+
+      // @todo test this
+      this.container.removeClass('ls-ui-ctrl-active');
+
+      // @todo test this
+      this.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
+
+    }
   };
 
   /**
