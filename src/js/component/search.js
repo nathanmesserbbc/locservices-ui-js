@@ -58,6 +58,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
     self.setComponentOptions(options);
     self.isSearching = false;
     self.hasAValidSearchTerm = false;
+    self.locationName = options.locationName;
 
     // @todo test supportsTouchEvents
     supportsTouchEvents = ('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch);
@@ -67,6 +68,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       .on('keyup', function() {
         self.checkInput();
       });
+
+    if ('string' === typeof self.locationName) {
+      self.input.val(self.locationName);
+    }
 
     // @todo test if (supportsTouchEvents) logic
     if (supportsTouchEvents) {
@@ -84,6 +89,9 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       self.search(self.input.val());
     });
     self.input.on('focus', function() {
+      if (self.input.val() === self.locationName) {
+        self.input.val('');
+      }
       self.emit('focus');
     });
 
@@ -92,6 +100,12 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
         self.form.trigger('submit');
       });
 
+    $.on(self.eventNamespaceBase + ':controller:inactive', function() {
+      if (self.locationName === undefined) {
+        return;
+      }
+      self.input.val(self.locationName);
+    });
   }
   Search.prototype = new Component();
   Search.prototype.constructor = Search;
@@ -106,7 +120,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   };
 
   /**
-   * Check if the input element value has length and 
+   * Check if the input element value has length and
    * add class as necessary.
    */
   Search.prototype.checkInput = function() {
@@ -152,7 +166,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     var self = this;
 
-    searchTerm = (searchTerm || '').replace(/^\s+|\s+$/g, ''); 
+    searchTerm = (searchTerm || '').replace(/^\s+|\s+$/g, '');
 
     if (!searchTerm || true === self.isSearching) {
       return;
