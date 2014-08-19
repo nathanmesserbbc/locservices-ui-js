@@ -65,6 +65,16 @@ define([
         expect(controller.search).toBeDefined();
       });
 
+      it('should set the search input if specified', function() {
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations,
+          locationName: 'Cardiff'
+        });
+        expect(controller.search.input.val()).toBe('Cardiff');
+      });
+
       it('should set the geolocation', function() {
         expect(controller.geolocation).toBeDefined();
       });

@@ -109,7 +109,7 @@ define([
       },
       onResultsClear: function() {
 
-        // @todo test this 
+        // @todo test this
         self.message.clear();
         self.results.clear();
 
@@ -147,7 +147,7 @@ define([
 
     $.on(self.namespace + ':component:auto_complete:clear', events.onResultsClear);
     $.on(self.namespace + ':component:search:clear', events.onResultsClear);
-    
+
     $.on(self.namespace + ':component:geolocation:location', events.onLocation);
     $.on(self.namespace + ':component:auto_complete:location', events.onLocation);
     $.on(self.namespace + ':component:user_locations:location', events.onLocation);
@@ -161,7 +161,8 @@ define([
       api: this.api,
       translations: self.translations,
       eventNamespace: self.namespace,
-      container: searchEl
+      container: searchEl,
+      locationName: options.locationName
     });
 
     self.autoComplete = new AutoComplete({

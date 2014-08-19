@@ -63,6 +63,16 @@ define([
         expect(search.hasAValidSearchTerm).toBe(false);
       });
 
+      it('should set locationName to specified name', function() {
+        search = new Search({
+          translations: translations,
+          container: container,
+          api: api,
+          locationName: 'Cardiff'
+        });
+        expect(search.locationName).toBe('Cardiff');
+      });
+
     });
 
     describe('clear()', function() {
@@ -161,7 +171,8 @@ define([
         search = new Search({
           translations: new En(),
           container: container,
-          api: new Api()
+          api: new Api(),
+          locationName: 'Cardiff'
         });
       });
 
@@ -212,6 +223,44 @@ define([
 
         expect(spy.getCall(0).args[0]).toEqual('locservices:ui:component:search:focus');
         $.emit.restore();
+      });
+
+      it('should clear the input value if the current value matches the location name', function() {
+        var spy = sinon.spy(search.input, 'val');
+        search.input.triggerHandler('focus');
+
+        expect(spy.getCall(1).args[0]).toEqual('');
+        search.input.val.restore();
+      });
+
+      it('should not clear the input value if the current value does not match the location name', function() {
+        var spy = sinon.spy(search.input, 'val');
+        search.input.val('Bristol');
+        search.input.triggerHandler('focus');
+
+        expect(spy.getCall(0).args[0]).toEqual('Bristol');
+        expect(spy.getCall(1).args[0]).toEqual(undefined);
+        search.input.val.restore();
+      });
+
+      it('should react to an inactive controller', function() {
+        var spy = sinon.spy($, 'on');
+        search = new Search({
+          translations: new En(),
+          container: container,
+          api: new Api(),
+          locationName: 'Cardiff'
+        });
+
+        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:controller:inactive');
+        $.on.restore();
+      });
+
+      it('should restore the location name on blur', function() {
+        search.input.triggerHandler('focus');
+        expect(search.input.val()).toEqual('');
+        $.emit('locservices:ui:controller:inactive');
+        expect(search.input.val()).toEqual('Cardiff');
       });
 
     });

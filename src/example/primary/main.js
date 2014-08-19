@@ -31,7 +31,8 @@ require([
     namespace: namespace,
     container: element,
     translations: new En(),
-    alwaysOpen: false
+    alwaysOpen: false,
+    locationName: 'Cardiff'
   });
 
   $.on(namespace + ':controller:active', function() {
