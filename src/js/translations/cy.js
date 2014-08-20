@@ -20,6 +20,7 @@ define(function() {
     'search.clear': 'Clirio',
     'search.submit': 'Chwilio',
     'search.submit.title': 'Chwilio am leoliad',
+    'search_results.more': 'Dangos mwy o ganlyniadau',
     'geolocation.button.label': 'Defnyddiwch fy lleoliad',
     'geolocation.error.http': 'Nid oes modd i ni ddefnyddio eich lleoliad.',
     'geolocation.error.browser': 'Nid oes modd i ni ddefnyddio eich lleoliad.',
