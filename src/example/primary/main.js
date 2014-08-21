@@ -31,8 +31,7 @@ require([
     namespace: namespace,
     container: element,
     translations: new En(),
-    alwaysOpen: false,
-    locationName: 'Cardiff'
+    alwaysOpen: true
   });
 
   $.on(namespace + ':controller:active', function() {
@@ -44,7 +43,7 @@ require([
   });
 
   $.on(namespace + ':controller:location', function(location) {
-    window.location = 'http://beta.bbc.co.uk/travelbeta/' + location.id + '/incidents/road';
+    window.location = 'http://beta.bbc.co.uk/travel/' + location.id + '/incidents/road';
   });
 
 });
