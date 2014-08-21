@@ -135,7 +135,7 @@ define([
     self.container.addClass('ls-ui-ctrl-primary')
                   .append(outside.append(searchEl));
 
-    self.isActive = alwaysOpen;
+    self.isActive = undefined;
 
     // @todo test this
     $.on(self.namespace + ':error', events.onError);
@@ -206,7 +206,10 @@ define([
       container: outside
     });
 
-    if (!alwaysOpen) {
+    if (alwaysOpen) {
+      self.container.addClass('ls-ui-ctrl-open');
+      events.onActive();
+    } else {
       self.closeButton = new CloseButton({
         translations: self.translations,
         eventNamespace: self.namespace,
@@ -214,10 +217,6 @@ define([
       });
     }
 
-    if (alwaysOpen) {
-      self.container.addClass('ls-ui-ctrl-open');
-      $.emit(self.namespace + ':component:search:focus');
-    }
   }
 
   /**

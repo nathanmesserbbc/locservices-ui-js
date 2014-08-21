@@ -150,6 +150,34 @@ define([
 
     });
 
+    describe('setting alwaysOpen to true', function() {
+
+      beforeEach(function() {
+        api = new Api();
+        container = $('<div />');
+        translations = new Translations();
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations,
+          alwaysOpen: true
+        });
+      });
+
+      it('should add open class to container', function() {
+        expect(container.hasClass('ls-ui-ctrl-open')).toEqual(true);
+      });
+
+      it('should set isActive to true', function() {
+        expect(controller.isActive).toEqual(true);
+      });
+
+      it('should add active class to container', function() {
+        expect(container.hasClass('ls-ui-ctrl-active')).toEqual(true);
+      });
+
+    });
+
     describe('events', function() {
 
       beforeEach(function() {
