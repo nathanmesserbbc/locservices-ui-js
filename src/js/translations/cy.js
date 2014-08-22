@@ -5,7 +5,8 @@ define(function() {
   var dictionary = {
     'auto_complete.error.search': 'Mae\'n ddrwg gennym, mae yna broblemau technegol ar hyn o bryd.',
     'user_locations.heading.preferred': 'Prif leoliad',
-    'user_locations.heading.recent': 'Lleoliadau eraill',
+    'user_locations.heading.other': 'Lleoliadau eraill',
+    'user_locations.heading.recent': 'Recent locations',
     'user_locations.action.recent': 'Dewis',
     'user_locations.action.remove': 'Dileu',
     'user_locations.dialog.confirm': 'Cadarnhau',

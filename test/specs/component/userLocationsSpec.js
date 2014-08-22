@@ -30,6 +30,8 @@ function(
       { id: '6', name: 'Location 6', placeType: 'settlement', country: 'GB' }
     ];
 
+    var withPreferableClass = 'ls-ui-comp-user_locations-with_preferable';
+    
     beforeEach(function() {
       container = $('<div/>');
       api = {
@@ -298,6 +300,44 @@ function(
         var stub = sinon.stub(userLocations, 'removeDialog');
         $.emit('locservices:ui:component:auto_complete:render');
         expect(stub.callCount).toBe(1);
+      });
+
+      it('has preferred location enabled by default', function() {
+        expect(userLocations.isPreferredLocationEnabled).toBe(true);
+      });
+
+      it('adds a "with_preferable" class', function() {
+        expect(userLocations.element.hasClass(withPreferableClass)).toBe(true);
+      });
+
+      describe('with preferred location disabled', function() {
+        beforeEach(function() {
+          userLocations = new UserLocations({
+            api: api,
+            translations: translations,
+            container: container,
+            isPreferredLocationEnabled: false
+          });
+        });
+
+        it('should have preferred location disabled', function() {
+          expect(userLocations.isPreferredLocationEnabled).toBe(false);
+        });
+
+        it('should not add a "with_preferable" class', function() {
+          expect(userLocations.element.hasClass(withPreferableClass)).toBe(false);
+        });
+
+        it('should not have a preferred location list', function() {
+          var preferredList = userLocations.element.find('.ls-ui-comp-user_locations-preferred');
+          expect(preferredList.length).toBe(0);
+        });
+
+        it('should not have a preferred location message', function() {
+          var message = userLocations.element.find('.ls-ui-comp-user_locations-message');
+          expect(message.length).toBe(0);
+        });
+
       });
 
     });
@@ -832,7 +872,7 @@ function(
         var locations;
         var stub;
         var expectedValue;
-        expectedValue = 'foo';
+        expectedValue = false;
         stubPreferredLocationIsSet.returns(false);
         stubRecentLocationsIsSupported.returns(true);
         stubRecentLocationsAll.returns([testLocations[0]]);
@@ -841,6 +881,18 @@ function(
         locations = userLocations.getRecentLocations();
         expect(stub.calledOnce).toEqual(true);
         expect(locations[0].isPreferable).toEqual(expectedValue);
+      });
+
+      it('sets isPreferable to false if preferred location is disabled', function() {
+        var locations;
+        var stub;
+        stubRecentLocationsIsSupported.returns(true);
+        stubRecentLocationsAll.returns([testLocations[0]]);
+        stub = sinon.stub(userLocations.preferredLocation, 'isValidLocation');
+        stub.returns(true);
+        userLocations.isPreferredLocationEnabled = false;
+        locations = userLocations.getRecentLocations();
+        expect(locations[0].isPreferable).toEqual(false);
       });
 
       it('does not include recent if same id as preferred', function() {

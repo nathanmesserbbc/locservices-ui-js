@@ -70,6 +70,7 @@ define([
 
     var self = this;
     var alwaysOpen = options.alwaysOpen || false;
+    var isPreferredLocationEnabled = options.isPreferredLocationEnabled;
 
     var events = {
       onError: function() {
@@ -203,7 +204,8 @@ define([
       api: this.api,
       translations: self.translations,
       eventNamespace: self.namespace,
-      container: outside
+      container: outside,
+      isPreferredLocationEnabled: isPreferredLocationEnabled
     });
 
     if (alwaysOpen) {
@@ -320,7 +322,8 @@ define([
       false === this.preferredLocation.isSet() &&
       false === this.bbcCookies.isPersonalisationDisabled() &&
       this.cookies.isSupported() &&
-      '1' !== this.cookies.get(this.cookiesColdStartKey)
+      '1' !== this.cookies.get(this.cookiesColdStartKey) &&
+      true === this.userLocations.isPreferredLocationEnabled
     );
   };
 
