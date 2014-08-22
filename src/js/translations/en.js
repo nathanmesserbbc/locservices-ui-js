@@ -5,8 +5,8 @@ define(function() {
   var dictionary = {
     'auto_complete.error.search': 'Sorry, we are experiencing technical problems.',
     'user_locations.heading.preferred': 'Main location',
-    'user_locations.heading.other': 'Other locations',
-    'user_locations.heading.recent': 'Recent locations',
+    'user_locations.heading.other_locations': 'Other locations',
+    'user_locations.heading.your_locations': 'Your locations',
     'user_locations.action.recent': 'Prefer',
     'user_locations.action.remove': 'Remove',
     'user_locations.dialog.confirm': 'Confirm',

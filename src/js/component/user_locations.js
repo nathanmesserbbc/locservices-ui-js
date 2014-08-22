@@ -72,7 +72,10 @@ function(
      * @return {Object}
      */
     recentLocationsHeading: function(translations, noOfLocations, isPreferredLocationEnabled) {
-      var translationKey = isPreferredLocationEnabled ? 'user_locations.heading.other' : 'user_locations.heading.recent';
+      var translationKey = 'user_locations.heading.your_locations';
+      if (isPreferredLocationEnabled) {
+        translationKey = 'user_locations.heading.other_locations';
+      }
       return $('<p />')
         .addClass('ls-ui-comp-user_locations-heading')
         .addClass('ls-ui-comp-user_locations-recent-heading')
