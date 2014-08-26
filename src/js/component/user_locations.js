@@ -551,6 +551,7 @@ function(
         for (recentLocationIndex = 0; recentLocationIndex < noOfRecentLocations; recentLocationIndex++) {
           recentLocation = recentLocations[recentLocationIndex];
           if (
+            !this.isPreferredLocationEnabled ||
             !preferredLocation ||
             (preferredLocation.id !== recentLocation.id)
           ) {

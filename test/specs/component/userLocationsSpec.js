@@ -909,6 +909,19 @@ function(
         expect(locations[2]).toEqual(testLocations[3]);
       });
 
+      it('includes preferred location if one is set and preferred location is disabled', function() {
+        var locations;
+        var preferredLocation = { id: '2', name: 'Preferred' };
+        stubPreferredLocationIsSet.returns(true);
+        stubPreferredLocationGet.returns(preferredLocation);
+        stubRecentLocationsIsSupported.returns(true);
+        stubRecentLocationsAll.returns(testLocations);
+        userLocations.isPreferredLocationEnabled = false;
+        locations = userLocations.getRecentLocations();
+        expect(locations.length).toEqual(4);
+        expect(locations).toEqual(testLocations.slice(0,4));
+      });
+
       describe('filtered', function() {
 
         beforeEach(function() {
