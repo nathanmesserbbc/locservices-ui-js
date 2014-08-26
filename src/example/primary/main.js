@@ -31,9 +31,6 @@ require([
     return results[1] == 'true' ? true : false;
   }
 
-  console.log(getBooleanQueryParam('alwaysOpen', true));
-  console.log(getBooleanQueryParam('isPreferredLocationEnabled', true));
-  
   new SearchController({
     api: {
       env: 'int',
