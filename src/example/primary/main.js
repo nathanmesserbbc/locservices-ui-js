@@ -43,7 +43,8 @@ require([
     container: element,
     translations: new En(),
     alwaysOpen: getBooleanQueryParam('alwaysOpen', true),
-    isPreferredLocationEnabled: getBooleanQueryParam('isPreferredLocationEnabled', true)
+    isPreferredLocationEnabled: getBooleanQueryParam('isPreferredLocationEnabled', true),
+    isGeolocationEnabled: getBooleanQueryParam('isGeolocationEnabled', true)
   });
 
   $.on(namespace + ':controller:active', function() {

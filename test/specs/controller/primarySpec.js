@@ -181,9 +181,6 @@ define([
     describe('setting isPreferredLocationEnabled to false', function() {
 
       beforeEach(function() {
-        api = new Api();
-        container = $('<div />');
-        translations = new Translations();
         controller = new Controller({
           api: api,
           container: container,
@@ -194,6 +191,23 @@ define([
 
       it('should pass isPreferredLocationEnabled to user locations module', function() {
         expect(controller.userLocations.isPreferredLocationEnabled).toEqual(false);
+      });
+
+    });
+        
+    describe('setting isGeolocationEnabled to false', function() {
+
+      beforeEach(function() {
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations,
+          isGeolocationEnabled: false
+        });
+      });
+
+      it('should not enable geolocation', function() {
+        expect(controller.geolocation).toBe(undefined);
       });
 
     });
