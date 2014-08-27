@@ -31,7 +31,8 @@ require([
     namespace: namespace,
     container: element,
     translations: new En(),
-    alwaysOpen: true
+    alwaysOpen: true,
+    isGeolocationEnabled: false
   });
 
   $.on(namespace + ':controller:active', function() {
