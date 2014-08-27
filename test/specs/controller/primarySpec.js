@@ -178,6 +178,22 @@ define([
 
     });
 
+    describe('setting isGeolocationEnabled to false', function() {
+      beforeEach(function() {
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations,
+          isGeolocationEnabled: false
+        });
+      });
+
+      it('should not enable geolocation', function() {
+        expect(controller.geolocation).toBe(undefined);
+      });
+
+    });
+
     describe('events', function() {
 
       beforeEach(function() {
