@@ -28,8 +28,12 @@ function(
      *
      * @return {object}
      */
-    element: function() {
-      return $('<div />').addClass('ls-ui-comp-user_locations');
+    element: function(isPreferredLocationEnabled) {
+      var element = $('<div />').addClass('ls-ui-comp-user_locations');
+      if (isPreferredLocationEnabled) {
+        element.addClass('ls-ui-comp-user_locations-with_preferable');
+      }
+      return element;
     },
 
     /**
@@ -67,12 +71,16 @@ function(
      * @param {Number} noOfLocations The number of recent locations
      * @return {Object}
      */
-    recentLocationsHeading: function(translations, noOfLocations) {
+    recentLocationsHeading: function(translations, noOfLocations, isPreferredLocationEnabled) {
+      var translationKey = 'user_locations.heading.your_locations';
+      if (isPreferredLocationEnabled) {
+        translationKey = 'user_locations.heading.other_locations';
+      }
       return $('<p />')
         .addClass('ls-ui-comp-user_locations-heading')
         .addClass('ls-ui-comp-user_locations-recent-heading')
         .text(
-          translations.get('user_locations.heading.recent') + ' (' + noOfLocations + ')'
+          translations.get(translationKey) + ' (' + noOfLocations + ')'
         );
     },
 
@@ -166,7 +174,6 @@ function(
     }
 
     this.setComponentOptions(options);
-
     bbcCookies = new BBCCookies();
     if (bbcCookies.isPersonalisationDisabled()) {
       return;
@@ -184,7 +191,8 @@ function(
     this.preferredLocation = new PreferredLocation(api);
     this.recentLocations = new RecentLocations();
 
-    this.element = templates.element();
+    this.isPreferredLocationEnabled = (typeof options.isPreferredLocationEnabled === 'undefined') ? true : options.isPreferredLocationEnabled;
+    this.element = templates.element(this.isPreferredLocationEnabled);
     this.container.append(this.element);
     this.render();
 
@@ -455,29 +463,32 @@ function(
     templates.recentLocationsList.empty();
 
     /* Preferred Location */
+    if (this.isPreferredLocationEnabled) {
 
-    if (hasLocations) {
-      this.element.append(templates.preferredLocationHeading(this.translations));
-    }
+      if (hasLocations) {
+        this.element.append(templates.preferredLocationHeading(this.translations));
+      }
 
-    if (hasPreferredLocation) {
-      preferredLocation = this.preferredLocation.get();
-      this._locations[preferredLocation.id] = preferredLocation;
+      if (hasPreferredLocation) {
+        preferredLocation = this.preferredLocation.get();
+        this._locations[preferredLocation.id] = preferredLocation;
 
-      // @todo always ensure this property is set so that stats tracking can
-      // capture clicking a preferred location
-      preferredLocation.isPreferred = true;
+        // @todo always ensure this property is set so that stats tracking can
+        // capture clicking a preferred location
+        preferredLocation.isPreferred = true;
 
-      preferredLocation.isPreferable = true;
-      templates.preferredLocationList.append(
-        templates.location(this.translations, preferredLocation)
-      );
-    } else {
-      templates.preferredLocationList.addClass('ls-ui-comp-user_locations-preferred-no-location');
-    }
+        preferredLocation.isPreferable = true;
+        templates.preferredLocationList.append(
+          templates.location(this.translations, preferredLocation)
+        );
+      } else {
+        templates.preferredLocationList.addClass('ls-ui-comp-user_locations-preferred-no-location');
+      }
 
-    if (hasLocations) {
-      this.element.append(templates.preferredLocationList);
+      if (hasLocations) {
+        this.element.append(templates.preferredLocationList);
+      }
+
     }
 
     /* Recent Locations */
@@ -485,7 +496,7 @@ function(
     if (hasRecentLocations) {
 
       this.element.append(
-        templates.recentLocationsHeading(this.translations, noOfRecentLocations)
+        templates.recentLocationsHeading(this.translations, noOfRecentLocations, this.isPreferredLocationEnabled)
       );
 
       for (locationIndex = 0; locationIndex < noOfRecentLocations; locationIndex++) {
@@ -500,7 +511,7 @@ function(
 
     /* Message */
 
-    if (hasLocations) {
+    if (hasLocations && this.isPreferredLocationEnabled) {
       this.element.append(
         templates.message(this.translations, hasRecentLocations)
       );
@@ -540,10 +551,11 @@ function(
         for (recentLocationIndex = 0; recentLocationIndex < noOfRecentLocations; recentLocationIndex++) {
           recentLocation = recentLocations[recentLocationIndex];
           if (
+            !this.isPreferredLocationEnabled ||
             !preferredLocation ||
             (preferredLocation.id !== recentLocation.id)
           ) {
-            recentLocation.isPreferable = this.preferredLocation.isValidLocation(recentLocation);
+            recentLocation.isPreferable = this.isPreferredLocationEnabled && this.preferredLocation.isValidLocation(recentLocation);
             locations.push(recentLocation);
           }
         }

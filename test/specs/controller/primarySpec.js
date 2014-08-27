@@ -178,7 +178,25 @@ define([
 
     });
 
+    describe('setting isPreferredLocationEnabled to false', function() {
+
+      beforeEach(function() {
+        controller = new Controller({
+          api: api,
+          container: container,
+          translations: translations,
+          isPreferredLocationEnabled: false
+        });
+      });
+
+      it('should pass isPreferredLocationEnabled to user locations module', function() {
+        expect(controller.userLocations.isPreferredLocationEnabled).toEqual(false);
+      });
+
+    });
+        
     describe('setting isGeolocationEnabled to false', function() {
+
       beforeEach(function() {
         controller = new Controller({
           api: api,
@@ -621,6 +639,11 @@ define([
 
       it('should return false if client has previously declined cold start', function() {
         stubCookiesGet.returns('1');
+        expect(controller.shouldColdStartDialogBeDisplayed()).toEqual(false);
+      });
+
+      it('should return false if preferred location has been disabled', function() {
+        controller.userLocations.isPreferredLocationEnabled = false;
         expect(controller.shouldColdStartDialogBeDisplayed()).toEqual(false);
       });
 

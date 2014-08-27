@@ -20,6 +20,17 @@ require([
 
   var namespace = 'primary';
   var element   = $('.primary-search');
+  
+  function getBooleanQueryParam(name, defaultValue) {
+    var regex, results;
+    regex = new RegExp('[[\\?&]' + name + '=((true|false))');
+    results = regex.exec(window.location.search);
+    if (results === null) {
+        return defaultValue;
+    }
+    return results[1] == 'true' ? true : false;
+  }
+
   new SearchController({
     api: {
       env: 'int',
@@ -31,8 +42,9 @@ require([
     namespace: namespace,
     container: element,
     translations: new En(),
-    alwaysOpen: true,
-    isGeolocationEnabled: false
+    alwaysOpen: getBooleanQueryParam('alwaysOpen', true),
+    isPreferredLocationEnabled: getBooleanQueryParam('isPreferredLocationEnabled', true),
+    isGeolocationEnabled: getBooleanQueryParam('isGeolocationEnabled', true)
   });
 
   $.on(namespace + ':controller:active', function() {
