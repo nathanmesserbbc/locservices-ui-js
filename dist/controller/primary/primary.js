@@ -70,6 +70,9 @@ define([
 
     var self = this;
     var alwaysOpen = options.alwaysOpen || false;
+    var isPreferredLocationEnabled = options.isPreferredLocationEnabled;
+    var isGeolocationEnabled = options.isGeolocationEnabled;
+    isGeolocationEnabled = (typeof isGeolocationEnabled === 'undefined') ? true : isGeolocationEnabled;
 
     var events = {
       onError: function() {
@@ -192,18 +195,21 @@ define([
       container: outside
     });
 
-    self.geolocation = new Geolocation({
-      api: this.api,
-      translations: self.translations,
-      eventNamespace: self.namespace,
-      container: outside
-    });
+    if (isGeolocationEnabled) {
+      self.geolocation = new Geolocation({
+        api: this.api,
+        translations: self.translations,
+        eventNamespace: self.namespace,
+        container: outside
+      });
+    }
 
     self.userLocations = new UserLocations({
       api: this.api,
       translations: self.translations,
       eventNamespace: self.namespace,
-      container: outside
+      container: outside,
+      isPreferredLocationEnabled: isPreferredLocationEnabled
     });
 
     if (alwaysOpen) {
@@ -320,7 +326,8 @@ define([
       false === this.preferredLocation.isSet() &&
       false === this.bbcCookies.isPersonalisationDisabled() &&
       this.cookies.isSupported() &&
-      '1' !== this.cookies.get(this.cookiesColdStartKey)
+      '1' !== this.cookies.get(this.cookiesColdStartKey) &&
+      true === this.userLocations.isPreferredLocationEnabled
     );
   };
 
