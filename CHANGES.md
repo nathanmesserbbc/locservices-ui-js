@@ -1,6 +1,13 @@
 Changes
 =======
 
+1.2.0 - 2014-07-28
+------------------
+
+* [feature] - Allow disabling preferred location in user locations component (#66)
+* [feature] - Allow disabling geolocation (#68)
+
+
 1.1.0 - 2014-07-21
 ------------------
 
