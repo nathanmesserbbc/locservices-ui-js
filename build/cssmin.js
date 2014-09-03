@@ -11,7 +11,7 @@ module.exports = function() {
     },
     all: {
       files: {
-        'dist/all.min.css' : 'dist/**/*.css'
+        'dist/all.min.css' : ['dist/**/*.css', '!dist/**/*.min.css']
       }
     }
   };
