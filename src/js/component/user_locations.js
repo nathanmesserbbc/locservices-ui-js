@@ -110,14 +110,14 @@ function(
         .attr('data-id', locationId)
         .attr('data-action', location.isPreferred ? 'none' : 'prefer')
         .attr('aria-disabled', location.isPreferred ? 'true' : 'false')
-        .text(translations.get('user_locations.action.recent'));
+        .html($('<span/>').text(translations.get('user_locations.action.recent')));
 
       var linkRemove = $('<button/>')
         .addClass('ls-ui-comp-user_locations-remove')
         .attr('href', '#' + locationId)
         .attr('data-id', locationId)
         .attr('data-action', 'remove')
-        .text(translations.get('user_locations.action.remove'));
+        .html($('<span/>').text(translations.get('user_locations.action.remove')));
 
       var li = $('<li />');
 
