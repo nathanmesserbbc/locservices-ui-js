@@ -139,10 +139,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
         this.moreResults.removeClass('ls-ui-comp-search_results-active');
       }
 
-      // @todo test this
-      if (0 < this.offset) {
-        this.list.find('li:nth-child(' + (this.offset + 1) + ') a').focus();
-      }
+      this.list.find('li:nth-child(' + (this.offset + 1) + ') a').focus();
 
     }
 

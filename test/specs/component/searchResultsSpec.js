@@ -158,6 +158,20 @@ define([
         expect(searchResults.list.find('a:eq(0)').data('offset')).toEqual(0);
       });
 
+      it('sets focus to the first result', function() {
+        var firstResult;
+
+        // Element needs to be attached to the DOM to receive focus
+        $(document.body).append(container.attr('id','search-result-container'));
+
+        searchResults.render(responseMultiple.results, responseMultiple.metadata);
+        firstResult = searchResults.list.find(':first-child a').get(0);
+
+        expect(document.activeElement).toEqual(firstResult);
+
+        $('#search-result-container').remove();
+      });
+
       // @todo Test the label includes name and container
 
       // @todo Test the <li> contains a link (and locationId)
