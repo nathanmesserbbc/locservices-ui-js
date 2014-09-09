@@ -104,14 +104,15 @@ function(
         linkName.append(', ' + location.container);
       }
 
-      var linkAction = $('<a/>')
+      var linkAction = $('<button/>')
         .addClass('ls-ui-comp-user_locations-action')
         .attr('href', '#' + locationId)
         .attr('data-id', locationId)
         .attr('data-action', location.isPreferred ? 'none' : 'prefer')
+        .attr('aria-disabled', location.isPreferred ? 'true' : 'false')
         .text(translations.get('user_locations.action.recent'));
 
-      var linkRemove = $('<a/>')
+      var linkRemove = $('<button/>')
         .addClass('ls-ui-comp-user_locations-remove')
         .attr('href', '#' + locationId)
         .attr('data-id', locationId)
@@ -196,7 +197,7 @@ function(
     this.container.append(this.element);
     this.render();
 
-    this.element.on('click', 'a', function(e) {
+    this.element.on('click', 'button,a', function(e) {
       var target;
       var locationId;
       var action;
