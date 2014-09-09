@@ -139,7 +139,7 @@ function(
             country: 'GB'
           };
           userLocations._locations[removeLocation.id] = removeLocation;
-          locationElement = $('<li><button class="ls-ui-comp-user_locations-action-remove" href="#' + removeLocation.id + '" data-id="' + removeLocation.id + '" data-action="remove">Location</button></li>');
+          locationElement = $('<li><button class="ls-ui-comp-user_locations-action-remove" href="#' + removeLocation.id + '" data-id="' + removeLocation.id + '" data-action="remove"><span>Location</span></button></li>');
           removeElement = locationElement.find('.ls-ui-comp-user_locations-action-remove');
           userLocations.element.append(locationElement);
         });
@@ -184,7 +184,7 @@ function(
         var preferElement;
 
         beforeEach(function() {
-          locationElement = $('<li><button class="ls-ui-comp-user_locations-action-prefer" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="prefer">Location</button></li>');
+          locationElement = $('<li><button class="ls-ui-comp-user_locations-action-prefer" href="#' + testLocations[0].id + '" data-id="' + testLocations[0].id + '" data-action="prefer"><span>Location</span></button></li>');
           preferElement = locationElement.find('.ls-ui-comp-user_locations-action-prefer');
           userLocations.element.append(locationElement);
         });
@@ -772,9 +772,9 @@ function(
         stubPreferredLocationGet.returns(expectedLocation);
         stubGetRecentLocations.returns([]);
         var expectedHtml = '<li class="ls-ui-comp-user_locations-location ls-ui-comp-user_locations-location-preferred ls-ui-comp-user_locations-location-preferable">' +
-          '<button class="ls-ui-comp-user_locations-action" href="#CF5" data-id="CF5" data-action="none" aria-disabled="true">Prefer</button>' +
+          '<button class="ls-ui-comp-user_locations-action" href="#CF5" data-id="CF5" data-action="none" aria-disabled="true"><span>Prefer</span></button>' +
           '<a class="ls-ui-comp-user_locations-name" href="#CF5" data-id="CF5" data-action="location"><strong>CF5</strong></a>' +
-          '<button class="ls-ui-comp-user_locations-remove" href="#CF5" data-id="CF5" data-action="remove">Remove</button>' +
+          '<button class="ls-ui-comp-user_locations-remove" href="#CF5" data-id="CF5" data-action="remove"><span>Remove</span></button>' +
           '</li>';
         userLocations.render();
         expect(container.find('ul.ls-ui-comp-user_locations-preferred').html()).toEqual(expectedHtml);
