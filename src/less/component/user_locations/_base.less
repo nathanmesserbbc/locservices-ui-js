@@ -39,19 +39,6 @@
   padding-left: 43px;
 }
 
-.ls-ui-comp-user_locations-action {
-    position: absolute;
-    top: 11px;
-    left: 7px;
-    width: 25px;
-    height: 25px;
-    padding: 0;
-    text-indent: -10000px;
-    background: url("@{sprite-x1}") no-repeat -10px -378px;
-}
-.ls-ui-comp-user_locations-location-preferred .ls-ui-comp-user_locations-action {
-    background: url("@{sprite-x1}") no-repeat -10px -10px;
-}
 .ls-ui-comp-user_locations-name {
     font-size: @font15;
     line-height: 1.4;
@@ -62,16 +49,51 @@
       text-decoration: underline;
     }
 }
+
+.ls-ui-comp-user_locations-action,
 .ls-ui-comp-user_locations-remove {
     position: absolute;
-    top: 11px;
-    right: 5px;
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    margin-top: 2px;
+    top: 0;
+    margin: 0;
     text-indent: -10000px;
-    background: url("@{sprite-x1}") no-repeat -11px -102px;
+    cursor: hand;
+    background: none;
+    border: none;
+
+    span {
+        display: block;
+    }
+}
+
+.ls-ui-comp-user_locations-action[disabled=disabled] {
+    cursor: default;
+}
+
+.ls-ui-comp-user_locations-action {
+    left: 0;
+    padding: 11px 7px;
+
+    span {
+        width: 25px;
+        height: 25px;
+        background: url("@{sprite-x1}") no-repeat -10px -378px;
+    }
+}
+
+.ls-ui-comp-user_locations-location-preferred .ls-ui-comp-user_locations-action span {
+    background: url("@{sprite-x1}") no-repeat -10px -10px;
+}
+
+.ls-ui-comp-user_locations-remove {
+    right: 0;
+    padding: 11px 5px;
+    margin-top: 2px;
+
+    span {
+        width: 24px;
+        height: 24px;
+        background: url("@{sprite-x1}") no-repeat -11px -102px;
+    }
 }
 
 /* dialog */
@@ -79,6 +101,13 @@
 .ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-with-dialog {
   padding: 0;
 }
-.ls-ui-comp-user_locations-location-with-dialog a {
-  display: none;
+
+.ls-ui-comp-user_locations-location-with-dialog {
+
+  .ls-ui-comp-user_locations-action,
+  .ls-ui-comp-user_locations-name,
+  .ls-ui-comp-user_locations-remove {
+    display: none;
+  }
+
 }
