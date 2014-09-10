@@ -214,6 +214,30 @@ define([
         $.emit.restore();
       });
 
+      // Bug #93 - This is to ensure that the results list is cleared before other components are rendered
+      // so the component can ensure it is visible in the viewport.
+      // See: https://github.com/BBC-Location-Services/locservices-ui-js/issues/93
+      it('should clear results before triggering location event when a search result is clicked', function() {
+        var results, eventSpy, clearSpy;
+
+        results = new SearchResults({
+          translations: new En(),
+          container: $('#search-results'),
+          api: new API()
+        });
+
+        $.emit('locservices:ui:component:search:results', [responseMultiple.results, responseMultiple.metadata]);
+
+        eventSpy = sinon.spy($, 'emit');
+        clearSpy = sinon.spy(results, 'clear');
+
+        results.list.find('a').trigger('click');
+
+        sinon.assert.callOrder(clearSpy, eventSpy);
+
+        $.emit.restore();
+      });
+
       it('should trigger: locservices:ui:component:search_results:results when displaying list of results', function() {
         var spy = sinon.spy($, 'emit');
 

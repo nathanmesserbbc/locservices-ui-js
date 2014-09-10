@@ -62,12 +62,13 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
     var self = this;
     this.list.on('click', function(evt) {
-      var locationId, offset;
+      var location, locationId, offset;
       evt.preventDefault();
       locationId = $(evt.target).data('id');
       offset = $(evt.target).data('offset');
-      self.emit('location', [self._data[locationId], offset]);
+      location = self._data[locationId];
       self.clear();
+      self.emit('location', [location, offset]);
       return false;
     });
 
