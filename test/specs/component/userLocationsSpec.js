@@ -772,7 +772,7 @@ function(
         stubPreferredLocationGet.returns(expectedLocation);
         stubGetRecentLocations.returns([]);
         var expectedHtml = '<li class="ls-ui-comp-user_locations-location ls-ui-comp-user_locations-location-preferred ls-ui-comp-user_locations-location-preferable">' +
-          '<button class="ls-ui-comp-user_locations-action" href="#CF5" data-id="CF5" data-action="none" aria-disabled="true"><span>Prefer</span></button>' +
+          '<button class="ls-ui-comp-user_locations-action" href="#CF5" data-id="CF5" data-action="none" disabled="disabled"><span>Prefer</span></button>' +
           '<a class="ls-ui-comp-user_locations-name" href="#CF5" data-id="CF5" data-action="location"><strong>CF5</strong></a>' +
           '<button class="ls-ui-comp-user_locations-remove" href="#CF5" data-id="CF5" data-action="remove"><span>Remove</span></button>' +
           '</li>';

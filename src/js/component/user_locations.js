@@ -109,8 +109,11 @@ function(
         .attr('href', '#' + locationId)
         .attr('data-id', locationId)
         .attr('data-action', location.isPreferred ? 'none' : 'prefer')
-        .attr('aria-disabled', location.isPreferred ? 'true' : 'false')
         .html($('<span/>').text(translations.get('user_locations.action.recent')));
+
+      if (location.isPreferred) {
+        linkAction.attr('disabled', 'disabled');
+      }
 
       var linkRemove = $('<button/>')
         .addClass('ls-ui-comp-user_locations-remove')
