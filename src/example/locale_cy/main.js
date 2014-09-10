@@ -26,7 +26,8 @@ require([
       protocol: 'http',
       filter: 'domestic',
       'place-types': ['road', 'settlement', 'airport'],
-      order: 'importance'
+      order: 'importance',
+      locale: 'cy'
     },
     namespace: namespace,
     container: element,
