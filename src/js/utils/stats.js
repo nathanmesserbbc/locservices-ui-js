@@ -63,11 +63,18 @@ define([
   var recentLocations = new RecentLocations();
   var recentLocationsIsSupported = recentLocations.isSupported();
   var allRecentLocations = recentLocationsIsSupported ? recentLocations.all() : [];
+  var safeLocalStorage = (function() {
+    try {
+      return window.localStorage;
+    } catch (Error) {
+      return {};
+    }
+  })();
 
   var caps = {
     'capability_geolocation': geolocation.isSupported,
     'capability_recent_locations': recentLocations.isSupported(),
-    'capability_local_storage': (typeof window.localStorage === 'object' && window.localStorage.getItem),
+    'capability_local_storage': (typeof safeLocalStorage === 'object' && safeLocalStorage.getItem),
     'capability_cookies_enabled': (new Cookies()).isSupported(),
     'capability_bbccookies_preference_enabled': (new BBCCookies()).isPersonalisationDisabled(),
     'has_locserv_cookie': hasLocservCookie,

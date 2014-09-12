@@ -17,7 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "locservices-core-js": "https://github.com/BBC-Location-Services/locservices-core-js.git"
+    "locservices-core-js": "https://github.com/BBC-Location-Services/locservices-core-js.git#1.0.1"
   },
   "devDependencies": {
     "jquery": "1.11.1",
