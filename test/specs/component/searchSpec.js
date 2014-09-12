@@ -11,9 +11,8 @@ define([
     'use strict';
 
     var search,
+        options,
         container,
-        translations,
-        api,
         mockAPI;
 
     var submitSearch = function(term) {
@@ -23,14 +22,13 @@ define([
 
     beforeEach(function() {
       container = $('<div/>');
-      translations = new En();
-      api  = new Api();
-      mockAPI = sinon.mock(api);
-      search = new Search({
-        translations: translations,
+      options = {
+        translations: new En(),
         container: container,
-        api: api
-      });
+        api: new Api()
+      };
+      mockAPI = sinon.mock(options.api);
+      search = new Search(options);
     });
 
     describe('constructor', function() {
@@ -46,7 +44,7 @@ define([
       it('should throw an exception if options do not api an element', function() {
         var failure = function() {
           new Search({
-            translations: translations,
+            translations: options.translations,
             container: null
           });
         };
@@ -64,13 +62,29 @@ define([
       });
 
       it('should set locationName to specified name', function() {
-        search = new Search({
-          translations: translations,
-          container: container,
-          api: api,
-          locationName: 'Cardiff'
-        });
+        options.locationName = 'Cardiff';
+        search = new Search(options);
         expect(search.locationName).toBe('Cardiff');
+      });
+
+      describe('with touch events', function() {
+
+        beforeEach(function() {
+          // Phantomjs reports itself as a touch browser anyway: https://github.com/ariya/phantomjs/issues/10375
+          window.ontouchstart = true;
+          search = new Search(options);
+        });
+
+        it('should set hasClearControl to true', function() {
+          expect(search.hasClearControl).toBe(true);
+         });
+
+        it('should add a clear button', function() {
+          var clearButton = container.find('.ls-ui-input-clear').first();
+          expect(clearButton.length).toBe(1);
+          expect(clearButton.is('button')).toBe(true);
+         });
+
       });
 
     });
@@ -166,14 +180,9 @@ define([
       };
 
       beforeEach(function() {
-        container = $('<div />');
         searchStub = sinon.stub(Api.prototype, 'search');
-        search = new Search({
-          translations: new En(),
-          container: container,
-          api: new Api(),
-          locationName: 'Cardiff'
-        });
+        options.locationName = 'Cardiff';
+        search = new Search(options);
       });
 
       afterEach(function() {
@@ -245,12 +254,7 @@ define([
 
       it('should react to an inactive controller', function() {
         var spy = sinon.spy($, 'on');
-        search = new Search({
-          translations: new En(),
-          container: container,
-          api: new Api(),
-          locationName: 'Cardiff'
-        });
+        search = new Search(options);
 
         expect(spy.getCall(0).args[0]).toEqual('locservices:ui:controller:inactive');
         $.on.restore();
