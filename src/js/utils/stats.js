@@ -74,7 +74,7 @@ define([
   var caps = {
     'capability_geolocation': geolocation.isSupported,
     'capability_recent_locations': recentLocations.isSupported(),
-    'capability_local_storage': (typeof safeLocalStorage === 'object' && safeLocalStorage.getItem),
+    'capability_local_storage': (typeof safeLocalStorage === 'object' && typeof safeLocalStorage.getItem === 'function'),
     'capability_cookies_enabled': (new Cookies()).isSupported(),
     'capability_bbccookies_preference_enabled': (new BBCCookies()).isPersonalisationDisabled(),
     'has_locserv_cookie': hasLocservCookie,
