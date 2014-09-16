@@ -290,6 +290,10 @@ define([
       this.preferredLocation.isValidLocation(location) &&
       this.shouldColdStartDialogBeDisplayed()
     ) {
+      if (undefined !== this.coldStartDialog) {
+        this.coldStartDialog.remove();
+        this.coldStartDialog = undefined;
+      }
       this.coldStartDialog = new Dialog({
         container: outside,
         translations: this.translations,

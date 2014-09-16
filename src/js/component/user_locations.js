@@ -428,7 +428,7 @@ function(
 
       if (location.isPreferred) {
         this.preferredLocation.unset();
-      } 
+      }
 
       // @todo test this.recentLocations.isSupported
       if (this.recentLocations.isSupported()) {
