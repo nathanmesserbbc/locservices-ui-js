@@ -595,6 +595,15 @@ define([
         $.emit.restore();
       });
 
+      it('should remove existing cold start dialog', function() {
+        var spy;
+        controller.coldStartDialog = { remove: function() {} };
+        spy = sinon.spy(controller.coldStartDialog, 'remove');
+        stubShouldColdStartDialogBeDisplayed.returns(true);
+        controller.selectLocation(location);
+        expect(spy.calledOnce).toBe(true);
+      });
+
     });
 
     describe('shouldColdStartDialogBeDisplayed()', function() {
