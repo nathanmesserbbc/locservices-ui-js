@@ -31,7 +31,7 @@ function(
     ];
 
     var withPreferableClass = 'ls-ui-comp-user_locations-with_preferable';
-    
+
     beforeEach(function() {
       container = $('<div/>');
       api = {
@@ -772,9 +772,10 @@ function(
         stubPreferredLocationGet.returns(expectedLocation);
         stubGetRecentLocations.returns([]);
         var expectedHtml = '<li class="ls-ui-comp-user_locations-location ls-ui-comp-user_locations-location-preferred ls-ui-comp-user_locations-location-preferable">' +
-          '<button class="ls-ui-comp-user_locations-action" href="#CF5" data-id="CF5" data-action="none" disabled="disabled"><span>Prefer</span></button>' +
+          '<button class="ls-ui-comp-user_locations-action" href="#CF5" data-id="CF5" data-action="none" aria-label="Remove CF5 as your main location" disabled="disabled">' +
+          '<span>Prefer</span></button>' +
           '<a class="ls-ui-comp-user_locations-name" href="#CF5" data-id="CF5" data-action="location"><strong>CF5</strong></a>' +
-          '<button class="ls-ui-comp-user_locations-remove" href="#CF5" data-id="CF5" data-action="remove"><span>Remove</span></button>' +
+          '<button class="ls-ui-comp-user_locations-remove" href="#CF5" data-id="CF5" data-action="remove" aria-label="Remove CF5 as your main location"><span>Remove</span></button>' +
           '</li>';
         userLocations.render();
         expect(container.find('ul.ls-ui-comp-user_locations-preferred').html()).toEqual(expectedHtml);
