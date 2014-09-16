@@ -104,9 +104,10 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    * @param {Object} metadata
    */
   SearchResults.prototype.render = function(results, metadata) {
-    var i, noOfResults, result, label, html = '';
+    var self, i, noOfResults, result, label, html = '';
     noOfResults = results.length;
 
+    self = this;
     this.offset = metadata.start || 0;
     this.searchTerm = metadata.search;
 
@@ -140,7 +141,14 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
         this.moreResults.removeClass('ls-ui-comp-search_results-active');
       }
 
-      this.list.find('li:nth-child(' + (this.offset + 1) + ') a').focus();
+      var setFocusToOffset = function() {
+        self.list.find('li:nth-child(' + (self.offset + 1) + ') a').focus();
+      };
+
+      setFocusToOffset();
+
+      // VoiceOver in iOS 6 set focus to the wrong place unless there is a delay. 
+      setTimeout(setFocusToOffset, 1000);
 
     }
 
