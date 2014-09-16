@@ -141,6 +141,14 @@ define([
         expect(search.form.hasClass('ls-ui-comp-search-with-term')).toBe(false);
       });
 
+      it('should emit a clear event if there is no input value', function() {
+        var spy = sinon.spy(search, 'emit');
+        search.hasAValidSearchTerm = true;
+        search.checkInput();
+        expect(spy.calledOnce).toBe(true);
+        expect(spy.args[0][0]).toBe('clear');
+      }); 
+
     });
 
     describe('search', function() {
