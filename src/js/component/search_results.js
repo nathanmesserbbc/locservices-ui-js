@@ -147,7 +147,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
 
       setFocusToOffset();
 
-      // VoiceOver in iOS 6 set focus to the wrong place unless there is a delay. 
+      // VoiceOver in iOS 6 set focus to the wrong place unless there is a delay.
       setTimeout(setFocusToOffset, 1000);
 
     }
@@ -164,6 +164,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   SearchResults.prototype.clear = function() {
     this.moreResults.removeClass('ls-ui-comp-search_results-active');
+    this.element.removeClass('ls-ui-comp-search_results-with_results');
     this.list.empty();
     this._data = {};
   };
