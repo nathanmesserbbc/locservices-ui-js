@@ -11,9 +11,20 @@ module.exports = function() {
         {
           expand: true,
           cwd: '<%= config.paths.less %>',
-          src: ['**/*.less', '!**/_*.less'],
+          src: ['**/*.less', '!**/*.non-responsive.less', '!**/_*.less'],
           dest: '<%= config.paths.css %>',
           ext: '.css'
+        }
+      ]
+    },
+    build_non_responsive: {
+      files: [
+        {
+          expand: true,
+          cwd: '<%= config.paths.less %>',
+          src: ['**/*.non-responsive.less', '!**/_*.less'],
+          dest: '<%= config.paths.css %>',
+          ext: '.non-responsive.css'
         }
       ]
     }
