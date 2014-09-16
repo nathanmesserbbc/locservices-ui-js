@@ -63,11 +63,21 @@ define([
   var recentLocations = new RecentLocations();
   var recentLocationsIsSupported = recentLocations.isSupported();
   var allRecentLocations = recentLocationsIsSupported ? recentLocations.all() : [];
+  var hasLocalStorage = (function() {
+    var key = 'bbc-locservices-ui-js';
+    try {
+      localStorage.setItem(key, key);
+      localStorage.removeItem(key);
+      return true;
+    } catch (Error) {
+      return false;
+    }
+  })();
 
   var caps = {
     'capability_geolocation': geolocation.isSupported,
     'capability_recent_locations': recentLocations.isSupported(),
-    'capability_local_storage': (typeof window.localStorage === 'object' && window.localStorage.getItem),
+    'capability_local_storage': hasLocalStorage,
     'capability_cookies_enabled': (new Cookies()).isSupported(),
     'capability_bbccookies_preference_enabled': (new BBCCookies()).isPersonalisationDisabled(),
     'has_locserv_cookie': hasLocservCookie,

@@ -24,8 +24,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
   };
 
   var clear = function(translations) {
-    return $('<a />')
-            .attr('href', '#')
+    return $('<button />')
             .attr('class', 'ls-ui-input-clear')
             .text(translations.get('search.clear'));
   };

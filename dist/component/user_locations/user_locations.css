@@ -28,58 +28,76 @@
 .ls-ui-comp-user_locations-with_preferable li {
   padding-left: 43px;
 }
-.ls-ui-comp-user_locations-action {
-  position: absolute;
-  top: 11px;
-  left: 7px;
-  width: 25px;
-  height: 25px;
-  padding: 0;
-  text-indent: -10000px;
-  background: url("../../img/sprites/locservices_ui_x1.png") no-repeat -10px -378px;
-}
-.ls-ui-comp-user_locations-location-preferred .ls-ui-comp-user_locations-action {
-  background: url("../../img/sprites/locservices_ui_x1.png") no-repeat -10px -10px;
-}
 .ls-ui-comp-user_locations-name {
   font-size: 1.5em;
   line-height: 1.4;
   color: #606060;
   text-decoration: none;
+  word-wrap: break-word;
 }
 .ls-ui-comp-user_locations-name:hover {
   text-decoration: underline;
 }
+.ls-ui-comp-user_locations-action,
 .ls-ui-comp-user_locations-remove {
   position: absolute;
-  top: 11px;
-  right: 5px;
+  top: 0;
+  margin: 0;
+  text-indent: -10000px;
+  cursor: hand;
+  background: none;
+  border: none;
+}
+.ls-ui-comp-user_locations-action span,
+.ls-ui-comp-user_locations-remove span {
+  display: block;
+}
+.ls-ui-comp-user_locations-action[disabled=disabled] {
+  cursor: default;
+}
+.ls-ui-comp-user_locations-action {
+  left: 0;
+  padding: 11px 7px;
+}
+.ls-ui-comp-user_locations-action span {
+  width: 25px;
+  height: 25px;
+  background: url("../../img/sprites/locservices_ui_x1.png") no-repeat -10px -378px;
+}
+.ls-ui-comp-user_locations-location-preferred .ls-ui-comp-user_locations-action span {
+  background: url("../../img/sprites/locservices_ui_x1.png") no-repeat -10px -10px;
+}
+.ls-ui-comp-user_locations-remove {
+  right: 0;
+  padding: 11px 5px;
+  margin-top: 2px;
+}
+.ls-ui-comp-user_locations-remove span {
   width: 24px;
   height: 24px;
-  padding: 0;
-  margin-top: 2px;
-  text-indent: -10000px;
   background: url("../../img/sprites/locservices_ui_x1.png") no-repeat -11px -102px;
 }
 /* dialog */
 .ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-with-dialog {
   padding: 0;
 }
-.ls-ui-comp-user_locations-location-with-dialog a {
+.ls-ui-comp-user_locations-location-with-dialog .ls-ui-comp-user_locations-action,
+.ls-ui-comp-user_locations-location-with-dialog .ls-ui-comp-user_locations-name,
+.ls-ui-comp-user_locations-location-with-dialog .ls-ui-comp-user_locations-remove {
   display: none;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 4/3), only screen and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 1.3dppx) {
-  .ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-preferred .ls-ui-comp-user_locations-action {
+  .ls-ui-comp-user_locations .ls-ui-comp-user_locations-location-preferred .ls-ui-comp-user_locations-action span {
     background-image: url("../../img/sprites/locservices_ui_x2.png");
     background-size: 44px;
     background-position: -10px -10px;
   }
-  .ls-ui-comp-user_locations .ls-ui-comp-user_locations-action {
+  .ls-ui-comp-user_locations .ls-ui-comp-user_locations-action span {
     background-image: url("../../img/sprites/locservices_ui_x2.png");
     background-size: 44px;
     background-position: -11px -370px;
   }
-  .ls-ui-comp-user_locations .ls-ui-comp-user_locations-remove {
+  .ls-ui-comp-user_locations .ls-ui-comp-user_locations-remove span {
     background-image: url("../../img/sprites/locservices_ui_x2.png");
     background-size: 44px;
     background-position: -10px -100px;

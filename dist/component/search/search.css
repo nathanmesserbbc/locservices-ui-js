@@ -34,6 +34,7 @@
   background-image: url("../../img/sprites/locservices_ui_x1.png");
   background-position: 0 -92px;
   background-repeat: no-repeat;
+  border: none;
 }
 .ls-ui-comp-search .ls-ui-submit {
   position: absolute;
@@ -60,6 +61,9 @@
 }
 .ls-ui-comp-search-with-term .ls-ui-input-clear {
   display: block;
+}
+.ls-ui-comp-search-with-term .ls-ui-input {
+  padding-right: 44px;
 }
 .ls-ui-ctrl-active .ls-ui-comp-search-with-clear .ls-ui-submit {
   background-color: #A0A0A0;
