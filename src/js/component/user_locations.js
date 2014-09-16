@@ -522,7 +522,7 @@ function(
         );
       }
       this.element.append(templates.recentLocationsList);
-      this.element.attr('aria-role', 'navigation');
+      this.element.attr('role', 'navigation');
     }
 
     /* Message */
@@ -535,7 +535,7 @@ function(
           this.eventNamespaceBase
         )
       );
-      this.element.attr('aria-role', 'navigation');
+      this.element.attr('role', 'navigation');
       this.element.attr(
         'aria-describedby',
         this.eventNamespaceBase + 'ls-ui-comp-user_locations-message'
