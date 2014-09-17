@@ -142,11 +142,10 @@ define([
       });
 
       it('should emit a clear event if there is no input value', function() {
-        var spy = sinon.spy(search, 'emit');
+        var emitSpy = sinon.spy(search, 'emit');
         search.hasAValidSearchTerm = true;
         search.checkInput();
-        expect(spy.calledOnce).toBe(true);
-        expect(spy.args[0][0]).toBe('clear');
+        expect(emitSpy.calledWith('clear')).toBe(true);
       }); 
 
     });
