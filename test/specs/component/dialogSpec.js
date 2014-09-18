@@ -140,6 +140,25 @@ define([
       });
       */
 
+      it('scrolls the dialog container into view', function() {
+        var stub, domEl, spy;
+       
+        domEl = element.get(0);
+        spy = sinon.spy(domEl, 'scrollIntoView');
+        stub = sinon.stub(element, 'get');
+        stub.withArgs(0).returns(domEl);
+        
+        new Dialog({
+          container: element,
+          translations: translations,
+          message: 'Test'
+        });
+        
+        expect(spy.calledOnce).toBe(true);
+
+        stub.restore();
+      });
+
     }); // constructor
 
     describe('remove()', function() {
