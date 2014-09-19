@@ -97,7 +97,7 @@ define([
       })
       .focus();
 
-    // Setting focus to the confirm button id not be enough to make the dialog
+    // Setting focus to the confirm button is not be enough to make the dialog
     // visible in the viewport on iOS if a location was chosen from a long
     // list of search results.
     this.container.get(0).scrollIntoView();
