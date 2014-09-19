@@ -144,7 +144,7 @@ define([
         var stub, domEl, spy;
 
         domEl = element.get(0);
-        spy = sinon.spy(domEl, 'scrollIntoView');
+        spy = sinon.spy(domEl, 'scrollIntoViewIfNeeded');
         stub = sinon.stub(element, 'get');
         stub.withArgs(0).returns(domEl);
 
