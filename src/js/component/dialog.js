@@ -97,6 +97,14 @@ define([
       })
       .focus();
 
+    // Setting focus to the confirm button is not be enough to make the dialog
+    // visible in the viewport on iOS if a location was chosen from a long
+    // list of search results.
+    var containerElement = this.container.get(0);
+    if (typeof containerElement.scrollIntoViewIfNeeded === 'function') {
+        containerElement.scrollIntoViewIfNeeded();
+    }
+
     this.container
       .find('.ls-ui-comp-dialog-cancel button')
       .on('click', function() {
