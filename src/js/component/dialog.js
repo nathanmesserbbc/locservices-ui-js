@@ -97,10 +97,9 @@ define([
       })
       .focus();
 
-    // Setting focus to the confirm button may not be enough to make the dialog
-    // visible in the viewport (e.g. on iOS) if a location was chosen from a long
-    // list of search results, if the browser supports it scroll the container
-    // element into view.
+    // Setting focus to the confirm button id not be enough to make the dialog
+    // visible in the viewport on iOS if a location was chosen from a long
+    // list of search results.
     this.container.get(0).scrollIntoView();
 
     this.container
