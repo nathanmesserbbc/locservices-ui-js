@@ -44,8 +44,8 @@
 @media (min-width: 568px) {
   .ls-ui-comp-dialog p {
     display: block;
-    margin: 0;
     padding: 11px 240px 13px 6px;
+    margin: 0;
   }
   .ls-ui-comp-dialog-buttons {
     position: absolute;
@@ -53,8 +53,8 @@
     right: 15px;
   }
   .ls-ui-comp-dialog span {
-    width: 100px;
-    top: -22px;
     position: relative;
+    top: -22px;
+    width: 100px;
   }
 }

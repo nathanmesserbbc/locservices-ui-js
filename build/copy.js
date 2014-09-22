@@ -5,7 +5,8 @@ module.exports = function() {
     var parts = dest.split('/');
     var name  = parts[1].split('.')[0];
     var type  = parts[1].split('.')[1];
-
+    type = type === 'non-responsive' ? type + '.css' : type;
+    
     return 'dist/' + parts[0] + '/' + name + '/' + name + '.' + type;
   };
 
