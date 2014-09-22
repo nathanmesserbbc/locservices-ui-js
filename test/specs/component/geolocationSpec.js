@@ -67,6 +67,18 @@ define([
         stub.restore();
       });
 
+      it('emits a click event', function() {
+        var emitSpy, stub;
+        
+        emitSpy = sinon.spy(geolocation, 'emit');
+        stub = sinon.stub(geolocation, 'reverseGeocode');
+        
+        geolocation._button.trigger('click');
+
+        expect(emitSpy.calledWith('click')).toBe(true);
+        stub.restore();
+      });
+
     });
 
     describe('reverseGeocode()', function() {
@@ -77,11 +89,10 @@ define([
         expect(geolocation._button.hasClass('ls-ui-comp-geolocation-disabled')).toBe(true);
       });
 
-      it('emits the click event', function() {
-        var emitStub = sinon.stub(geolocation, 'emit');
+      it('emits a start event', function() {
+        var emitSpy = sinon.spy(geolocation, 'emit');
         geolocation.reverseGeocode();
-        expect(emitStub.calledWith('click')).toBe(true);
-        emitStub.restore();
+        expect(emitSpy.calledWith('start')).toBe(true);
       });
 
       it('calls geolocation.getCurrentPosition', function() {

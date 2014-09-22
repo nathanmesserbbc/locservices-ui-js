@@ -1,8 +1,20 @@
+.ls-ui-comp-dialog {
+  padding-right: 16px;
+}
+.ls-ui-comp-dialog span {
+  display: inline-block;
+  width: 50%;
+}
+.ls-ui-comp-dialog-confirm button {
+  margin: 0 8px 0 0;
+}
+.ls-ui-comp-dialog-cancel button {
+  margin-left: 8px;
+}
 .ls-ui-comp-dialog p {
   display: block;
   padding: 11px 240px 13px 6px;
   margin: 0;
-
 }
 .ls-ui-comp-dialog-buttons {
   position: absolute;
