@@ -151,7 +151,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       if (this.hasClearControl) {
         this.form.removeClass('ls-ui-comp-search-with-clear');
       }
-      this.emit('clear');
+
     }
 
   };
