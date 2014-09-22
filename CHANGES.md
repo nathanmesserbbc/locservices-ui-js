@@ -1,6 +1,19 @@
 Changes
 =======
 
+1.3.0 - 2014-09-22
+------------------
+
+* [fix] - Remove cold start dialog to prevent duplicate display (#74, #79, #80)
+* [fix] - VoiceOver improvements for user locations disalogs (#86)
+* [fix] - Long placenames wrap over multiple lines in IE11 (#111)
+* [fix] - Ensure cold start dialog is visible in viewport on iOS (#113)
+* [fix] - Remove "with results" class from when results are cleared (#81)
+* [fix] - reverseGeocode method in geolocation module  emits start event instead of click event (#64)
+* [fix] - Added main entry for bower metadata (#49)
+* [fix] - Reverted iOS6 focus fix (#92) when loading more search results (#115)  
+
+
 1.2.1 - 2014-09-16
 ------------------
 
