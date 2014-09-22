@@ -96,11 +96,18 @@ define([
         search.clear();
         expect(search.input.val()).toBe('');
       });
-
-      it('should call checkInput()', function() {
-        var stub = sinon.stub(search, 'checkInput');
+      
+      it('should set hasAValidSearchTerm to false', function() {
+        search.hasAValidSearchTerm = true;
         search.clear();
-        expect(stub.calledOnce).toBe(true);
+        expect(search.hasAValidSearchTerm).toBe(false);
+      });
+
+      it('should remove \'ls-ui-comp-search-with-term\' class from form', function() {
+        search.form.addClass('ls-ui-comp-search-with-term');
+        expect(search.form.hasClass('ls-ui-comp-search-with-term')).toBe(true);
+        search.clear();
+        expect(search.form.hasClass('ls-ui-comp-search-with-term')).toBe(false);
       });
 
       it('should emit a clear event', function() {

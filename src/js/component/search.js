@@ -114,7 +114,14 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   Search.prototype.clear = function() {
     this.input.val('');
-    this.checkInput();
+    this.hasAValidSearchTerm = false;
+    this.form.removeClass('ls-ui-comp-search-with-term');
+
+    // @todo test this
+    if (this.hasClearControl) {
+      this.form.removeClass('ls-ui-comp-search-with-clear');
+    }
+
     this.emit('clear');
   };
 
@@ -141,17 +148,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
       }
 
     } else if (this.hasAValidSearchTerm) {
-
-      // if we previously had a valid search term then remove
-      // the class from the form element
-      this.hasAValidSearchTerm = false;
-      this.form.removeClass('ls-ui-comp-search-with-term');
-
-      // @todo test this
-      if (this.hasClearControl) {
-        this.form.removeClass('ls-ui-comp-search-with-clear');
-      }
-      this.emit('clear');
+      this.clear();
     }
 
   };
