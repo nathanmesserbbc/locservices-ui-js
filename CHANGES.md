@@ -4,6 +4,7 @@ Changes
 1.3.0 - 2014-09-22
 ------------------
 
+* [feature] - Addition of non-responsive CSS stylesheet, renamed all.min.css to locservices-ui.min.css (#105)
 * [fix] - Remove cold start dialog to prevent duplicate display (#74, #79, #80)
 * [fix] - VoiceOver improvements for user locations disalogs (#86)
 * [fix] - Long placenames wrap over multiple lines in IE11 (#111)
