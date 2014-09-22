@@ -321,6 +321,14 @@ define([
         expect(searchResults.moreResults.hasClass('ls-ui-comp-search_results-active')).toBe(false);
       });
 
+      it('should remove the "with results" class from the container', function() {
+        var className = 'ls-ui-comp-search_results-with_results';
+        searchResults.element.addClass(className);
+        expect(searchResults.element.hasClass(className)).toBe(true);
+        searchResults.clear();
+        expect(searchResults.element.hasClass(className)).toBe(false);
+      });
+
       it('should clear the stored data', function() {
         searchResults.clear();
         expect(searchResults._data).toEqual({});

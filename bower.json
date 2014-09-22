@@ -9,6 +9,7 @@
     "amd",
     "node"
   ],
+  "main": "dist/primary.all.js",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -20,9 +21,9 @@
     "locservices-core-js": "https://github.com/BBC-Location-Services/locservices-core-js.git#1.0.1"
   },
   "devDependencies": {
-    "jquery": "1.11.1",
     "requirejs": "~2.1.14",
     "jasmine": "~2.0.0",
-    "sinon": "~1.10.2"
+    "sinon": "~1.10.2",
+    "jquery": "~2.1.1"
   }
 }

@@ -157,6 +157,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   SearchResults.prototype.clear = function() {
     this.moreResults.removeClass('ls-ui-comp-search_results-active');
+    this.element.removeClass('ls-ui-comp-search_results-with_results');
     this.list.empty();
     this._data = {};
   };
