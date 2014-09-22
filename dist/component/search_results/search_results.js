@@ -141,14 +141,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
         this.moreResults.removeClass('ls-ui-comp-search_results-active');
       }
 
-      var setFocusToOffset = function() {
-        self.list.find('li:nth-child(' + (self.offset + 1) + ') a').focus();
-      };
-
-      setFocusToOffset();
-
-      // VoiceOver in iOS 6 set focus to the wrong place unless there is a delay. 
-      setTimeout(setFocusToOffset, 1000);
+      this.list.find('li:nth-child(' + (self.offset + 1) + ') a').focus();
 
     }
 
@@ -164,6 +157,7 @@ define(['jquery', 'locservices/ui/component/component'], function($, Component) 
    */
   SearchResults.prototype.clear = function() {
     this.moreResults.removeClass('ls-ui-comp-search_results-active');
+    this.element.removeClass('ls-ui-comp-search_results-with_results');
     this.list.empty();
     this._data = {};
   };
