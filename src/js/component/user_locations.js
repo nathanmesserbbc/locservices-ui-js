@@ -104,22 +104,31 @@ function(
         linkName.append(', ' + location.container);
       }
 
+      var linkActionLabel  = location.isPreferred ?
+        'user_locations.action.label.remove' :
+        'user_locations.action.label.prefer';
+
       var linkAction = $('<button/>')
         .addClass('ls-ui-comp-user_locations-action')
         .attr('href', '#' + locationId)
         .attr('data-id', locationId)
         .attr('data-action', location.isPreferred ? 'none' : 'prefer')
+        .attr('aria-label', translations.get(linkActionLabel, { name: location.name }))
         .html($('<span/>').text(translations.get('user_locations.action.recent')));
 
       if (location.isPreferred) {
         linkAction.attr('disabled', 'disabled');
       }
+      var linkRemoveLabel  = location.isPreferred ?
+        'user_locations.action.label.remove' :
+        'user_locations.action.label.delete';
 
       var linkRemove = $('<button/>')
         .addClass('ls-ui-comp-user_locations-remove')
         .attr('href', '#' + locationId)
         .attr('data-id', locationId)
         .attr('data-action', 'remove')
+        .attr('aria-label', translations.get(linkRemoveLabel, { name: location.name }))
         .html($('<span/>').text(translations.get('user_locations.action.remove')));
 
       var li = $('<li />');
@@ -143,15 +152,17 @@ function(
      *
      * @param {Object} translations
      * @param {Boolean} hasRecentLocations
+     * @param {String} namespace
      * @return {Object}
      */
-    message: function(translations, hasRecentLocations) {
+    message: function(translations, hasRecentLocations, namespace) {
       var value = translations.get('user_locations.message.preferred');
       if (hasRecentLocations) {
         value += ' ' + translations.get('user_locations.message.change_preferred');
       }
       return $('<p/>')
         .addClass('ls-ui-comp-user_locations-message')
+        .attr('id', namespace + 'ls-ui-comp-user_locations-message')
         .text(value);
     }
 
@@ -428,7 +439,7 @@ function(
 
       if (location.isPreferred) {
         this.preferredLocation.unset();
-      } 
+      }
 
       // @todo test this.recentLocations.isSupported
       if (this.recentLocations.isSupported()) {
@@ -511,13 +522,23 @@ function(
         );
       }
       this.element.append(templates.recentLocationsList);
+      this.element.attr('role', 'navigation');
     }
 
     /* Message */
 
     if (hasLocations && this.isPreferredLocationEnabled) {
       this.element.append(
-        templates.message(this.translations, hasRecentLocations)
+        templates.message(
+          this.translations,
+          hasRecentLocations,
+          this.eventNamespaceBase
+        )
+      );
+      this.element.attr('role', 'navigation');
+      this.element.attr(
+        'aria-describedby',
+        this.eventNamespaceBase + 'ls-ui-comp-user_locations-message'
       );
     }
   };
