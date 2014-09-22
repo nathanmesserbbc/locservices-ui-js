@@ -56,6 +56,7 @@ define([
 
     this._button.on('click', function(e) {
       e.preventDefault();
+      self.emit('click');
       self.reverseGeocode();
     });
   }
@@ -71,7 +72,7 @@ define([
     var self = this;
 
     this._button.attr('disabled', 'disabled').addClass('ls-ui-comp-geolocation-disabled');
-    this.emit('click');
+    this.emit('start');
 
     // make a call to the api reverse Geocode method
     function onSuccess(position) {
