@@ -119,6 +119,11 @@ define([
         self.message.clear();
         self.results.clear();
 
+        if (self.coldStartDialog) {
+          self.coldStartDialog.remove();
+          self.coldStartDialog = undefined;
+        }
+
         self.container.find('.ls-ui-comp-user_locations').removeClass('ls-ui-hidden');
       },
       onClose: function() {
@@ -156,6 +161,7 @@ define([
 
     $.on(self.namespace + ':component:auto_complete:clear', events.onResultsClear);
     $.on(self.namespace + ':component:search:clear', events.onResultsClear);
+    $.on(self.namespace + ':component:geolocation:start', events.onResultsClear);
 
     $.on(self.namespace + ':component:geolocation:location', events.onLocation);
     $.on(self.namespace + ':component:auto_complete:location', events.onLocation);

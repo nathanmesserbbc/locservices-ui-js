@@ -331,6 +331,13 @@ define([
         $.emit('locservices:ui:component:auto_complete:clear');
         expect(controller.userLocations.element.hasClass('ls-ui-hidden')).toEqual(false);
       });
+      
+      it('should show user_locations on geolocation start', function() {
+        controller.userLocations.element.addClass('ls-ui-hidden');
+        expect(controller.userLocations.element.hasClass('ls-ui-hidden')).toEqual(true);
+        $.emit('locservices:ui:component:geolocation:start');
+        expect(controller.userLocations.element.hasClass('ls-ui-hidden')).toEqual(false);
+      });
 
       it('should call setLocation when a location is selected via search results', function() {
         var location = { id: 'foo' };
