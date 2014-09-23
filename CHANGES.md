@@ -6,7 +6,7 @@ Changes
 
 * [feature] - Addition of non-responsive CSS stylesheet, renamed all.min.css to locservices-ui.min.css (#105)
 * [fix] - Remove cold start dialog to prevent duplicate display (#74, #79, #80)
-* [fix] - VoiceOver improvements for user locations disalogs (#86)
+* [fix] - VoiceOver improvements for user location dialogs (#86)
 * [fix] - Long placenames wrap over multiple lines in IE11 (#111)
 * [fix] - Ensure cold start dialog is visible in viewport on iOS (#113)
 * [fix] - Remove "with results" class from when results are cleared (#81)
