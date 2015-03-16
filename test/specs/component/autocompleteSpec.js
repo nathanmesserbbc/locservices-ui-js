@@ -84,14 +84,14 @@ define([
       it('for the escape key', function() {
         var stub = sinon.stub(autoComplete, 'escapeKeyHandler');
         var event = $.Event('keydown', { keyCode: 27 });
-        $(document).trigger(event);
+        $(container).trigger(event);
         expect(stub.calledOnce).toBe(true);
         stub.restore();
       });
       it('for the enter key', function() {
         var stub = sinon.stub(autoComplete, 'enterKeyHandler');
         var event = $.Event('keydown', { keyCode: 13 });
-        $(document).trigger(event);
+        $(container).trigger(event);
         expect(stub.calledOnce).toBe(true);
         stub.restore();
       });
@@ -99,7 +99,7 @@ define([
       it('for the up arrow', function() {
         var stub = sinon.stub(autoComplete, 'highlightPrevSearchResult');
         var event = $.Event('keydown', { keyCode: 38 });
-        $(document).trigger(event);
+        $(container).trigger(event);
         expect(stub.calledOnce).toBe(true);
         stub.restore();
       });
@@ -107,7 +107,7 @@ define([
       it('for the down arrow', function() {
         var stub = sinon.stub(autoComplete, 'highlightNextSearchResult');
         var event = $.Event('keydown', { keyCode: 40 });
-        $(document).trigger(event);
+        $(container).trigger(event);
         expect(stub.calledOnce).toBe(true);
         stub.restore();
       });
