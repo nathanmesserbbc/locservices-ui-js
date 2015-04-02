@@ -171,7 +171,7 @@ define([
 
     $.on(ns + ':component:search_results:results', function(metadata) {
       if (metadata.totalResults === 0) {
-        logActionEvent(echoClient, 'search_no_results');
+        logActionEvent(echoClient, 'search_no_results', {searchTerm: metadata.searchTerm});
       }
     });
 
