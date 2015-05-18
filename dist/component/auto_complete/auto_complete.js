@@ -83,7 +83,7 @@ define([
       self.clear();
     });
 
-    $(document).on('keydown', function(event) {
+    $(self.container).on('keydown', function(event) {
       switch (event.keyCode) {
 
         case KEY_CODE.escape:

@@ -268,6 +268,7 @@ define([
     var setAsPreferredLocation = function() {
       self.preferredLocation.set(location.id, {
         success: function() {
+          $.emit(self.namespace + ':controller:preferred_location', [location]);
           emitLocation();
         },
         error: function() {

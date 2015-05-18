@@ -544,7 +544,22 @@ define([
         controller.selectLocation(location);
         expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
         container.find('.ls-ui-comp-dialog-confirm button').trigger('click');
-        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:controller:location');
+        expect(spy.getCall(1).args[0]).toEqual('locservices:ui:controller:location');
+        expect(spy.getCall(1).args[1]).toEqual([location]);
+        $.emit.restore();
+        setStub.restore();
+      });
+
+      it('should emit preferred_location event after confirming dialog', function() {
+        var spy = sinon.spy($, 'emit');
+        stubShouldColdStartDialogBeDisplayed.returns(true);
+        var setStub = sinon.stub(controller.preferredLocation, 'set', function(id, options) {
+          options.success(true);
+        });
+        controller.selectLocation(location);
+        expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
+        container.find('.ls-ui-comp-dialog-confirm button').trigger('click');
+        expect(spy.getCall(0).args[0]).toEqual('locservices:ui:controller:preferred_location');
         expect(spy.getCall(0).args[1]).toEqual([location]);
         $.emit.restore();
         setStub.restore();
