@@ -545,7 +545,31 @@ define([
         expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
         container.find('.ls-ui-comp-dialog-confirm button').trigger('click');
         expect(spy.getCall(0).args[0]).toEqual('locservices:ui:controller:location');
-        expect(spy.getCall(0).args[1]).toEqual([location]);
+        $.emit.restore();
+        setStub.restore();
+      });
+
+      it('should set wasSetAsPreferredLocationDueToColdStart after confirming dialog', function() {
+        var spy = sinon.spy($, 'emit');
+        var expectedLocation = {
+          id: '2644160',
+          name: 'Llandaff',
+          container: 'Cardiff',
+          placeType: 'settlement',
+          country: 'GB',
+          wasSetAsPreferredLocationDueToColdStart: true
+        };
+
+        stubShouldColdStartDialogBeDisplayed.returns(true);
+        var setStub = sinon.stub(controller.preferredLocation, 'set', function(id, options) {
+          options.success(true);
+        });
+
+        controller.selectLocation(location);
+        expect(container.find('.ls-ui-comp-dialog').length).toEqual(1);
+        container.find('.ls-ui-comp-dialog-confirm button').trigger('click');
+
+        expect(spy.getCall(0).args[1]).toEqual([expectedLocation]);
         $.emit.restore();
         setStub.restore();
       });

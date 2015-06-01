@@ -29,7 +29,7 @@ define([
     if (typeof options.api !== 'object') {
       throw new Error('AutoComplete requires an api option');
     }
-    if (!options.element instanceof $) {
+    if (!(options.element instanceof $)) {
       throw new Error('AutoComplete requires an element option');
     }
 
@@ -83,7 +83,7 @@ define([
       self.clear();
     });
 
-    $(document).on('keydown', function(event) {
+    $(self.container).on('keydown', function(event) {
       switch (event.keyCode) {
 
         case KEY_CODE.escape:
