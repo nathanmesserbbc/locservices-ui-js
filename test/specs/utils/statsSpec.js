@@ -164,7 +164,7 @@ define([
             offset: 0,
             totalResults: 0
           });
-          expect(stub.calledWith('search_no_results', 'locservicesui')).toBe(true);
+          expect(stub.calledWith('search_no_results', 'locservicesui', {searchTerm: 'foo'})).toBe(true);
         });
         it('records a stat when a search result is selected', function() {
           var labels = $.extend({}, expectedLabels);
