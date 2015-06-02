@@ -4,11 +4,14 @@ Changes
 1.4.0 - 2015-06-02
 ------------------
 
-* [fix] - Location prefer / delete buttons correctly shows pointer cursor (was hand) (#118)
-* [fix] - Key events in the auto-complete component now bound to the instances container (was document) (#123)
 * [feature] - Stats events for a search with no results now include a search term (#124)
 * [feature] - The location object emitted by the controller:location event includes a wasSetAsPreferredLocationDueToColdStart: true property if the location was set as the preferred location due to the cold start dialog. (#126)
 
+1.3.1 - 2015-03-16
+------------------
+
+* [fix] - Location prefer / delete buttons correctly shows pointer cursor (was hand) (#119, #118)
+* [fix] - Key events in the auto-complete component now bound to the instances container (was document) (#123)
 
 1.3.0 - 2014-09-22
 ------------------
